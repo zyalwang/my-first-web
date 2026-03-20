@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)file:///Users/wangxinlu/my-first-web/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zyal Wang — Personal Homepage</title>
+  <link href="./index_files/css2" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: #1d1d1f;
+      background: #f5f5f7;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Layout ── */
+    .wrapper { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+
+    /* ── Fade-in ── */
+    .fade-in {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky; top: 16px; z-index: 10;
+      max-width: 720px; margin: 16px auto 0;
+      padding: 0 20px;
+    }
+    .nav-pill {
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px; padding: 10px 20px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-radius: 50px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+      width: fit-content; margin: 0 auto;
+    }
+    .nav-pill a {
+      font-size: 0.78rem; font-weight: 500; color: #86868b;
+      text-decoration: none; padding: 6px 14px; border-radius: 20px;
+      transition: color 0.25s, background 0.25s;
+    }
+    .nav-pill a:hover { color: #1d1d1f; }
+    .nav-pill a.active { color: #1d1d1f; background: rgba(0,0,0,0.05); }
+
+    /* ── Sections ── */
+    section { padding: 64px 0; }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 100px 0 48px;
+    }
+    .hero-text {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 1.55rem;
+      font-weight: 400;
+      line-height: 1.75;
+      color: #86868b;
+    }
+    .hero-text strong {
+      color: #1d1d1f;
+      font-weight: 600;
+    }
+    .hero-text a {
+      color: #86868b;
+      text-decoration: none;
+      border-bottom: 1.5px dotted #c0c0c4;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .hero-text a:hover { color: #1d1d1f; border-color: #1d1d1f; }
+    .currently {
+      margin-top: 24px;
+      font-size: 0.82rem; font-weight: 400; color: #86868b;
+    }
+    .currently span { color: #1d1d1f; font-weight: 500; }
+    .currently .rotating-text {
+      display: inline-block;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .currently .rotating-text.fade-out {
+      opacity: 0; transform: translateY(5px);
+    }
+
+    /* ── Manifesto ── */
+    .manifesto {
+      padding: 32px 0 48px;
+    }
+    .manifesto blockquote {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      font-style: italic;
+      color: #1d1d1f;
+      line-height: 1.65;
+      border-left: 3px solid #d1d1d6;
+      padding-left: 24px;
+    }
+    .manifesto .quote-attr {
+      margin-top: 12px;
+      padding-left: 27px;
+      font-size: 0.78rem;
+      color: #86868b;
+      font-style: normal;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: #fff;
+      border-radius: 24px;
+      overflow: hidden;
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    }
+
+    /* ── Section headers ── */
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #86868b;
+      margin-bottom: 20px;
+    }
+
+    /* ── Stats row ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      padding: 0 0 16px;
+    }
+    .stat-card {
+      padding: 24px 16px;
+      text-align: center;
+    }
+    .stat-card .stat-number {
+      font-family: 'Newsreader', Georgia, serif;
+      font-weight: 600;
+      font-size: 1.6rem;
+      color: #1d1d1f;
+      margin-bottom: 4px;
+    }
+    .stat-card .stat-label {
+      font-size: 0.7rem;
+      color: #86868b;
+      line-height: 1.4;
+    }
+
+    /* ── About ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .about-portrait {
+      border-radius: 20px;
+      overflow: hidden;
+      aspect-ratio: 3 / 4;
+    }
+    .about-portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .about-text h2 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-weight: 600;
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+    .about-text p {
+      font-size: 0.88rem;
+      font-weight: 400;
+      color: #48484a;
+      line-height: 1.85;
+      margin-bottom: 14px;
+    }
+    .about-text p:last-child { margin-bottom: 0; }
+    .about-text em {
+      font-style: normal;
+      font-weight: 600;
+      color: #1d1d1f;
+    }
+
+    /* ── Exploring tags ── */
+    .tag-cloud {
+      display: flex; flex-wrap: wrap; gap: 10px;
+    }
+    .explore-tag {
+      font-size: 0.82rem; font-weight: 500;
+      color: #48484a; padding: 8px 20px;
+      border-radius: 50px; background: #fff;
+      border: 1px solid #e8e8ed;
+      transition: transform 0.3s, background 0.3s, color 0.3s;
+      cursor: default;
+    }
+    .explore-tag:hover {
+      transform: translateY(-2px);
+      background: #1d1d1f; color: #fff;
+    }
+
+    /* ── Grid ── */
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+    /* ── Life cards ── */
+    .life-card { padding: 28px 24px; text-align: center; }
+    .life-card .emoji { font-size: 1.8rem; margin-bottom: 12px; line-height: 1; }
+    .life-card .emoji svg { width: 28px; height: 28px; stroke: #86868b; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .life-card h3 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-weight: 600; font-size: 1.1rem; margin-bottom: 6px;
+    }
+    .life-card p { font-size: 0.78rem; color: #86868b; line-height: 1.6; }
+
+    /* ── Social cards ── */
+    .social-card {
+      display: flex; align-items: center; gap: 16px;
+      padding: 20px 24px; text-decoration: none; color: #1d1d1f;
+    }
+    .social-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+      background: #f5f5f7;
+    }
+    .social-icon svg { width: 20px; height: 20px; stroke: #86868b; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .social-card h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 2px; }
+    .social-card .stat-badge {
+      font-size: 0.62rem; font-weight: 600; color: #1d1d1f;
+      background: #f0f0f5; padding: 2px 8px; border-radius: 8px;
+      margin-left: 6px; vertical-align: middle;
+    }
+    .social-card p { font-size: 0.76rem; color: #86868b; }
+    .social-card .card-arrow {
+      margin-left: auto; font-size: 0.9rem; color: #c0c0c4;
+      transition: transform 0.25s, color 0.25s;
+    }
+    .social-card:hover .card-arrow { transform: translate(2px, -2px); color: #1d1d1f; }
+
+    /* ── Skill cards ── */
+    .work-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .skill-card { padding: 28px 24px; }
+    .skill-card .icon-circle {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: #f5f5f7; display: flex; align-items: center;
+      justify-content: center; font-size: 1.1rem; margin-bottom: 14px;
+    }
+    .skill-card .icon-circle svg { width: 20px; height: 20px; stroke: #86868b; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .skill-card h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; }
+    .skill-card p { font-size: 0.78rem; color: #86868b; line-height: 1.65; }
+
+    /* ── Project cards ── */
+    .project-card {
+      display: flex; flex-direction: column;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .project-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+    }
+    .project-preview {
+      height: 200px; display: flex; align-items: center;
+      justify-content: center; position: relative; overflow: hidden;
+      transition: transform 0.5s ease;
+    }
+    .project-preview img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .project-preview::before {
+      content: ''; position: absolute; inset: 0;
+      opacity: 0.5;
+      background: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.6), transparent 60%);
+      z-index: 1;
+    }
+    .project-preview .preview-icon {
+      position: relative; z-index: 2;
+      transition: transform 0.5s ease, opacity 0.5s ease;
+      opacity: 0.35;
+    }
+    .project-preview .preview-icon svg {
+      width: 36px; height: 36px; stroke: rgba(255,255,255,0.9); fill: none;
+      stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .card.project-card:hover .preview-icon { transform: scale(1.1) translateY(-2px); opacity: 0.55; }
+    .card.project-card:hover .project-preview { transform: scale(1.02); }
+
+    /* Individual preview gradients */
+    .preview-quiettown {
+      background: linear-gradient(135deg, #e8e4df 0%, #d4cfc8 30%, #c9c4bc 60%, #bfb9b0 100%);
+    }
+    .preview-childhood {
+      background: linear-gradient(135deg, #d6dce2 0%, #c4cdd6 30%, #b8c5cf 60%, #aebfcc 100%);
+    }
+    .preview-derby {
+      background: linear-gradient(135deg, #d8ddd4 0%, #c8cfbf 30%, #bcc5af 60%, #b3bda6 100%);
+    }
+    .preview-ramen {
+      background: linear-gradient(135deg, #e6ddd4 0%, #dbd0c4 30%, #d1c4b4 60%, #c9baa8 100%);
+    }
+    .preview-marketer {
+      background: linear-gradient(135deg, #dddbe2 0%, #d0ced8 30%, #c5c2ce 60%, #bcb8c6 100%);
+    }
+
+    .project-body { padding: 24px 24px 28px; display: flex; flex-direction: column; flex-grow: 1; }
+    .project-meta {
+      font-size: 0.65rem; font-weight: 600; letter-spacing: 1px;
+      text-transform: uppercase; color: #86868b; margin-bottom: 8px;
+    }
+    .project-body h3 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-weight: 600; font-size: 1.15rem; margin-bottom: 8px;
+    }
+    .project-body p {
+      font-size: 0.8rem; color: #86868b;
+      line-height: 1.7; margin-bottom: 6px; flex-grow: 1;
+    }
+    .project-origin {
+      font-size: 0.7rem; font-style: italic; color: #aeaeb2;
+      margin-bottom: 18px;
+      opacity: 0; transform: translateY(4px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .card.project-card:hover .project-origin { opacity: 1; transform: translateY(0); }
+    .project-link {
+      align-self: flex-start; font-size: 0.76rem; font-weight: 500;
+      color: #1d1d1f; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 4px;
+      transition: gap 0.25s;
+    }
+    .project-link:hover { gap: 8px; }
+    .project-link .arrow { font-size: 0.85rem; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center; padding: 64px 0 48px;
+    }
+    footer .footer-links {
+      display: flex; justify-content: center; gap: 24px;
+      margin-bottom: 24px; list-style: none;
+    }
+    footer .footer-links a {
+      font-size: 0.78rem; font-weight: 500; color: #86868b;
+      text-decoration: none; transition: color 0.25s;
+    }
+    footer .footer-links a:hover { color: #1d1d1f; }
+    footer .signature {
+      font-family: 'Newsreader', Georgia, serif;
+      font-style: italic; font-size: 0.95rem;
+      color: #86868b; margin-bottom: 20px;
+    }
+    footer .copyright { font-size: 0.75rem; color: #aeaeb2; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .hero-text { font-size: 1.3rem; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .about-grid { grid-template-columns: 1fr; text-align: center; }
+      .about-portrait { max-width: 220px; margin: 0 auto; }
+      .grid-3, .grid-2, .work-grid { grid-template-columns: 1fr; }
+      .tag-cloud { justify-content: center; }
+      section { padding: 48px 0; }
+    }
+    @media (max-width: 480px) {
+      .hero-text { font-size: 1.15rem; }
+      .nav-pill { gap: 2px; padding: 8px 12px; }
+      .nav-pill a { font-size: 0.72rem; padding: 6px 10px; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-pill">
+    <a href="#about" class="active">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#exploring">Exploring</a>
+    <a href="#content">Content</a>
+    <a href="#work">Work</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<div class="wrapper">
+
+  <!-- Hero -->
+  <section class="hero">
+    <p class="hero-text">
+      I'm <strong>Zyal Wang</strong> — I turn <strong>curiosity</strong> into things you can click.
+      <strong>Digital marketer</strong> by day, <strong>creator</strong> and <strong>AI explorer</strong> always.
+      Based in Japan. I tell stories through data, build ideas through code, and
+      document life because it helps me think.
+      This is my <a href="#projects">digital garden</a>.
+    </p>
+    <p class="currently">Currently exploring → <span class="rotating-text">vibe coding at midnight with Lovable</span></p>
+  </section>
+
+  <!-- Manifesto -->
+  <div class="manifesto fade-in visible">
+    <blockquote>
+      I don't wait until I'm ready.<br>
+      I start — and clarity follows.
+    </blockquote>
+    <p class="quote-attr">— a personal operating principle</p>
+  </div>
+
+  <!-- Stats -->
+  <section class="fade-in visible" style="padding-top:0">
+    <div class="stats-row">
+      <div class="card stat-card">
+        <div class="stat-number">27K+</div>
+        <div class="stat-label">Likes &amp; saves on Rednote</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-number">5</div>
+        <div class="stat-label">AI-built side projects</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-number">Healthcare</div>
+        <div class="stat-label">Marketing that matters</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-number">Global</div>
+        <div class="stat-label">Cross-border content</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="fade-in visible">
+    <p class="section-label">About</p>
+    <div class="about-grid">
+      <div class="about-portrait">
+        <img src="portrait.jpeg" alt="Zyal Wang">
+      </div>
+      <div class="about-text">
+        <h2>A restless mind between Tokyo and the internet</h2>
+        <p>I'm Zyal. Most days I work in <em>healthcare marketing</em> — translating complex ideas into stories that actually connect. But when the laptop stays open past midnight, it's because I'm chasing a thread: wiring up an <em>AI experiment</em>, sketching a new project, or writing something I'll probably post on Rednote before breakfast.</p>
+        <p>I'm happiest in the overlap — where <em>marketing meets making</em>, where a weekend prototype teaches more than any course, and where the best ideas come from following your curiosity instead of a plan.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="fade-in visible">
+    <p class="section-label">Projects &amp; Experiments</p>
+    <div class="grid-2">
+      <div class="card project-card">
+        <div class="project-preview">
+          <img src="Quiet Town.jpeg" alt="Quiet Town">
+        </div>
+        <div class="project-body">
+          <p class="project-meta">Interactive</p>
+          <h3>Quiet Town</h3>
+          <p>What if a website could feel like a quiet afternoon? An interactive space where mood shapes the experience.</p>
+          <span class="project-origin">Built in one night to explore calm in digital space</span>
+          <a href="https://quiettown.lovable.app/" target="_blank" class="project-link">View project <span class="arrow">↗</span></a>
+        </div>
+      </div>
+      <div class="card project-card">
+        <div class="project-preview">
+          <img src="My Childhood Global.jpeg" alt="My Childhood Global">
+        </div>
+        <div class="project-body">
+          <p class="project-meta">Creative Experiment</p>
+          <h3>My Childhood Global</h3>
+          <p>I wondered: do people from different countries remember childhood the same way? So I built a place to find out.</p>
+          <span class="project-origin">Started from a late-night conversation about nostalgia</span>
+          <a href="https://my-childhood-global.lovable.app/" target="_blank" class="project-link">View project <span class="arrow">↗</span></a>
+        </div>
+      </div>
+      <div class="card project-card">
+        <div class="project-preview">
+          <img src="Legend Derby.jpeg" alt="Legend Derby">
+        </div>
+        <div class="project-body">
+          <p class="project-meta">Creative Project</p>
+          <h3>Legend Derby</h3>
+          <p>Part game, part story, part excuse to play with character design. Horse racing meets creative fiction.</p>
+          <span class="project-origin">An experiment in playful worldbuilding with AI</span>
+          <a href="https://legend-derby.lovable.app/" target="_blank" class="project-link">View project <span class="arrow">↗</span></a>
+        </div>
+      </div>
+      <div class="card project-card">
+        <div class="project-preview">
+          <img src="Ramen Tour.jpeg" alt="Ramen Tour">
+        </div>
+        <div class="project-body">
+          <p class="project-meta">Lifestyle Tool</p>
+          <h3>Ramen Tour</h3>
+          <p>A love letter to noodle soup. Track, rank, and map the best ramen spots — because someone had to.</p>
+          <span class="project-origin">Born from eating too much ramen and wanting to rank it all</span>
+          <a href="https://ramen-tour.lovable.app/" target="_blank" class="project-link">View project <span class="arrow">↗</span></a>
+        </div>
+      </div>
+      <div class="card project-card">
+        <div class="project-preview">
+          <img src="Marketer Life.jpeg" alt="Marketer Life">
+        </div>
+        <div class="project-body">
+          <p class="project-meta">Satirical Game</p>
+          <h3>Marketer Life</h3>
+          <p>A tongue-in-cheek career simulator about surviving corporate marketing — emails, meetings, stress, and all.</p>
+          <span class="project-origin">Made because if you can't laugh at the job, what can you do</span>
+          <a href="https://marketer-life-career-dulx.bolt.host/" target="_blank" class="project-link">View project <span class="arrow">↗</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Exploring -->
+  <section id="exploring" class="fade-in visible">
+    <p class="section-label">What I'm Exploring</p>
+    <div class="tag-cloud">
+      <span class="explore-tag">AI × creativity</span>
+      <span class="explore-tag">The return of personal websites</span>
+      <span class="explore-tag">Writing = thinking</span>
+      <span class="explore-tag">Building without permission</span>
+      <span class="explore-tag">Internet as a playground</span>
+      <span class="explore-tag">Vibe coding as a creative medium</span>
+      <span class="explore-tag">Cross-cultural storytelling</span>
+    </div>
+  </section>
+
+  <!-- Life -->
+  <section id="life" class="fade-in visible">
+    <p class="section-label">Life</p>
+    <div class="grid-3">
+      <div class="card life-card">
+        <div class="emoji"><svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4z"/></svg></div>
+        <h3>Wandering</h3>
+        <p>Getting lost on purpose — in back streets, train stations, and cities I don't know yet.</p>
+      </div>
+      <div class="card life-card">
+        <div class="emoji"><svg viewBox="0 0 24 24"><path d="M12 22c-4-4-8-7.5-8-12a8 8 0 0116 0c0 4.5-4 8-8 12z"/><path d="M12 10v6"/><path d="M9 13l3-3 3 3"/></svg></div>
+        <h3>Thinking Out Loud</h3>
+        <p>Reflections on work, identity, and what it means to live between cultures.</p>
+      </div>
+      <div class="card life-card">
+        <div class="emoji"><svg viewBox="0 0 24 24"><path d="M17 8h1a4 4 0 010 8h-1"/><path d="M3 8h14v9a4 4 0 01-4 4H7a4 4 0 01-4-4V8z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg></div>
+        <h3>Small Rituals</h3>
+        <p>Morning coffee, evening walks, weekend reads — the quiet structure behind the noise.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content -->
+  <section id="content" class="fade-in visible">
+    <p class="section-label">Content</p>
+    <div class="grid-2">
+      <a href="https://xhslink.com/m/3NL8vdNT7zq" target="_blank" class="card social-card">
+        <div class="social-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+        <div>
+          <h3>Rednote <span class="stat-badge">27K+</span></h3>
+          <p>Lifestyle, reflections, and ideas people actually save.</p>
+        </div>
+        <span class="card-arrow">↗</span>
+      </a>
+      <a href="https://www.linkedin.com/in/wangxinlu" target="_blank" class="card social-card">
+        <div class="social-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></div>
+        <div>
+          <h3>LinkedIn</h3>
+          <p>The professional version of me — marketing, strategy, and global work.</p>
+        </div>
+        <span class="card-arrow">↗</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Work -->
+  <section id="work" class="fade-in visible">
+    <p class="section-label">What I Do</p>
+    <div class="work-grid">
+      <div class="card skill-card">
+        <div class="icon-circle"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <h3>Digital Marketing</h3>
+        <p>SEO, paid media, campaigns — the kind of work where creativity and spreadsheets coexist.</p>
+      </div>
+      <div class="card skill-card">
+        <div class="icon-circle"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <h3>Healthcare</h3>
+        <p>Marketing in an industry where trust matters more than trends. I take that seriously.</p>
+      </div>
+      <div class="card skill-card">
+        <div class="icon-circle"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+        <h3>AI &amp; Vibe Coding</h3>
+        <p>Prompting, prototyping, building things that didn't exist yesterday. The fun part.</p>
+      </div>
+      <div class="card skill-card">
+        <div class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
+        <h3>Websites &amp; Automation</h3>
+        <p>Building pages, reading analytics, automating the boring stuff so I can focus on the interesting stuff.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <ul class="footer-links">
+      <li><a href="https://xhslink.com/m/3NL8vdNT7zq" target="_blank">Rednote</a></li>
+      <li><a href="https://www.linkedin.com/in/wangxinlu" target="_blank">LinkedIn</a></li>
+    </ul>
+    <p class="signature">Built with curiosity, coffee, and a bit of AI</p>
+    <p class="copyright">© 2026 Zyal Wang</p>
+  </footer>
+
+</div>
+
+<script>
+  // ── Rotating text ──
+  const topics = [
+    'AI as a creative collaborator',
+    'why personal websites still matter',
+    'vibe coding at midnight with Lovable',
+    'ramen rankings across Kanto',
+    'writing as a way to think clearly',
+    'building things with no roadmap'
+  ];
+  let i = 0;
+  const el = document.querySelector('.rotating-text');
+  if (el) {
+    setInterval(() => {
+      el.classList.add('fade-out');
+      setTimeout(() => {
+        i = (i + 1) % topics.length;
+        el.textContent = topics[i];
+        el.classList.remove('fade-out');
+      }, 400);
+    }, 3200);
+  }
+
+  // ── Active nav on scroll ──
+  const links = document.querySelectorAll('.nav-pill a');
+  const secs = document.querySelectorAll('section[id], footer[id]');
+  const navObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  secs.forEach(s => navObs.observe(s));
+
+  // ── Fade in ──
+  const fadeEls = document.querySelectorAll('.fade-in');
+  const fadeObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); fadeObs.unobserve(e.target); }
+    });
+  }, { rootMargin: '0px 0px -40px 0px' });
+  fadeEls.forEach(el => fadeObs.observe(el));
+</script>
+
+
+</body></html>
