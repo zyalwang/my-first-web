@@ -3,7 +3,13 @@
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zyal Wang | Personal Homepage</title>
+  <title>Zyal Wang | Marketing, AI, and a Curious Life</title>
+  <meta name="description" content="A quiet corner of the internet for digital marketing, AI projects, creative experiments, and life between cultures.">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Zyal Wang | Marketing, AI, and a Curious Life">
+  <meta property="og:description" content="A quiet corner of the internet for digital marketing, AI projects, creative experiments, and life between cultures.">
+  <meta property="og:image" content="Portraitphotosquare.jpeg">
+  <meta property="og:type" content="website">
   <link href="./index_files/css2" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -210,15 +216,78 @@
     .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
     .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
 
-    /* ── Life cards ── */
-    .life-card { padding: 28px 24px; text-align: center; }
-    .life-card .emoji { font-size: 1.8rem; margin-bottom: 12px; line-height: 1; }
-    .life-card .emoji svg { width: 28px; height: 28px; stroke: #86868b; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-    .life-card h3 {
-      font-family: 'Newsreader', Georgia, serif;
-      font-weight: 600; font-size: 1.1rem; margin-bottom: 6px;
+    /* UPDATED: life gallery – cover flow style */
+    .life-gallery {
+      display: flex;
+      justify-content: center;
+      padding-bottom: 40px;
+      perspective: 800px;
+      margin: 0 -10px;
     }
-    .life-card p { font-size: 0.78rem; color: #86868b; line-height: 1.6; }
+    .life-photo {
+      width: 100px; height: 100px;
+      border-radius: 10px;
+      overflow: visible;
+      cursor: pointer;
+      flex-shrink: 0;
+      position: relative;
+      margin: 0 -12px;
+      z-index: 1;
+      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  z-index 0s, box-shadow 0.5s ease;
+    }
+    .life-photo img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      border-radius: 10px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      /* UPDATED: real image reflection */
+      -webkit-box-reflect: below 4px
+        linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.08));
+    }
+
+    /* UPDATED: cover flow hover – JS-driven classes */
+    /* left of hovered: left edge forward, right edge back */
+    .life-photo.tilt-left {
+      transform: rotateY(35deg) scale(0.88);
+      z-index: 2;
+    }
+    /* right of hovered: right edge forward, left edge back */
+    .life-photo.tilt-right {
+      transform: rotateY(-35deg) scale(0.88);
+      z-index: 2;
+    }
+    /* the hovered photo itself */
+    .life-photo.is-hover {
+      transform: rotateY(0deg) scale(1.15);
+      z-index: 10;
+    }
+    .life-photo.is-hover img {
+      box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+    }
+    /* z-index: further from hovered = lower */
+    .life-photo.tilt-far { z-index: 1; }
+
+    /* active state (clicked) */
+    .life-photo.active {
+      z-index: 3;
+    }
+    .life-photo.active img {
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+    .life-caption {
+      text-align: center;
+      padding-top: 20px;
+    }
+    .life-caption h3 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-weight: 600; font-size: 1.1rem;
+      margin-bottom: 6px; color: #1d1d1f;
+    }
+    .life-caption p {
+      font-size: 0.8rem; color: #86868b;
+      line-height: 1.65; max-width: 420px;
+      margin: 0 auto;
+    }
 
     /* ── Social cards ── */
     .social-card {
@@ -257,57 +326,32 @@
     .skill-card h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; }
     .skill-card p { font-size: 0.78rem; color: #86868b; line-height: 1.65; }
 
+    /* ── Project container: grid on desktop ── */
+    #projects .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
     /* ── Project cards ── */
     .project-card {
       display: flex; flex-direction: column;
       box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
     }
     .project-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.07);
     }
     .project-preview {
-      height: 200px; display: flex; align-items: center;
-      justify-content: center; position: relative; overflow: hidden;
-      transition: transform 0.5s ease;
+      height: 220px; position: relative; overflow: hidden;
+      background: #f5f5f7;
     }
     .project-preview img {
       width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.5s ease;
     }
-    .project-preview::before {
-      content: ''; position: absolute; inset: 0;
-      opacity: 0.5;
-      background: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.6), transparent 60%);
-      z-index: 1;
-    }
-    .project-preview .preview-icon {
-      position: relative; z-index: 2;
-      transition: transform 0.5s ease, opacity 0.5s ease;
-      opacity: 0.35;
-    }
-    .project-preview .preview-icon svg {
-      width: 36px; height: 36px; stroke: rgba(255,255,255,0.9); fill: none;
-      stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round;
-    }
-    .card.project-card:hover .preview-icon { transform: scale(1.1) translateY(-2px); opacity: 0.55; }
-    .card.project-card:hover .project-preview { transform: scale(1.02); }
-
-    /* Individual preview gradients */
-    .preview-quiettown {
-      background: linear-gradient(135deg, #e8e4df 0%, #d4cfc8 30%, #c9c4bc 60%, #bfb9b0 100%);
-    }
-    .preview-childhood {
-      background: linear-gradient(135deg, #d6dce2 0%, #c4cdd6 30%, #b8c5cf 60%, #aebfcc 100%);
-    }
-    .preview-derby {
-      background: linear-gradient(135deg, #d8ddd4 0%, #c8cfbf 30%, #bcc5af 60%, #b3bda6 100%);
-    }
-    .preview-ramen {
-      background: linear-gradient(135deg, #e6ddd4 0%, #dbd0c4 30%, #d1c4b4 60%, #c9baa8 100%);
-    }
-    .preview-marketer {
-      background: linear-gradient(135deg, #dddbe2 0%, #d0ced8 30%, #c5c2ce 60%, #bcb8c6 100%);
-    }
+    .card.project-card:hover .project-preview img { transform: scale(1.03); }
 
     .project-body { padding: 24px 24px 28px; display: flex; flex-direction: column; flex-grow: 1; }
     .project-meta {
@@ -367,6 +411,21 @@
       .grid-3, .grid-2, .work-grid { grid-template-columns: 1fr; }
       .tag-cloud { justify-content: center; }
       section { padding: 48px 0; }
+      #projects .grid-2 {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 16px;
+        padding-bottom: 8px;
+        scrollbar-width: none;
+      }
+      #projects .grid-2::-webkit-scrollbar { display: none; }
+      .project-card {
+        flex: 0 0 85%;
+        max-width: 85%;
+        scroll-snap-align: start;
+      }
     }
     @media (max-width: 480px) {
       .hero-text { font-size: 1.15rem; }
@@ -408,9 +467,9 @@
   <div class="manifesto fade-in visible">
     <blockquote>
       I don't wait until I'm ready.<br>
-      I start — and clarity follows.
+      I start, and clarity follows.
     </blockquote>
-    <p class="quote-attr">— a personal operating principle</p>
+    <p class="quote-attr">a personal operating principle</p>
   </div>
 
   <!-- Stats -->
@@ -444,9 +503,26 @@
       </div>
       <div class="about-text">
         <h2>A restless mind between Tokyo and the internet</h2>
-        <p>I'm Zyal. Most days I work in <em>healthcare marketing</em> — translating complex ideas into stories that actually connect. But when the laptop stays open past midnight, it's because I'm chasing a thread: wiring up an <em>AI experiment</em>, sketching a new project, or writing something I'll probably post on Rednote before breakfast.</p>
-        <p>I'm happiest in the overlap — where <em>marketing meets making</em>, where a weekend prototype teaches more than any course, and where the best ideas come from following your curiosity instead of a plan.</p>
+        <p>I'm Zyal. Most days I work in <em>healthcare marketing</em>, translating complex ideas into stories that actually connect. But when the laptop stays open past midnight, it's because I'm chasing a thread: wiring up an <em>AI experiment</em>, sketching a new project, or writing something I'll probably post on Rednote before breakfast.</p>
+        <p>I'm happiest in the overlap, where <em>marketing meets making</em>, where a weekend prototype teaches more than any course, and where the best ideas come from following your curiosity instead of a plan.</p>
       </div>
+    </div>
+  </section>
+
+  <!-- UPDATED: Life gallery structure -->
+  <section id="life" class="fade-in visible">
+    <p class="section-label">Life</p>
+    <div class="life-gallery">
+      <div class="life-photo active" data-index="0"><img src="images/life1.jpeg" alt="Lolita"></div>
+      <div class="life-photo" data-index="1"><img src="images/life2.jpeg" alt="Horses"></div>
+      <div class="life-photo" data-index="2"><img src="images/life3.jpg" alt="Dogs"></div>
+      <div class="life-photo" data-index="3"><img src="images/life4.jpeg" alt="Anime"></div>
+      <div class="life-photo" data-index="4"><img src="images/life5.jpeg" alt="Onsen"></div>
+      <div class="life-photo" data-index="5"><img src="images/life6.jpeg" alt="Abroad"></div>
+    </div>
+    <div class="life-caption">
+      <h3 id="life-title">Lolita</h3>
+      <p id="life-desc">Dressing as mood, memory, and theatre. A softer way of being seen.</p>
     </div>
   </section>
 
@@ -497,7 +573,7 @@
         <div class="project-body">
           <p class="project-meta">Lifestyle Tool</p>
           <h3>Ramen Tour</h3>
-          <p>A love letter to noodle soup. Track, rank, and map the best ramen spots — because someone had to.</p>
+          <p>A love letter to noodle soup. Track, rank, and map the best ramen spots, because someone had to.</p>
           <span class="project-origin">Born from eating too much ramen and wanting to rank it all</span>
           <a href="https://ramen-tour.lovable.app/" target="_blank" class="project-link">View project <span class="arrow">↗</span></a>
         </div>
@@ -509,7 +585,7 @@
         <div class="project-body">
           <p class="project-meta">Satirical Game</p>
           <h3>Marketer Life</h3>
-          <p>A tongue-in-cheek career simulator about surviving corporate marketing — emails, meetings, stress, and all.</p>
+          <p>A tongue-in-cheek career simulator about surviving corporate marketing. Emails, meetings, stress, and all.</p>
           <span class="project-origin">Made because if you can't laugh at the job, what can you do</span>
           <a href="https://marketer-life-career-dulx.bolt.host/" target="_blank" class="project-link">View project <span class="arrow">↗</span></a>
         </div>
@@ -531,28 +607,6 @@
     </div>
   </section>
 
-  <!-- Life -->
-  <section id="life" class="fade-in visible">
-    <p class="section-label">Life</p>
-    <div class="grid-3">
-      <div class="card life-card">
-        <div class="emoji"><svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4z"/></svg></div>
-        <h3>Wandering</h3>
-        <p>Getting lost on purpose — in back streets, train stations, and cities I don't know yet.</p>
-      </div>
-      <div class="card life-card">
-        <div class="emoji"><svg viewBox="0 0 24 24"><path d="M12 22c-4-4-8-7.5-8-12a8 8 0 0116 0c0 4.5-4 8-8 12z"/><path d="M12 10v6"/><path d="M9 13l3-3 3 3"/></svg></div>
-        <h3>Thinking Out Loud</h3>
-        <p>Reflections on work, identity, and what it means to live between cultures.</p>
-      </div>
-      <div class="card life-card">
-        <div class="emoji"><svg viewBox="0 0 24 24"><path d="M17 8h1a4 4 0 010 8h-1"/><path d="M3 8h14v9a4 4 0 01-4 4H7a4 4 0 01-4-4V8z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg></div>
-        <h3>Small Rituals</h3>
-        <p>Morning coffee, evening walks, weekend reads — the quiet structure behind the noise.</p>
-      </div>
-    </div>
-  </section>
-
   <!-- Content -->
   <section id="content" class="fade-in visible">
     <p class="section-label">Content</p>
@@ -569,7 +623,7 @@
         <div class="social-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></div>
         <div>
           <h3>LinkedIn</h3>
-          <p>The professional version of me — marketing, strategy, and global work.</p>
+          <p>The professional version of me. Marketing, strategy, and global work.</p>
         </div>
         <span class="card-arrow">↗</span>
       </a>
@@ -583,7 +637,7 @@
       <div class="card skill-card">
         <div class="icon-circle"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
         <h3>Digital Marketing</h3>
-        <p>SEO, paid media, campaigns — the kind of work where creativity and spreadsheets coexist.</p>
+        <p>SEO, paid media, campaigns. The kind of work where creativity and spreadsheets coexist.</p>
       </div>
       <div class="card skill-card">
         <div class="icon-circle"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
@@ -650,6 +704,52 @@
     });
   }, { rootMargin: '-40% 0px -55% 0px' });
   secs.forEach(s => navObs.observe(s));
+
+  // UPDATED: Life gallery click + hover handler
+  const lifeData = [
+    { title: 'Lolita', desc: 'Dressing as mood, memory, and theatre. A softer way of being seen.' },
+    { title: 'Horses', desc: 'Grace, speed, instinct, a world where emotion and motion meet.' },
+    { title: 'Dogs', desc: 'Loyalty, softness, and small daily joy. The kind of presence that makes a place feel like home.' },
+    { title: 'Anime', desc: 'Stories that stay longer than expected, part escape, part emotional language.' },
+    { title: 'Onsen', desc: 'Steam, stillness, and the rare luxury of slowing all the way down.' },
+    { title: 'Abroad', desc: 'Curiosity in motion. Cities, borders, and the feeling of becoming larger through movement.' }
+  ];
+  const lifePhotos = document.querySelectorAll('.life-photo');
+  const lifeTitle = document.getElementById('life-title');
+  const lifeDesc = document.getElementById('life-desc');
+  const lifeGallery = document.querySelector('.life-gallery');
+  const hoverClasses = ['tilt-left', 'tilt-right', 'tilt-far', 'is-hover'];
+
+  // UPDATED: gallery hover – set tilt classes based on hovered index
+  function clearHoverClasses() {
+    lifePhotos.forEach(p => hoverClasses.forEach(c => p.classList.remove(c)));
+  }
+  lifePhotos.forEach((photo, idx) => {
+    photo.addEventListener('mouseenter', () => {
+      clearHoverClasses();
+      lifePhotos.forEach((p, j) => {
+        if (j === idx) {
+          p.classList.add('is-hover');
+        } else if (j < idx) {
+          p.classList.add('tilt-left');
+          if (Math.abs(j - idx) > 1) p.classList.add('tilt-far');
+        } else {
+          p.classList.add('tilt-right');
+          if (Math.abs(j - idx) > 1) p.classList.add('tilt-far');
+        }
+      });
+      // UPDATED: update caption on hover
+      lifeTitle.textContent = lifeData[idx].title;
+      lifeDesc.textContent = lifeData[idx].desc;
+    });
+    photo.addEventListener('click', () => {
+      lifePhotos.forEach(p => p.classList.remove('active'));
+      photo.classList.add('active');
+      lifeTitle.textContent = lifeData[idx].title;
+      lifeDesc.textContent = lifeData[idx].desc;
+    });
+  });
+  lifeGallery.addEventListener('mouseleave', clearHoverClasses);
 
   // ── Fade in ──
   const fadeEls = document.querySelectorAll('.fade-in');
