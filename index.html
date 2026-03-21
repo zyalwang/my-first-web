@@ -64,6 +64,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .nav-pill a:hover { color: #1d1d1f; }
     .nav-pill a.active { color: #1d1d1f; background: rgba(0,0,0,0.05); }
 
+    /* ── Language switcher ── */
+    .lang-bar {
+      text-align: center;
+      padding: 10px 0 0;
+    }
+    .lang-bar a {
+      font-size: 0.72rem; font-weight: 500; color: #aeaeb2;
+      text-decoration: none; padding: 4px 10px;
+      transition: color 0.2s;
+    }
+    .lang-bar a:hover { color: #1d1d1f; }
+    .lang-bar a.current { color: #1d1d1f; font-weight: 600; }
+    .lang-bar span { color: #d1d1d6; font-size: 0.65rem; }
+
     /* ── Sections ── */
     section { padding: 64px 0; }
 
@@ -460,6 +474,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <a href="#contact">Contact</a>
   </div>
 </nav>
+
+<!-- Language switcher -->
+<div class="lang-bar">
+  <a href="index.html" class="current">EN</a>
+  <span>|</span>
+  <a href="ja/index.html">日本語</a>
+</div>
 
 <div class="wrapper">
 
