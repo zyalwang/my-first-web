@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+  <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NZXPKF83');</script>
+<!-- End Google Tag Manager -->
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zyal Wang | 营销、AI与好奇生活</title>
+  <meta name="description" content="数字营销、AI项目、创意实验，以及在不同文化之间生活的日常。互联网上一个安静的角落。">
+  <!-- Google Search Console -->
+  <meta name="google-site-verification" content="9sDPMP5eEM-u4sxH_2bG6KSkaLZlipDWN4YRXhgr1_8" />
+  <!-- Open Graph -->
+  <meta property="og:title" content="Zyal Wang | 营销、AI与好奇生活">
+  <meta property="og:description" content="数字营销、AI项目、创意实验，以及在不同文化之间生活的日常。互联网上一个安静的角落。">
+  <meta property="og:image" content="https://zyalwang.netlify.app/Portraitphotosquare.jpeg">
+  <meta property="og:type" content="website">
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@400;600&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans SC', 'Inter', -apple-system, sans-serif;
+      color: #1d1d1f;
+      background: #f5f5f7;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Layout ── */
+    .wrapper { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+
+    /* ── Fade-in ── */
+    .fade-in {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky; top: 16px; z-index: 10;
+      max-width: 720px; margin: 16px auto 0;
+      padding: 0 20px;
+    }
+    .nav-pill {
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px; padding: 10px 20px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-radius: 50px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+      width: fit-content; margin: 0 auto;
+    }
+    .nav-pill a {
+      font-size: 0.78rem; font-weight: 500; color: #86868b;
+      text-decoration: none; padding: 6px 14px; border-radius: 20px;
+      transition: color 0.25s, background 0.25s;
+    }
+    .nav-pill a:hover { color: #1d1d1f; }
+    .nav-pill a.active { color: #1d1d1f; background: rgba(0,0,0,0.05); }
+
+    /* ── Language switcher ── */
+    .lang-bar {
+      text-align: center;
+      padding: 10px 0 0;
+    }
+    .lang-bar a {
+      font-size: 0.72rem; font-weight: 500; color: #aeaeb2;
+      text-decoration: none; padding: 4px 10px;
+      transition: color 0.2s;
+    }
+    .lang-bar a:hover { color: #1d1d1f; }
+    .lang-bar a.current { color: #1d1d1f; font-weight: 600; }
+    .lang-bar span { color: #d1d1d6; font-size: 0.65rem; }
+
+    /* ── Sections ── */
+    section { padding: 64px 0; }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 100px 0 48px;
+    }
+    .hero-text {
+      font-family: 'Noto Serif SC', 'Newsreader', Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 400;
+      line-height: 2;
+      color: #86868b;
+    }
+    .hero-text strong {
+      color: #1d1d1f;
+      font-weight: 600;
+    }
+    .hero-text a {
+      color: #86868b;
+      text-decoration: none;
+      border-bottom: 1.5px dotted #c0c0c4;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .hero-text a:hover { color: #1d1d1f; border-color: #1d1d1f; }
+    .currently {
+      margin-top: 24px;
+      font-size: 0.82rem; font-weight: 400; color: #86868b;
+    }
+    .currently span { color: #1d1d1f; font-weight: 500; }
+    .currently .rotating-text {
+      display: inline-block;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .currently .rotating-text.fade-out {
+      opacity: 0; transform: translateY(5px);
+    }
+
+    /* ── Manifesto ── */
+    .manifesto {
+      padding: 32px 0 48px;
+    }
+    .manifesto blockquote {
+      font-family: 'Noto Serif SC', 'Newsreader', Georgia, serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      font-style: normal;
+      color: #1d1d1f;
+      line-height: 1.85;
+      border-left: 3px solid #d1d1d6;
+      padding-left: 24px;
+    }
+    .manifesto .quote-attr {
+      margin-top: 12px;
+      padding-left: 27px;
+      font-size: 0.78rem;
+      color: #86868b;
+      font-style: normal;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: #fff;
+      border-radius: 24px;
+      overflow: hidden;
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    }
+
+    /* ── Section headers ── */
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #86868b;
+      margin-bottom: 20px;
+    }
+
+    /* ── Stats row ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      padding: 0 0 16px;
+    }
+    .stat-card {
+      padding: 24px 16px;
+      text-align: center;
+    }
+    .stat-card .stat-number {
+      font-family: 'Noto Serif SC', 'Newsreader', Georgia, serif;
+      font-weight: 600;
+      font-size: 1.6rem;
+      color: #1d1d1f;
+      margin-bottom: 4px;
+    }
+    .stat-card .stat-label {
+      font-size: 0.7rem;
+      color: #86868b;
+      line-height: 1.5;
+    }
+
+    /* ── About ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .about-portrait {
+      border-radius: 20px;
+      overflow: hidden;
+      aspect-ratio: 3 / 4;
+    }
+    .about-portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .about-text h2 {
+      font-family: 'Noto Serif SC', 'Newsreader', Georgia, serif;
+      font-weight: 600;
+      font-size: 1.3rem;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .about-text p {
+      font-size: 0.88rem;
+      font-weight: 400;
+      color: #48484a;
+      line-height: 1.95;
+      margin-bottom: 14px;
+    }
+    .about-text p:last-child { margin-bottom: 0; }
+    .about-text em {
+      font-style: normal;
+      font-weight: 600;
+      color: #1d1d1f;
+    }
+
+    /* ── Exploring tags ── */
+    .tag-cloud {
+      display: flex; flex-wrap: wrap; gap: 10px;
+    }
+    .explore-tag {
+      font-size: 0.82rem; font-weight: 500;
+      color: #48484a; padding: 8px 20px;
+      border-radius: 50px; background: #fff;
+      border: 1px solid #e8e8ed;
+      transition: transform 0.3s, background 0.3s, color 0.3s;
+      cursor: default;
+    }
+    .explore-tag:hover {
+      transform: translateY(-2px);
+      background: #1d1d1f; color: #fff;
+    }
+
+    /* ── Grid ── */
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+    /* life gallery – cover flow style */
+    .life-gallery {
+      display: flex;
+      justify-content: center;
+      padding-bottom: 40px;
+      perspective: 800px;
+      margin: 0 -10px;
+    }
+    .life-photo {
+      width: 100px; height: 100px;
+      border-radius: 10px;
+      overflow: visible;
+      cursor: pointer;
+      flex-shrink: 0;
+      position: relative;
+      margin: 0 -12px;
+      z-index: 1;
+      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  z-index 0s, box-shadow 0.5s ease;
+    }
+    .life-photo img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      border-radius: 10px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      -webkit-box-reflect: below 4px
+        linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.08));
+    }
+
+    .life-photo.tilt-left {
+      transform: rotateY(35deg) scale(0.88);
+      z-index: 2;
+    }
+    .life-photo.tilt-right {
+      transform: rotateY(-35deg) scale(0.88);
+      z-index: 2;
+    }
+    .life-photo.is-hover {
+      transform: rotateY(0deg) scale(1.15);
+      z-index: 10;
+    }
+    .life-photo.is-hover img {
+      box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+    }
+    .life-photo.tilt-far { z-index: 1; }
+
+    .life-photo.active {
+      z-index: 3;
+    }
+    .life-photo.active img {
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+    .life-caption {
+      text-align: center;
+      padding-top: 20px;
+    }
+    .life-caption h3 {
+      font-family: 'Noto Serif SC', 'Newsreader', Georgia, serif;
+      font-weight: 600; font-size: 1.1rem;
+      margin-bottom: 6px; color: #1d1d1f;
+    }
+    .life-caption p {
+      font-size: 0.8rem; color: #86868b;
+      line-height: 1.75; max-width: 420px;
+      margin: 0 auto;
+    }
+
+    /* ── Social cards ── */
+    .social-card {
+      display: flex; align-items: center; gap: 16px;
+      padding: 20px 24px; text-decoration: none; color: #1d1d1f;
+    }
+    .social-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+      background: #f5f5f7;
+    }
+    .social-icon svg { width: 20px; height: 20px; stroke: #86868b; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .social-card h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 2px; }
+    .social-card .stat-badge {
+      font-size: 0.62rem; font-weight: 600; color: #1d1d1f;
+      background: #f0f0f5; padding: 2px 8px; border-radius: 8px;
+      margin-left: 6px; vertical-align: middle;
+    }
+    .social-card p { font-size: 0.76rem; color: #86868b; }
+    .social-card .card-arrow {
+      margin-left: auto; font-size: 0.9rem; color: #c0c0c4;
+      transition: transform 0.25s, color 0.25s;
+    }
+    .social-card:hover .card-arrow { transform: translate(2px, -2px); color: #1d1d1f; }
+
+    /* ── Article card ── */
+    .article-card {
+      display: flex; flex-direction: column;
+      padding: 0;
+    }
+    .article-card-inner {
+      padding: 32px 28px;
+      text-decoration: none; color: inherit;
+      display: block;
+    }
+    .article-card .article-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.65rem; font-weight: 600; letter-spacing: 1px;
+      text-transform: uppercase; color: #86868b;
+      margin-bottom: 14px;
+    }
+    .article-card .article-tag svg {
+      width: 14px; height: 14px; stroke: #86868b;
+      fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .article-card h3 {
+      font-family: 'Noto Serif SC', 'Newsreader', Georgia, serif;
+      font-weight: 600; font-size: 1.2rem;
+      margin-bottom: 10px; line-height: 1.5;
+    }
+    .article-card .article-desc {
+      font-size: 0.82rem; color: #86868b;
+      line-height: 1.8; margin-bottom: 20px;
+    }
+    .article-cta {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.78rem; font-weight: 600;
+      color: #1d1d1f; text-decoration: none;
+      padding: 10px 22px;
+      border-radius: 50px;
+      background: #f5f5f7;
+      transition: background 0.25s, gap 0.25s;
+    }
+    .article-cta:hover { background: #e8e8ed; gap: 10px; }
+    .article-cta .arrow { font-size: 0.85rem; }
+
+    /* ── Contact section ── */
+    .contact-section {
+      text-align: center;
+      padding: 64px 0 48px;
+    }
+    .contact-section .section-label {
+      margin-bottom: 12px;
+    }
+    .contact-subtitle {
+      font-size: 0.85rem;
+      color: #86868b;
+      margin-bottom: 28px;
+    }
+    .contact-links {
+      display: flex; justify-content: center; gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+      list-style: none;
+    }
+    .contact-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.82rem; font-weight: 500;
+      color: #1d1d1f; text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 50px;
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .contact-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    }
+    .contact-btn svg {
+      width: 18px; height: 18px;
+      stroke: #86868b; fill: none;
+      stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .contact-btn .stat-badge {
+      font-size: 0.6rem; font-weight: 600; color: #1d1d1f;
+      background: #f0f0f5; padding: 2px 8px; border-radius: 8px;
+    }
+
+    /* ── Skill cards ── */
+    .work-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .skill-card { padding: 28px 24px; }
+    .skill-card .icon-circle {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: #f5f5f7; display: flex; align-items: center;
+      justify-content: center; font-size: 1.1rem; margin-bottom: 14px;
+    }
+    .skill-card .icon-circle svg { width: 20px; height: 20px; stroke: #86868b; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .skill-card h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; }
+    .skill-card p { font-size: 0.78rem; color: #86868b; line-height: 1.75; }
+
+    /* ── Project container: grid on desktop ── */
+    #projects .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    /* ── Project cards ── */
+    .project-card {
+      display: flex; flex-direction: column;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.07);
+    }
+    .project-preview {
+      height: 220px; position: relative; overflow: hidden;
+      background: #f5f5f7;
+    }
+    .project-preview img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.5s ease;
+    }
+    .card.project-card:hover .project-preview img { transform: scale(1.03); }
+
+    .project-body { padding: 24px 24px 28px; display: flex; flex-direction: column; flex-grow: 1; }
+    .project-meta {
+      font-size: 0.65rem; font-weight: 600; letter-spacing: 1px;
+      text-transform: uppercase; color: #86868b; margin-bottom: 8px;
+    }
+    .project-body h3 {
+      font-family: 'Noto Serif SC', 'Newsreader', Georgia, serif;
+      font-weight: 600; font-size: 1.15rem; margin-bottom: 8px;
+    }
+    .project-body p {
+      font-size: 0.8rem; color: #86868b;
+      line-height: 1.8; margin-bottom: 6px; flex-grow: 1;
+    }
+    .project-origin {
+      font-size: 0.7rem; font-style: normal; color: #aeaeb2;
+      margin-bottom: 18px;
+      opacity: 0; transform: translateY(4px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .card.project-card:hover .project-origin { opacity: 1; transform: translateY(0); }
+    .project-link {
+      align-self: flex-start; font-size: 0.76rem; font-weight: 500;
+      color: #1d1d1f; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 4px;
+      transition: gap 0.25s;
+    }
+    .project-link:hover { gap: 8px; }
+    .project-link .arrow { font-size: 0.85rem; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center; padding: 64px 0 48px;
+    }
+    footer .footer-links {
+      display: flex; justify-content: center; gap: 24px;
+      margin-bottom: 24px; list-style: none;
+    }
+    footer .footer-links a {
+      font-size: 0.78rem; font-weight: 500; color: #86868b;
+      text-decoration: none; transition: color 0.25s;
+    }
+    footer .footer-links a:hover { color: #1d1d1f; }
+    footer .signature {
+      font-family: 'Noto Serif SC', 'Newsreader', Georgia, serif;
+      font-style: normal; font-size: 0.95rem;
+      color: #86868b; margin-bottom: 20px;
+    }
+    footer .copyright { font-size: 0.75rem; color: #aeaeb2; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .hero-text { font-size: 1.25rem; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .about-grid { grid-template-columns: 1fr; text-align: center; }
+      .about-portrait { max-width: 220px; margin: 0 auto; }
+      .grid-3, .grid-2, .work-grid { grid-template-columns: 1fr; }
+      .tag-cloud { justify-content: center; }
+      section { padding: 48px 0; }
+      #projects .grid-2 {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 16px;
+        padding-bottom: 8px;
+        scrollbar-width: none;
+      }
+      #projects .grid-2::-webkit-scrollbar { display: none; }
+      .project-card {
+        flex: 0 0 85%;
+        max-width: 85%;
+        scroll-snap-align: start;
+      }
+    }
+    @media (max-width: 480px) {
+      .hero-text { font-size: 1.1rem; }
+      .nav-pill { gap: 2px; padding: 8px 12px; }
+      .nav-pill a { font-size: 0.72rem; padding: 6px 10px; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NZXPKF83"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<!-- Nav -->
+<nav>
+  <div class="nav-pill">
+    <a href="#about" class="active">关于我</a>
+    <a href="#projects">项目</a>
+    <a href="#exploring">探索中</a>
+    <a href="#content">内容</a>
+    <a href="#work">技能</a>
+    <a href="#contact">联系</a>
+  </div>
+</nav>
+
+<!-- Language switcher -->
+<div class="lang-bar">
+  <a href="../index.html">EN</a>
+  <span>|</span>
+  <a href="../ja/index.html">日本語</a>
+  <span>|</span>
+  <a href="index.html" class="current">中文</a>
+</div>
+
+<div class="wrapper">
+
+  <!-- Hero -->
+  <section class="hero">
+    <p class="hero-text">
+      <strong>Zyal Wang</strong>。<br><br>
+      <strong>好奇心</strong>，变成可以触碰的东西。<br><br>
+      白天是<strong>数字营销人</strong>，<br>
+      但始终是<strong>创造者</strong>和<strong>AI探索者</strong>。<br><br>
+      用数据讲故事，<br>
+      用代码让想法成形，<br>
+      用写作来理清思路。<br><br>
+      这里是我的<a href="#projects">数字花园</a>。
+    </p>
+    <p class="currently">最近在想 → <span class="rotating-text">用Lovable深夜写代码</span></p>
+  </section>
+
+  <!-- Manifesto -->
+  <div class="manifesto fade-in visible">
+    <blockquote>
+      不等准备好再开始。<br>
+      先动起来，答案会跟上。
+    </blockquote>
+    <p class="quote-attr">这是我的行动原则。</p>
+  </div>
+
+  <!-- Stats -->
+  <section class="fade-in visible" style="padding-top:0">
+    <div class="stats-row">
+      <div class="card stat-card">
+        <div class="stat-number">27K+</div>
+        <div class="stat-label">Rednote点赞与收藏</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-number">5</div>
+        <div class="stat-label">用AI做的个人项目</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-number">Healthcare</div>
+        <div class="stat-label">有温度的营销</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-number">Global</div>
+        <div class="stat-label">跨境内容创作</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="fade-in visible">
+    <p class="section-label">About</p>
+    <div class="about-grid">
+      <div class="about-portrait">
+        <img src="../portrait.jpeg" alt="Zyal Wang">
+      </div>
+      <div class="about-text">
+        <h2>在东京和互联网之间，不停思考的人。</h2>
+        <p>我是Zyal。日常工作是<em>医疗健康营销</em>，<br>把复杂的信息变成真正能打动人的表达。</p>
+        <p>但如果深夜还没关电脑，<br>多半是在做<em>AI实验</em>、构思新项目，<br>或者在Rednote上写点什么。</p>
+        <p><em>营销和创造</em>重叠的地方，就是我最喜欢待的地方。<br>周末做的原型比任何课程都让我学得多，<br>最好的想法永远来自好奇心，而不是计划。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Life gallery -->
+  <section id="life" class="fade-in visible">
+    <p class="section-label">Life</p>
+    <div class="life-gallery">
+      <div class="life-photo active" data-index="0"><img src="../images/life1.jpeg" alt="洛丽塔"></div>
+      <div class="life-photo" data-index="1"><img src="../images/life2.jpeg" alt="马"></div>
+      <div class="life-photo" data-index="2"><img src="../images/life3.jpg" alt="狗"></div>
+      <div class="life-photo" data-index="3"><img src="../images/life4.jpeg" alt="动漫"></div>
+      <div class="life-photo" data-index="4"><img src="../images/life5.jpeg" alt="温泉"></div>
+      <div class="life-photo" data-index="5"><img src="../images/life6.jpeg" alt="旅行"></div>
+    </div>
+    <div class="life-caption">
+      <h3 id="life-title">洛丽塔</h3>
+      <p id="life-desc">用穿衣表达情绪、记忆和一点戏剧感。一种更温柔的被看见的方式。</p>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="fade-in visible">
+    <p class="section-label">Projects &amp; Experiments</p>
+    <div class="grid-2">
+      <div class="card project-card">
+        <div class="project-preview">
+          <img src="../Quiet Town.jpeg" alt="Quiet Town">
+        </div>
+        <div class="project-body">
+          <p class="project-meta">Interactive</p>
+          <h3>Quiet Town</h3>
+          <p>如果一个网站能让人感觉像安静的午后呢？一个由心情驱动体验的互动空间。</p>
+          <span class="project-origin">想在数字世界里找到一点平静，用一个晚上做出来的</span>
+          <a href="https://quiettown.lovable.app/" target="_blank" class="project-link">查看项目 <span class="arrow">↗</span></a>
+        </div>
+      </div>
+      <div class="card project-card">
+        <div class="project-preview">
+          <img src="../My Childhood Global.jpeg" alt="My Childhood Global">
+        </div>
+        <div class="project-body">
+          <p class="project-meta">Creative Experiment</p>
+          <h3>My Childhood Global</h3>
+          <p>不同国家的人，对童年的记忆会一样吗？好奇心驱使我做了一个可以验证的地方。</p>
+          <span class="project-origin">深夜聊怀旧话题时冒出的念头</span>
+          <a href="https://my-childhood-global.lovable.app/" target="_blank" class="project-link">查看项目 <span class="arrow">↗</span></a>
+        </div>
+      </div>
+      <div class="card project-card">
+        <div class="project-preview">
+          <img src="../Legend Derby.jpeg" alt="Legend Derby">
+        </div>
+        <div class="project-body">
+          <p class="project-meta">Creative Project</p>
+          <h3>Legend Derby</h3>
+          <p>一半是游戏，一半是故事，一半是玩角色设计的借口。赛马×创意虚构。</p>
+          <span class="project-origin">用AI进行趣味世界观构建的实验</span>
+          <a href="https://legend-derby.lovable.app/" target="_blank" class="project-link">查看项目 <span class="arrow">↗</span></a>
+        </div>
+      </div>
+      <div class="card project-card">
+        <div class="project-preview">
+          <img src="../Ramen Tour.jpeg" alt="Ramen Tour">
+        </div>
+        <div class="project-body">
+          <p class="project-meta">Lifestyle Tool</p>
+          <h3>Ramen Tour</h3>
+          <p>写给拉面的情书。记录、排名、标记最好吃的拉面店——总得有人来做这件事。</p>
+          <span class="project-origin">拉面吃太多了，想把它们全部排个名</span>
+          <a href="https://ramen-tour.lovable.app/" target="_blank" class="project-link">查看项目 <span class="arrow">↗</span></a>
+        </div>
+      </div>
+      <div class="card project-card">
+        <div class="project-preview">
+          <img src="../Marketer Life.jpeg" alt="Marketer Life">
+        </div>
+        <div class="project-body">
+          <p class="project-meta">Satirical Game</p>
+          <h3>Marketer Life</h3>
+          <p>一款自嘲式的职场生存模拟器。邮件、会议、压力，一个都不少。</p>
+          <span class="project-origin">如果不能笑着面对工作，还能笑什么呢</span>
+          <a href="https://marketer-life-career-dulx.bolt.host/" target="_blank" class="project-link">查看项目 <span class="arrow">↗</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Exploring -->
+  <section id="exploring" class="fade-in visible">
+    <p class="section-label">正在探索</p>
+    <div class="tag-cloud">
+      <span class="explore-tag">AI × 创造力</span>
+      <span class="explore-tag">个人网站的回归</span>
+      <span class="explore-tag">写作 = 思考</span>
+      <span class="explore-tag">不等许可，先做再说</span>
+      <span class="explore-tag">互联网是游乐场</span>
+      <span class="explore-tag">Vibe coding作为创作方式</span>
+      <span class="explore-tag">跨文化叙事</span>
+    </div>
+  </section>
+
+  <!-- Content -->
+  <section id="content" class="fade-in visible">
+    <p class="section-label">内容</p>
+    <div class="card article-card">
+      <a href="articles/myself/index.html" class="article-card-inner">
+        <p class="article-tag">
+          <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          个人随笔
+        </p>
+        <h3>从语言生到日本数字营销人：我的旅程</h3>
+        <p class="article-desc">从中国985大学的日语专业出发，经历留学、求职、转职，最终在日本成为数字营销人。19岁到31岁，一段关于拒绝、重新开始和好奇心的真实记录。</p>
+        <span class="article-cta">阅读全文 <span class="arrow">→</span></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Work -->
+  <section id="work" class="fade-in visible">
+    <p class="section-label">我的技能</p>
+    <div class="work-grid">
+      <div class="card skill-card">
+        <div class="icon-circle"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <h3>数字营销</h3>
+        <p>SEO、付费广告、营销活动。创意和数据表格共存的日常。</p>
+      </div>
+      <div class="card skill-card">
+        <div class="icon-circle"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <h3>医疗健康</h3>
+        <p>在信任比潮流更重要的行业做营销。我认真对待这件事。</p>
+      </div>
+      <div class="card skill-card">
+        <div class="icon-circle"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+        <h3>AI &amp; Vibe Coding</h3>
+        <p>提示词、原型设计、做出昨天还不存在的东西。最有趣的部分。</p>
+      </div>
+      <div class="card skill-card">
+        <div class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
+        <h3>网站 &amp; 自动化</h3>
+        <p>搭页面、看数据、把无聊的事交给自动化，好把精力留给有趣的事。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <footer id="contact" class="contact-section">
+    <p class="section-label">联系方式</p>
+    <p class="contact-subtitle">打个招呼、一起合作，或者单纯聊聊。</p>
+    <ul class="contact-links">
+      <li>
+        <a href="https://xhslink.com/m/3NL8vdNT7zq" target="_blank" class="contact-btn">
+          <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+          Rednote
+          <span class="stat-badge">27K+</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://www.linkedin.com/in/wangxinlu" target="_blank" class="contact-btn">
+          <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+          LinkedIn
+        </a>
+      </li>
+    </ul>
+    <p class="signature">用好奇心、咖啡和一点AI搭建</p>
+    <p class="copyright">© 2026 Zyal Wang</p>
+  </footer>
+
+</div>
+
+<script>
+  // ── Rotating text ──
+  const topics = [
+    '用Lovable深夜写代码',
+    '作为创作伙伴的AI',
+    '个人网站为什么还重要',
+    '关东拉面排行榜',
+    '用写作整理思路',
+    '没有路线图地去创造'
+  ];
+  let i = 0;
+  const el = document.querySelector('.rotating-text');
+  if (el) {
+    setInterval(() => {
+      el.classList.add('fade-out');
+      setTimeout(() => {
+        i = (i + 1) % topics.length;
+        el.textContent = topics[i];
+        el.classList.remove('fade-out');
+      }, 400);
+    }, 3200);
+  }
+
+  // ── Active nav on scroll ──
+  const links = document.querySelectorAll('.nav-pill a');
+  const secs = document.querySelectorAll('section[id], footer[id]');
+  const navObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  secs.forEach(s => navObs.observe(s));
+
+  // Life gallery click + hover handler
+  const lifeData = [
+    { title: '洛丽塔', desc: '用穿衣表达情绪、记忆和一点戏剧感。一种更温柔的被看见的方式。' },
+    { title: '马', desc: '优雅、速度、本能。情感和动态交汇的世界。' },
+    { title: '狗', desc: '忠诚、温柔，和每天小小的幸福。那种让一个地方变成"家"的陪伴。' },
+    { title: '动漫', desc: '停留得比预期更久的故事。一半是逃离，一半是情感的语言。' },
+    { title: '温泉', desc: '蒸汽、寂静，以及彻底慢下来的奢侈。' },
+    { title: '旅行', desc: '行走中的好奇心。城市、边境，以及在移动中变得更广阔的感觉。' }
+  ];
+  const lifePhotos = document.querySelectorAll('.life-photo');
+  const lifeTitle = document.getElementById('life-title');
+  const lifeDesc = document.getElementById('life-desc');
+  const lifeGallery = document.querySelector('.life-gallery');
+  const hoverClasses = ['tilt-left', 'tilt-right', 'tilt-far', 'is-hover'];
+
+  function clearHoverClasses() {
+    lifePhotos.forEach(p => hoverClasses.forEach(c => p.classList.remove(c)));
+  }
+  lifePhotos.forEach((photo, idx) => {
+    photo.addEventListener('mouseenter', () => {
+      clearHoverClasses();
+      lifePhotos.forEach((p, j) => {
+        if (j === idx) {
+          p.classList.add('is-hover');
+        } else if (j < idx) {
+          p.classList.add('tilt-left');
+          if (Math.abs(j - idx) > 1) p.classList.add('tilt-far');
+        } else {
+          p.classList.add('tilt-right');
+          if (Math.abs(j - idx) > 1) p.classList.add('tilt-far');
+        }
+      });
+      lifeTitle.textContent = lifeData[idx].title;
+      lifeDesc.textContent = lifeData[idx].desc;
+    });
+    photo.addEventListener('click', () => {
+      lifePhotos.forEach(p => p.classList.remove('active'));
+      photo.classList.add('active');
+      lifeTitle.textContent = lifeData[idx].title;
+      lifeDesc.textContent = lifeData[idx].desc;
+    });
+  });
+  lifeGallery.addEventListener('mouseleave', clearHoverClasses);
+
+  // ── Fade in ──
+  const fadeEls = document.querySelectorAll('.fade-in');
+  const fadeObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); fadeObs.unobserve(e.target); }
+    });
+  }, { rootMargin: '0px 0px -40px 0px' });
+  fadeEls.forEach(el => fadeObs.observe(el));
+</script>
+
+
+</body></html>
