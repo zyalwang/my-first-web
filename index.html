@@ -802,8 +802,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     }
     @media (max-width: 480px) {
       .hero-text { font-size: 1.15rem; }
-      .nav-pill { gap: 4px; padding: 8px 12px; flex-wrap: wrap; justify-content: center; }
+      .nav-pill { gap: 4px; padding: 8px 12px; justify-content: center; }
       .nav-pill a { font-size: 0.72rem; padding: 6px 10px; }
+      .nav-pill a.hide-mobile { display: none; }
       .stats-row { grid-template-columns: 1fr 1fr; }
     }
 
@@ -844,7 +845,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     @media (max-width: 600px) {
       .pet { width: 100px; height: 112px; }
       .pet .shadow { width: 30px; height: 4px; }
-      .pet .speech { white-space: normal; max-width: 160px; text-align: center; top: -40px; }
+      .pet .speech { white-space: normal; max-width: 130px; text-align: center; top: -55px; font-size: 0.5rem; }
     }
   </style>
 </head>
@@ -857,7 +858,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <nav>
   <div class="nav-pill">
     <a href="#about" class="active">About</a>
-    <a href="#life">Life</a>
+    <a href="#life" class="hide-mobile">Life</a>
     <a href="#music">Music</a>
     <a href="#projects">Projects</a>
     <a href="#content">Content</a>
@@ -1117,7 +1118,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <section id="content" class="fade-in visible">
     <p class="section-label">Content</p>
     <div class="card article-card">
-      <a href="articles/myself/index.html" class="article-card-inner">
+      <a class='article-card-inner' href='/articles/myself/'>
         <p class="article-tag">
           <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
           Personal Essay
@@ -1277,7 +1278,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   const playlist = [
     { src: 'music/Balkansko(Motenegro Song).mp3', title: 'Balkansko', label: 'Montenegro Song' },
     { src: 'music/Mi Esperanza(Spanish Song)mp3.mp3', title: 'Mi Esperanza', label: 'Spanish Song' },
-    { src: 'music/ビーグルの歌.mp3', title: 'ビーグルの歌', label: 'Japanese Song' },
+    { src: 'music/beagle-song.mp3', title: 'ビーグルの歌', label: 'Japanese Song' },
     { src: 'music/彩虹(初中创作的歌曲).mp3', title: '彩虹', label: 'Chinese Song' },
     { src: 'music/魔法なんていらない.mp3', title: '魔法なんていらない', label: 'Japanese Song' }
   ];
@@ -1440,6 +1441,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   let posX = 60, posY = 16, walking = false, msgIdx = 0;
 
   function say(text, mood) {
+    var isMobile = window.innerWidth <= 600;
+    if (isMobile && text.length > 20) text = text.substring(0, 18) + '…';
     speech.textContent = text;
     setMood(mood || 'normal');
     wrap.classList.add('talking');
