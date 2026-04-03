@@ -18,6 +18,32 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta property="og:description" content="数字营销、AI项目、创意实验，以及在不同文化之间生活的日常。互联网上一个安静的角落。">
   <meta property="og:image" content="https://zyalwang.netlify.app/Portraitphotosquare.jpeg">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zyalwang.netlify.app/zh/">
+  <link rel="canonical" href="https://zyalwang.netlify.app/zh/">
+  <link rel="alternate" hreflang="en" href="https://zyalwang.netlify.app/">
+  <link rel="alternate" hreflang="ja" href="https://zyalwang.netlify.app/ja/">
+  <link rel="alternate" hreflang="zh" href="https://zyalwang.netlify.app/zh/">
+  <link rel="alternate" hreflang="x-default" href="https://zyalwang.netlify.app/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Zyal Wang",
+    "url": "https://zyalwang.netlify.app/zh/",
+    "author": {
+      "@type": "Person",
+      "name": "Zyal Wang",
+      "url": "https://zyalwang.netlify.app",
+      "jobTitle": "数字营销",
+      "sameAs": [
+        "https://www.linkedin.com/in/wangxinlu",
+        "https://xhslink.com/m/3NL8vdNT7zq"
+      ]
+    },
+    "description": "数字营销、AI项目、创意实验，以及在不同文化之间生活的日常。互联网上一个安静的角落。",
+    "inLanguage": "zh-CN"
+  }
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@400;600&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -77,6 +103,173 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .lang-bar a:hover { color: #2D2D2D; }
     .lang-bar a.current { color: #2D2D2D; font-weight: 600; }
     .lang-bar span { color: #BABABA; font-size: 0.65rem; }
+
+    /* ── Music player (Y2K flip phone) ── */
+    @import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap');
+    .music-player { max-width: 720px; margin: 20px auto 0; padding: 0 20px; }
+    .music-widget {
+      display: flex; align-items: flex-start; justify-content: center; gap: 24px;
+    }
+    .phone {
+      width: 210px; flex-shrink: 0;
+      background: linear-gradient(170deg, #B2E2D2 0%, #F4C2C2 50%, #FFAEBC 100%);
+      border-radius: 30px; padding: 10px;
+      box-shadow: 0 8px 32px rgba(178,226,210,0.35), 0 4px 16px rgba(255,174,188,0.3), inset 0 1px 0 rgba(255,255,255,0.6);
+      border: 2.5px solid rgba(255,255,255,0.55);
+      position: relative;
+    }
+    .phone-screen {
+      background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+      border-radius: 20px; padding: 14px 14px 16px; margin-bottom: 10px;
+      position: relative; overflow: hidden;
+    }
+    .phone-screen::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse at 50% 30%, rgba(157,80,187,0.15) 0%, transparent 60%),
+                  radial-gradient(circle at 20% 80%, rgba(255,133,161,0.1) 0%, transparent 40%),
+                  radial-gradient(circle at 80% 20%, rgba(178,226,210,0.08) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    .screen-status {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+      font-family: 'Silkscreen', monospace; position: relative; z-index: 1;
+    }
+    .screen-hearts { font-size: 0.55rem; color: #FF85A1; letter-spacing: 2px; }
+    .screen-clock { font-size: 0.55rem; color: rgba(255,255,255,0.5); }
+    .screen-album {
+      width: 100px; height: 100px; margin: 0 auto 10px; border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, rgba(178,226,210,0.6) 0%, rgba(157,80,187,0.5) 40%, rgba(110,72,170,0.7) 70%, rgba(30,30,38,0.9) 100%);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 30px rgba(157,80,187,0.4), 0 0 60px rgba(178,226,210,0.15);
+      position: relative; z-index: 1;
+    }
+    .cd-icon {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, rgba(255,255,255,0.3) 0%, rgba(178,226,210,0.2) 40%, rgba(157,80,187,0.15) 70%, transparent 100%);
+      box-shadow: inset 0 0 8px rgba(255,255,255,0.15), 0 0 12px rgba(178,226,210,0.3);
+      position: relative; border: 1px solid rgba(255,255,255,0.1);
+    }
+    .cd-icon::after {
+      content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,0.2); box-shadow: 0 0 4px rgba(178,226,210,0.5);
+    }
+    .screen-title {
+      font-family: 'Noto Serif SC', 'Newsreader', Georgia, serif;
+      font-size: 0.85rem; font-weight: 400; color: #fff;
+      text-align: center; margin-bottom: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      position: relative; z-index: 1; letter-spacing: 0.5px;
+    }
+    .screen-artist {
+      font-family: 'Silkscreen', monospace; font-size: 0.5rem; color: #B2E2D2;
+      text-align: center; margin-bottom: 12px; position: relative; z-index: 1; letter-spacing: 1px;
+    }
+    .screen-progress-wrap {
+      display: flex; align-items: center; gap: 6px; margin-bottom: 14px;
+      position: relative; z-index: 1;
+    }
+    .screen-progress-time {
+      font-family: 'Silkscreen', monospace; font-size: 0.45rem; color: rgba(255,255,255,0.4); min-width: 22px;
+    }
+    .screen-progress-time.right { text-align: right; }
+    .screen-progress {
+      flex-grow: 1; height: 2px; background: rgba(255,255,255,0.12); border-radius: 2px;
+      cursor: pointer; overflow: hidden;
+    }
+    .screen-progress-fill {
+      height: 100%; width: 0%; background: linear-gradient(90deg, #B2E2D2, #FF85A1);
+      border-radius: 2px; transition: width 0.1s linear;
+    }
+    .screen-controls {
+      display: flex; justify-content: center; align-items: center; gap: 18px;
+      position: relative; z-index: 1;
+    }
+    .ctrl-skip {
+      width: 28px; height: 28px; border: none; background: rgba(255,255,255,0.08);
+      border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: transform 0.15s, background 0.15s;
+    }
+    .ctrl-skip:hover { transform: scale(1.15); background: rgba(255,255,255,0.15); }
+    .ctrl-skip svg { width: 12px; height: 12px; fill: rgba(255,255,255,0.7); }
+    .ctrl-play {
+      width: 42px; height: 42px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+      background: linear-gradient(135deg, #F4C2C2 0%, #FF85A1 100%);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 12px rgba(255,133,161,0.4), 0 0 20px rgba(244,194,194,0.2);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .ctrl-play:hover { transform: scale(1.1); box-shadow: 0 4px 20px rgba(255,133,161,0.5); }
+    .ctrl-play:active { transform: scale(0.95); }
+    .ctrl-play svg { width: 16px; height: 16px; fill: #fff; }
+    .phone-keypad {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 5px; padding: 0 8px; margin-bottom: 8px;
+    }
+    .key {
+      background: linear-gradient(180deg, #F4C2C2 0%, #FFAEBC 100%);
+      border: 1.5px solid rgba(255,255,255,0.4); border-radius: 10px; padding: 6px 0;
+      font-family: 'Silkscreen', monospace; font-size: 0.6rem; font-weight: 700; color: #fff;
+      cursor: default; box-shadow: 0 2px 0 #d4a0aa; transition: transform 0.1s;
+    }
+    .key:active { transform: translateY(1px); box-shadow: 0 1px 0 #d4a0aa; }
+    .phone-menu {
+      display: block; width: calc(100% - 16px); margin: 0 8px 4px;
+      background: linear-gradient(90deg, #B2E2D2, #A8D8C8);
+      border: 1.5px solid rgba(255,255,255,0.4); border-radius: 20px; padding: 6px 0;
+      font-family: 'Silkscreen', monospace; font-size: 0.55rem; font-weight: 700; color: #fff;
+      letter-spacing: 2px; box-shadow: 0 2px 0 #8ec4b2; cursor: default;
+    }
+    .tracklist-panel {
+      flex-grow: 1; max-width: 320px; background: #fff;
+      border-radius: 20px; overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+    .tracklist-header {
+      padding: 14px 18px; font-family: 'Silkscreen', monospace;
+      font-size: 0.6rem; font-weight: 700; color: #999;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .tracklist-header::after {
+      content: '● ● ●'; font-size: 0.45rem; letter-spacing: 3px;
+      background: linear-gradient(90deg, #F4C2C2, #B2E2D2, #F4C2C2);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .tracklist-items { padding: 4px 0; }
+    .track-item {
+      display: flex; align-items: center; gap: 12px; padding: 10px 18px;
+      cursor: pointer; transition: background 0.15s;
+      border: none; background: none; width: 100%; text-align: left; font-family: inherit;
+    }
+    .track-item:hover { background: #f9f9f9; }
+    .track-item.active { background: #f0faf6; }
+    .track-idx {
+      font-family: 'Silkscreen', monospace; font-size: 0.7rem; font-weight: 700; color: #ddd; min-width: 22px;
+    }
+    .track-item.active .track-idx { color: #B2E2D2; }
+    .track-emoji { font-size: 0.85rem; flex-shrink: 0; }
+    .track-info { flex-grow: 1; min-width: 0; }
+    .track-name {
+      font-size: 0.72rem; font-weight: 600; color: #2D2D2D;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;
+    }
+    .track-sub { font-size: 0.55rem; color: #bbb; display: block; margin-top: 1px; }
+    .track-dur { font-family: 'Silkscreen', monospace; font-size: 0.5rem; color: #F4C2C2; flex-shrink: 0; }
+    .music-desc {
+      max-width: 520px; margin: 24px auto 0; text-align: center;
+      font-size: 0.78rem; line-height: 1.9; color: #717171;
+    }
+    .music-desc p { margin-bottom: 10px; }
+    @media (max-width: 600px) {
+      .music-widget { flex-direction: column; align-items: center; gap: 16px; }
+      .phone { width: 190px; }
+      .tracklist-panel { max-width: 100%; width: 100%; }
+      .screen-album { width: 80px; height: 80px; }
+      .cd-icon { width: 36px; height: 36px; }
+    }
 
     /* ── Sections ── */
     section { padding: 64px 0; }
@@ -533,9 +726,50 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     }
     @media (max-width: 480px) {
       .hero-text { font-size: 1.1rem; }
-      .nav-pill { gap: 2px; padding: 8px 12px; }
+      .nav-pill { gap: 4px; padding: 8px 12px; justify-content: center; }
       .nav-pill a { font-size: 0.72rem; padding: 6px 10px; }
+      .nav-pill a.hide-mobile { display: none; }
       .stats-row { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── Webpage Pet ── */
+    .pet-wrap {
+      position: fixed; bottom: 16px; left: 60px; z-index: 50;
+      cursor: pointer; user-select: none; pointer-events: auto;
+    }
+    .pet {
+      width: 160px; height: 180px; position: relative;
+      animation: pet-idle 2.5s ease-in-out infinite;
+    }
+    .pet-img {
+      width: 100%; height: 100%;
+      background: url('../page_pet/webpet_normal.png') center/contain no-repeat;
+      transition: background-image 0.3s ease;
+    }
+    .pet .shadow {
+      position: absolute; bottom: -4px; left: 10px;
+      width: 44px; height: 6px; background: rgba(0,0,0,0.08); border-radius: 50%;
+    }
+    .pet .speech {
+      position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
+      background: #fff; border: 1.5px solid #FFEB3B; border-radius: 10px;
+      padding: 3px 8px; font-size: 0.6rem; color: #717171; white-space: nowrap;
+      opacity: 0; transition: opacity 0.3s; pointer-events: none;
+    }
+    .pet .speech::after {
+      content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 5px solid #FFEB3B;
+    }
+    .pet-wrap.talking .speech { opacity: 1; }
+    .pet-wrap.flip .pet-img { transform: scaleX(-1); }
+    @keyframes pet-idle { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+    @keyframes pet-walk { 0%,100%{transform:rotate(0)} 25%{transform:rotate(3deg)} 75%{transform:rotate(-3deg)} }
+    .pet-wrap.walking .pet { animation: pet-walk 0.35s ease-in-out infinite; }
+    @media (max-width: 600px) {
+      .pet { width: 100px; height: 112px; }
+      .pet .shadow { width: 30px; height: 4px; }
+      .pet .speech { white-space: normal; max-width: 130px; text-align: center; top: -55px; font-size: 0.5rem; }
     }
   </style>
 </head>
@@ -548,10 +782,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <nav>
   <div class="nav-pill">
     <a href="#about" class="active">关于我</a>
+    <a href="#life" class="hide-mobile">生活</a>
+    <a href="#music">原创音乐</a>
     <a href="#projects">项目</a>
-    <a href="#exploring">探索中</a>
     <a href="#content">内容</a>
-    <a href="#work">技能</a>
     <a href="#contact">联系</a>
   </div>
 </nav>
@@ -645,6 +879,87 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <p id="life-desc">用穿衣表达情绪、记忆和一点戏剧感。一种更温柔的被看见的方式。</p>
     </div>
   </section>
+
+  <!-- Music player -->
+  <div id="music" class="music-player fade-in visible">
+    <div class="music-widget">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="screen-status">
+            <span class="screen-hearts">♥ ♥ ♥</span>
+            <span class="screen-clock" id="screen-clock">12:34</span>
+          </div>
+          <div class="screen-album">
+            <div class="cd-icon" id="cd-icon"></div>
+          </div>
+          <div class="screen-title" id="music-title">Balkansko</div>
+          <div class="screen-artist" id="music-artist">Original Music</div>
+          <div class="screen-progress-wrap">
+            <span class="screen-progress-time" id="music-time">0:00</span>
+            <div class="screen-progress" id="music-progress">
+              <div class="screen-progress-fill" id="music-fill"></div>
+            </div>
+            <span class="screen-progress-time right" id="music-duration">0:00</span>
+          </div>
+          <div class="screen-controls">
+            <button class="ctrl-skip" id="music-prev" title="上一首">
+              <svg viewBox="0 0 24 24"><path d="M19 20L9 12l10-8v16zM5 4h2v16H5V4z"/></svg>
+            </button>
+            <button class="ctrl-play" id="music-toggle" title="播放">
+              <svg id="music-icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg id="music-icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+            </button>
+            <button class="ctrl-skip" id="music-next" title="下一首">
+              <svg viewBox="0 0 24 24"><path d="M5 4l10 8-10 8V4zm14 0h-2v16h2V4z"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="phone-keypad">
+          <button class="key">1</button><button class="key">2</button><button class="key">3</button>
+          <button class="key">4</button><button class="key">5</button><button class="key">6</button>
+          <button class="key">7</button><button class="key">8</button><button class="key">9</button>
+          <button class="key">*</button><button class="key">0</button><button class="key">#</button>
+        </div>
+        <button class="phone-menu">MENU</button>
+      </div>
+      <div class="tracklist-panel">
+        <div class="tracklist-header">♫ TRACKLIST</div>
+        <div class="tracklist-items" id="tracklist">
+          <button class="track-item active" data-index="0">
+            <span class="track-idx">01</span><span class="track-emoji">🎧</span>
+            <span class="track-info"><span class="track-name">Balkansko</span><span class="track-sub">Montenegro Song</span></span>
+            <span class="track-dur" data-dur>--:--</span>
+          </button>
+          <button class="track-item" data-index="1">
+            <span class="track-idx">02</span><span class="track-emoji">🔥</span>
+            <span class="track-info"><span class="track-name">Mi Esperanza</span><span class="track-sub">Spanish Song</span></span>
+            <span class="track-dur" data-dur>--:--</span>
+          </button>
+          <button class="track-item" data-index="2">
+            <span class="track-idx">03</span><span class="track-emoji">🐶</span>
+            <span class="track-info"><span class="track-name">ビーグルの歌</span><span class="track-sub">Japanese Song</span></span>
+            <span class="track-dur" data-dur>--:--</span>
+          </button>
+          <button class="track-item" data-index="3">
+            <span class="track-idx">04</span><span class="track-emoji">🌈</span>
+            <span class="track-info"><span class="track-name">彩虹</span><span class="track-sub">Chinese Song</span></span>
+            <span class="track-dur" data-dur>--:--</span>
+          </button>
+          <button class="track-item" data-index="4">
+            <span class="track-idx">05</span><span class="track-emoji">✨</span>
+            <span class="track-info"><span class="track-name">魔法なんていらない</span><span class="track-sub">Japanese Song</span></span>
+            <span class="track-dur" data-dur>--:--</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="music-desc">
+      <p>这些作品都由我亲自创作与制作。它们凝结了我对世界的热爱、人生的片段与情绪的记录。</p>
+      <p>其中，有我在黑山共和国与西班牙旅行时的感受，也有在日本独自求职、每天走在通勤路上的心境。</p>
+      <p>还有一些中文歌曲，创作于我的初中时期，歌词来源于一本作文选，旋律则是即兴完成，并曾在全班同学面前演唱。</p>
+      <p>这些作品或许仍有不成熟之处，但都是真实而珍贵的表达。希望你会喜欢这些凝聚了我心血的创作。</p>
+    </div>
+  </div>
 
   <!-- Projects -->
   <section id="projects" class="fade-in visible">
@@ -788,6 +1103,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           LinkedIn
         </a>
       </li>
+
     </ul>
     <p class="signature">用好奇心、咖啡和一点AI搭建</p>
     <p class="copyright">© 2026 Zyal Wang</p>
@@ -820,7 +1136,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   // ── Active nav on scroll ──
   const links = document.querySelectorAll('.nav-pill a');
-  const secs = document.querySelectorAll('section[id], footer[id]');
+  const secs = document.querySelectorAll('section[id], footer[id], div[id="music"]');
   const navObs = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) {
@@ -883,7 +1199,240 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
   }, { rootMargin: '0px 0px -40px 0px' });
   fadeEls.forEach(el => fadeObs.observe(el));
+
+  // ── Music player (Y2K) ──
+  const playlist = [
+    { src: '../music/Balkansko(Motenegro Song).mp3', title: 'Balkansko', label: 'Montenegro Song' },
+    { src: '../music/Mi Esperanza(Spanish Song)mp3.mp3', title: 'Mi Esperanza', label: 'Spanish Song' },
+    { src: '../music/ビーグルの歌.mp3', title: 'ビーグルの歌', label: 'Japanese Song' },
+    { src: '../music/彩虹(初中创作的歌曲).mp3', title: '彩虹', label: 'Chinese Song' },
+    { src: '../music/魔法なんていらない.mp3', title: '魔法なんていらない', label: 'Japanese Song' }
+  ];
+  let trackIdx = 0;
+  const audio = new Audio();
+  const titleEl = document.getElementById('music-title');
+  const artistEl = document.getElementById('music-artist');
+  const timeEl = document.getElementById('music-time');
+  const durEl = document.getElementById('music-duration');
+  const fillEl = document.getElementById('music-fill');
+  const progressEl = document.getElementById('music-progress');
+  const playIcon = document.getElementById('music-icon-play');
+  const pauseIcon = document.getElementById('music-icon-pause');
+  const toggleBtn = document.getElementById('music-toggle');
+  const cdIcon = document.getElementById('cd-icon');
+  const trackItems = document.querySelectorAll('.track-item');
+  const clockEl = document.getElementById('screen-clock');
+  function updateClock() {
+    const now = new Date();
+    clockEl.textContent = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+  }
+  updateClock(); setInterval(updateClock, 30000);
+  let cdAngle = 0, cdAnim = null;
+  function spinCD() { cdAngle = (cdAngle + 2) % 360; cdIcon.style.transform = 'rotate(' + cdAngle + 'deg)'; cdAnim = requestAnimationFrame(spinCD); }
+  function stopCD() { if (cdAnim) { cancelAnimationFrame(cdAnim); cdAnim = null; } }
+  function fmt(s) { const m = Math.floor(s/60); const sec = Math.floor(s%60); return m+':'+(sec<10?'0':'')+sec; }
+  function loadTrack(idx) {
+    trackIdx = ((idx % playlist.length) + playlist.length) % playlist.length;
+    audio.src = playlist[trackIdx].src;
+    titleEl.textContent = playlist[trackIdx].title;
+    artistEl.textContent = playlist[trackIdx].label;
+    fillEl.style.width = '0%'; timeEl.textContent = '0:00'; durEl.textContent = '0:00';
+    trackItems.forEach((t, i) => t.classList.toggle('active', i === trackIdx));
+  }
+  playlist.forEach((track, i) => {
+    const tmp = new Audio(); tmp.preload = 'metadata'; tmp.src = track.src;
+    tmp.addEventListener('loadedmetadata', () => {
+      document.querySelectorAll('.track-item[data-index="'+i+'"] .track-dur').forEach(s => s.textContent = fmt(tmp.duration));
+    });
+  });
+  toggleBtn.addEventListener('click', () => {
+    if (!audio.src) loadTrack(0);
+    if (audio.paused) { audio.play(); playIcon.style.display='none'; pauseIcon.style.display='block'; spinCD(); }
+    else { audio.pause(); playIcon.style.display='block'; pauseIcon.style.display='none'; stopCD(); }
+  });
+  audio.addEventListener('timeupdate', () => {
+    if (audio.duration) { fillEl.style.width=(audio.currentTime/audio.duration*100)+'%'; timeEl.textContent=fmt(audio.currentTime); durEl.textContent=fmt(audio.duration); }
+  });
+  audio.addEventListener('ended', () => { loadTrack(trackIdx+1); audio.play(); spinCD(); });
+  function seekFromEvent(e) {
+    if (!audio.duration) return;
+    const rect = progressEl.getBoundingClientRect();
+    const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+    audio.currentTime = Math.max(0, Math.min(1, x / rect.width)) * audio.duration;
+  }
+  progressEl.addEventListener('click', seekFromEvent);
+  progressEl.addEventListener('touchstart', (e) => { seekFromEvent(e); e.preventDefault(); });
+  document.getElementById('music-prev').addEventListener('click', () => { const w=!audio.paused; loadTrack(trackIdx-1); if(w){audio.play();spinCD();} });
+  document.getElementById('music-next').addEventListener('click', () => { const w=!audio.paused; loadTrack(trackIdx+1); if(w){audio.play();spinCD();} });
+  trackItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const idx = parseInt(item.dataset.index);
+      loadTrack(idx); audio.play(); playIcon.style.display='none'; pauseIcon.style.display='block'; spinCD();
+    });
+  });
 </script>
 
+<!-- Webpage Pet -->
+<div class="pet-wrap" id="pet-wrap">
+  <div class="pet">
+    <div class="speech" id="pet-speech"></div>
+    <div class="pet-img"></div>
+    <div class="shadow"></div>
+  </div>
+</div>
+<script>
+(function(){
+  const wrap = document.getElementById('pet-wrap');
+  const speech = document.getElementById('pet-speech');
+  const petImg = wrap.querySelector('.pet-img');
+  const basePath = '../page_pet/';
+  const moods = {
+    normal: basePath + 'webpet_normal.png',
+    happy: basePath + 'webpet_happy.png',
+    excited: basePath + 'webpet_exciting.png',
+    cute: basePath + 'webpet_cute.png',
+    cry: basePath + 'webpet_cry.png',
+    angry: basePath + 'webpet_angry.png',
+    question: basePath + 'webpet_question.png',
+    worried: basePath + 'webpet_worried.png'
+  };
+  let currentMood = 'normal';
+  function setMood(mood) {
+    currentMood = mood;
+    petImg.style.backgroundImage = 'url(' + moods[mood] + ')';
+  }
+  function resetMood() { setMood('normal'); }
+
+  // Preload all mood images
+  Object.values(moods).forEach(src => { const img = new Image(); img.src = src; });
+
+  const clickMsgs = [
+    { text: '你好呀！我是Zyal ♡', mood: 'happy' },
+    { text: '我喜欢vibe coding！', mood: 'excited' },
+    { text: '我去过黑山共和国，超喜欢那里！', mood: 'excited' },
+    { text: '我从12岁开始就是粉色头发了 ✨', mood: 'cute' },
+    { text: '这里的音乐都是我自己做的哦！', mood: 'happy' },
+    { text: '欢迎来到我的数字花园~', mood: 'cute' },
+    { text: '别走嘛... 🥺', mood: 'cry' },
+    { text: '凌晨3点的bug真的让人抓狂 😤', mood: 'angry' },
+    { text: '嗯...下一个项目做什么好呢？', mood: 'question' },
+    { text: '我的文章，会有人看吗...？', mood: 'worried' },
+    { text: '( ˶ᵔ ᵕ ᵔ˶ )', mood: 'cute' },
+    { text: '♪♪♪', mood: 'happy' }
+  ];
+  const autoMsgs = [
+    { text: '听听Balkansko吧！🎧', mood: 'excited' },
+    { text: 'Mi Esperanza是我的西班牙语歌~ 🔥', mood: 'happy' },
+    { text: '看看Quiet Town这个项目 ↑', mood: 'cute' },
+    { text: '你玩过Marketer Life吗？😂', mood: 'happy' },
+    { text: '「内容」里有我的故事哦 ↑', mood: 'cute' },
+    { text: '彩虹是我初中时写的歌！', mood: 'happy' },
+    { text: 'ビーグルの歌写的是我家小狗 🐶', mood: 'cute' },
+    { text: '这些项目都是深夜做出来的 ☽', mood: 'worried' },
+    { text: '点一下音乐播放器，不会后悔的 ♫', mood: 'excited' },
+    { text: '等等…你是不是想走了？🥺', mood: 'cry' },
+    { text: '这个CSS为什么就是居中不了 😤', mood: 'angry' },
+    { text: '嗯…真的有人看个人网站吗…？', mood: 'question' }
+  ];
+  let posX = 60, posY = 16, walking = false, msgIdx = 0;
+
+  function say(text, mood) {
+    var isMobile = window.innerWidth <= 600;
+    if (isMobile && text.length > 14) text = text.substring(0, 12) + '…';
+    speech.textContent = text;
+    setMood(mood || 'normal');
+    wrap.classList.add('talking');
+    setTimeout(() => {
+      wrap.classList.remove('talking');
+      setTimeout(resetMood, 300);
+    }, 3000);
+  }
+
+  function getEdgeTarget() {
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const contentLeft = (vw - Math.min(720, vw)) / 2;
+    const contentRight = contentLeft + Math.min(720, vw);
+    const margin = 20;
+    const side = Math.random();
+    let x, y;
+    if (vw > 900 && side < 0.6) {
+      if (Math.random() < 0.5) {
+        x = Math.random() * Math.max(margin, contentLeft - 150);
+      } else {
+        x = contentRight + Math.random() * Math.max(margin, vw - contentRight - 150);
+      }
+      y = margin + Math.random() * (vh - 200);
+    } else {
+      x = margin + Math.random() * (vw - 180);
+      y = margin + Math.random() * (vh * 0.35);
+    }
+    return { x: Math.max(margin, Math.min(x, vw - 150)), y: Math.max(margin, Math.min(y, vh - 180)) };
+  }
+
+  function walkTo(tx, ty) {
+    if (walking) return;
+    walking = true;
+    const dist = Math.sqrt(Math.pow(tx - posX, 2) + Math.pow(ty - posY, 2));
+    const duration = Math.max(1.8, dist / 55);
+    wrap.classList.toggle('flip', tx < posX);
+    wrap.style.transition = 'left ' + duration + 's ease-in-out, bottom ' + duration + 's ease-in-out';
+    setTimeout(() => wrap.classList.add('walking'), 50);
+    wrap.style.left = tx + 'px';
+    wrap.style.bottom = ty + 'px';
+    posX = tx; posY = ty;
+    setTimeout(() => {
+      walking = false;
+      wrap.classList.remove('walking');
+      wrap.style.transition = 'none';
+    }, duration * 1000);
+  }
+
+  wrap.addEventListener('click', () => {
+    const m = clickMsgs[Math.floor(Math.random() * clickMsgs.length)];
+    say(m.text, m.mood);
+  });
+
+  function scheduleWalk() {
+    const delay = 4000 + Math.random() * 6000;
+    setTimeout(() => {
+      if (!walking) {
+        const t = getEdgeTarget();
+        walkTo(t.x, t.y);
+      }
+      scheduleWalk();
+    }, delay);
+  }
+  scheduleWalk();
+
+  function autoChat() {
+    const delay = 12000 + Math.random() * 15000;
+    setTimeout(() => {
+      const m = autoMsgs[msgIdx % autoMsgs.length];
+      say(m.text, m.mood);
+      msgIdx++;
+      autoChat();
+    }, delay);
+  }
+
+  // Nav click reactions
+  const navReactions = {
+    '#about': { text: '这就是我啦！认识你很高兴 ♡', mood: 'happy' },
+    '#life': { text: '我的生活有点混乱但很开心~', mood: 'excited' },
+    '#music': { text: '快来听我的歌！🎧', mood: 'excited' },
+    '#projects': { text: '这些都是我做的！看看吧~', mood: 'happy' },
+    '#content': { text: '那篇文章是我自己写的...希望你喜欢', mood: 'worried' },
+    '#contact': { text: '我们做朋友吧！✨', mood: 'cute' }
+  };
+  document.querySelectorAll('.nav-pill a').forEach(link => {
+    link.addEventListener('click', () => {
+      const r = navReactions[link.getAttribute('href')];
+      if (r) say(r.text, r.mood);
+    });
+  });
+
+  setTimeout(() => say('你好呀！我是Zyal，欢迎来我的主页 ♡', 'happy'), 2000);
+  setTimeout(autoChat, 10000);
+})();
+</script>
 
 </body></html>
