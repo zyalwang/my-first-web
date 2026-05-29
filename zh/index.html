@@ -299,15 +299,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .currently {
       margin-top: 24px;
       font-size: 0.82rem; font-weight: 400; color: #717171;
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
     .currently span { color: #2D2D2D; font-weight: 500; }
     .currently .rotating-text {
+      display: inline;
+      color: #F05AA3;
+      font-weight: 600;
+    }
+    .currently .tw-cursor {
       display: inline-block;
-      transition: opacity 0.4s ease, transform 0.4s ease;
+      width: 2px; height: 1em;
+      vertical-align: -2px;
+      margin-left: 1px;
+      background: #F05AA3;
+      animation: tw-blink 1s steps(1) infinite;
     }
-    .currently .rotating-text.fade-out {
-      opacity: 0; transform: translateY(5px);
-    }
+    @keyframes tw-blink { 50% { opacity: 0; } }
 
     /* ── Manifesto ── */
     .manifesto {
@@ -813,7 +824,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       用写作来理清思路。<br><br>
       这里是我的<a href="#projects">数字花园</a>。
     </p>
-    <p class="currently">最近在想 → <span class="rotating-text">用Lovable深夜写代码</span></p>
+    <p class="currently">此刻在想 → <span class="rotating-text"></span><span class="tw-cursor"></span></p>
   </section>
 
   <!-- Manifesto -->
@@ -833,7 +844,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="stat-label">Rednote点赞与收藏</div>
       </div>
       <div class="card stat-card">
-        <div class="stat-number">5</div>
+        <div class="stat-number">6</div>
         <div class="stat-label">用AI做的个人项目</div>
       </div>
       <div class="card stat-card">
@@ -1003,6 +1014,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="card project-card">
         <div class="project-preview">
+          <img src="../Japan Keiba.png" alt="Japan Keiba">
+        </div>
+        <div class="project-body">
+          <p class="project-meta">Interactive</p>
+          <h3>Japan Keiba</h3>
+          <p>能在闸门打开前猜中胜者吗？一个日本竞马预测小 playground，看赛道、看赔率，也看一点直觉。</p>
+          <span class="project-origin">因为爱马，想把每场比赛都当成一道谜题</span>
+          <a href="https://japan-keiba.lovable.app/" target="_blank" class="project-link">查看项目 <span class="arrow">↗</span></a>
+        </div>
+      </div>
+      <div class="card project-card">
+        <div class="project-preview">
           <img src="../Ramen Tour.jpeg" alt="Ramen Tour">
         </div>
         <div class="project-body">
@@ -1114,24 +1137,28 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
   // ── Rotating text ──
   const topics = [
-    '用Lovable深夜写代码',
-    '作为创作伙伴的AI',
+    '用 Lovable 深夜写代码',
+    '这家拉面该不该再升一名',
+    '把 AI 当创作搭档',
     '个人网站为什么还重要',
-    '关东拉面排行榜',
-    '用写作整理思路',
-    '没有路线图地去创造'
+    '让人真正信任的医疗健康故事',
+    '耳机里循环播放的黑山歌曲',
+    '来自五个国家的童年记忆',
+    '不等准备好，先动手再说'
   ];
-  let i = 0;
   const el = document.querySelector('.rotating-text');
   if (el) {
-    setInterval(() => {
-      el.classList.add('fade-out');
-      setTimeout(() => {
-        i = (i + 1) % topics.length;
-        el.textContent = topics[i];
-        el.classList.remove('fade-out');
-      }, 400);
-    }, 3200);
+    let w = 0, c = 0, deleting = false;
+    function tick() {
+      const word = topics[w];
+      el.textContent = word.slice(0, c);
+      if (!deleting && c < word.length) { c++; }
+      else if (deleting && c > 0) { c--; }
+      else if (!deleting && c === word.length) { deleting = true; setTimeout(tick, 1200); return; }
+      else { deleting = false; w = (w + 1) % topics.length; }
+      setTimeout(tick, deleting ? 60 : 110);
+    }
+    tick();
   }
 
   // ── Active nav on scroll ──
