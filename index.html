@@ -368,15 +368,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .currently {
       margin-top: 24px;
       font-size: 0.82rem; font-weight: 400; color: #717171;
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
     .currently span { color: #2D2D2D; font-weight: 500; }
     .currently .rotating-text {
+      display: inline;
+      color: #F05AA3;
+      font-weight: 600;
+    }
+    .currently .tw-cursor {
       display: inline-block;
-      transition: opacity 0.4s ease, transform 0.4s ease;
+      width: 2px; height: 1em;
+      vertical-align: -2px;
+      margin-left: 1px;
+      background: #F05AA3;
+      animation: tw-blink 1s steps(1) infinite;
     }
-    .currently .rotating-text.fade-out {
-      opacity: 0; transform: translateY(5px);
-    }
+    @keyframes tw-blink { 50% { opacity: 0; } }
 
     /* ── Manifesto ── */
     .manifesto {
@@ -886,7 +897,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       document life because it helps me think.
       This is my <a href="#projects">digital garden</a>.
     </p>
-    <p class="currently">Currently exploring → <span class="rotating-text">vibe coding at midnight with Lovable</span></p>
+    <p class="currently">On my mind → <span class="rotating-text"></span><span class="tw-cursor"></span></p>
   </section>
 
   <!-- Manifesto -->
@@ -906,7 +917,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="stat-label">Likes &amp; saves on Rednote</div>
       </div>
       <div class="card stat-card">
-        <div class="stat-number">5</div>
+        <div class="stat-number">6</div>
         <div class="stat-label">AI-built side projects</div>
       </div>
       <div class="card stat-card">
@@ -1075,6 +1086,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="card project-card">
         <div class="project-preview">
+          <img src="Japan Keiba.png" alt="Japan Keiba">
+        </div>
+        <div class="project-body">
+          <p class="project-meta">Interactive</p>
+          <h3>Japan Keiba</h3>
+          <p>Can you call the winner before the gates open? A race-day prediction playground for Japanese keiba — course quirks, odds, and a little instinct.</p>
+          <span class="project-origin">Built for horse lovers who treat every race like a puzzle</span>
+          <a href="https://japan-keiba.lovable.app/" target="_blank" class="project-link">View project <span class="arrow">↗</span></a>
+        </div>
+      </div>
+      <div class="card project-card">
+        <div class="project-preview">
           <img src="Ramen Tour.jpeg" alt="Ramen Tour">
         </div>
         <div class="project-body">
@@ -1186,24 +1209,28 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
   // ── Rotating text ──
   const topics = [
-    'AI as a creative collaborator',
+    'vibe-coding at midnight with Lovable',
+    'whether this ramen deserves a higher rank',
+    'AI that feels like a creative collaborator',
     'why personal websites still matter',
-    'vibe coding at midnight with Lovable',
-    'ramen rankings across Kanto',
-    'writing as a way to think clearly',
-    'building things with no roadmap'
+    'healthcare stories people actually trust',
+    'Montenegro on loop in my headphones',
+    'childhood memories from five countries',
+    'starting before I feel ready'
   ];
-  let i = 0;
   const el = document.querySelector('.rotating-text');
   if (el) {
-    setInterval(() => {
-      el.classList.add('fade-out');
-      setTimeout(() => {
-        i = (i + 1) % topics.length;
-        el.textContent = topics[i];
-        el.classList.remove('fade-out');
-      }, 400);
-    }, 3200);
+    let w = 0, c = 0, deleting = false;
+    function tick() {
+      const word = topics[w];
+      el.textContent = word.slice(0, c);
+      if (!deleting && c < word.length) { c++; }
+      else if (deleting && c > 0) { c--; }
+      else if (!deleting && c === word.length) { deleting = true; setTimeout(tick, 1200); return; }
+      else { deleting = false; w = (w + 1) % topics.length; }
+      setTimeout(tick, deleting ? 60 : 110);
+    }
+    tick();
   }
 
   // ── Active nav on scroll ──
