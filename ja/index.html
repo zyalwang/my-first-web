@@ -299,15 +299,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .currently {
       margin-top: 24px;
       font-size: 0.82rem; font-weight: 400; color: #717171;
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
     .currently span { color: #2D2D2D; font-weight: 500; }
     .currently .rotating-text {
+      display: inline;
+      color: #F05AA3;
+      font-weight: 600;
+    }
+    .currently .tw-cursor {
       display: inline-block;
-      transition: opacity 0.4s ease, transform 0.4s ease;
+      width: 2px; height: 1em;
+      vertical-align: -2px;
+      margin-left: 1px;
+      background: #F05AA3;
+      animation: tw-blink 1s steps(1) infinite;
     }
-    .currently .rotating-text.fade-out {
-      opacity: 0; transform: translateY(5px);
-    }
+    @keyframes tw-blink { 50% { opacity: 0; } }
 
     /* ── Manifesto ── */
     .manifesto {
@@ -813,7 +824,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       書くことで、思考を深めています。<br><br>
       ここは、私のための小さな<a href="#projects">デジタルガーデン</a>です。
     </p>
-    <p class="currently">いま気になっていること → <span class="rotating-text">Lovableで深夜のバイブコーディング</span></p>
+    <p class="currently">いま夢中なのは → <span class="rotating-text"></span><span class="tw-cursor"></span></p>
   </section>
 
   <!-- Manifesto -->
@@ -833,7 +844,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="stat-label">Rednoteのいいね・保存数</div>
       </div>
       <div class="card stat-card">
-        <div class="stat-number">5</div>
+        <div class="stat-number">6</div>
         <div class="stat-label">AIでつくった個人プロジェクト</div>
       </div>
       <div class="card stat-card">
@@ -1003,6 +1014,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="card project-card">
         <div class="project-preview">
+          <img src="../Japan Keiba.png" alt="Japan Keiba">
+        </div>
+        <div class="project-body">
+          <p class="project-meta">Interactive</p>
+          <h3>Japan Keiba</h3>
+          <p>ゲートが開く前に勝ち馬を当てられる？ 日本の競馬を楽しむ予測プレイグラウンド。コース特性、オッズ、そしてちょっとした直感。</p>
+          <span class="project-origin">馬が好きで、レースをパズルのように読みたくなった</span>
+          <a href="https://japan-keiba.lovable.app/" target="_blank" class="project-link">プロジェクトを見る <span class="arrow">↗</span></a>
+        </div>
+      </div>
+      <div class="card project-card">
+        <div class="project-preview">
           <img src="../Ramen Tour.jpeg" alt="Ramen Tour">
         </div>
         <div class="project-body">
@@ -1114,24 +1137,28 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
   // ── Rotating text ──
   const topics = [
+    'Lovableで深夜のバイブコーディング',
+    'このラーメン、もっと上に入れるか問題',
     'つくる相棒としてのAI',
     '個人サイトがまだ大事な理由',
-    'Lovableで深夜のバイブコーディング',
-    '関東ラーメンランキング制覇',
-    '書いて、考えを整理する',
-    'ノープランでつくること'
+    '信頼されるヘルスケアの物語',
+    'モンテネグロの曲をループ再生中',
+    '五つの国から集めた子どもの記憶',
+    '準備ができてから、じゃなく今から始める'
   ];
-  let i = 0;
   const el = document.querySelector('.rotating-text');
   if (el) {
-    setInterval(() => {
-      el.classList.add('fade-out');
-      setTimeout(() => {
-        i = (i + 1) % topics.length;
-        el.textContent = topics[i];
-        el.classList.remove('fade-out');
-      }, 400);
-    }, 3200);
+    let w = 0, c = 0, deleting = false;
+    function tick() {
+      const word = topics[w];
+      el.textContent = word.slice(0, c);
+      if (!deleting && c < word.length) { c++; }
+      else if (deleting && c > 0) { c--; }
+      else if (!deleting && c === word.length) { deleting = true; setTimeout(tick, 1200); return; }
+      else { deleting = false; w = (w + 1) % topics.length; }
+      setTimeout(tick, deleting ? 60 : 110);
+    }
+    tick();
   }
 
   // ── Active nav on scroll ──
