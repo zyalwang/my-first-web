@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rise | 21天愈合与自我关怀之旅</title>
+  <!-- SEO & Social Meta Tags -->
+  <meta name="description" content="一个完全属于你个人的、保密的21天自我关怀与正念冥想愈合空间，伴你走出分手阴霾，重建内心秩序。">
+  <meta name="theme-color" content="#BFDCD4">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Header Brand and Subtitle -->
+    <header class="app-header fade-in visible">
+      <div class="brand">
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 2L8 6M12 2l4 4M12 22l-4-4M12 22l4-4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h1>Rise</h1>
+        <p class="brand-subtitle">21天分手愈合与自我关怀之旅</p>
+      </div>
+
+      <!-- Escape Sanctuary Toggle Button -->
+      <div style="display: flex; align-items: center; justify-content: flex-end; margin-bottom: 12px; gap: 8px;">
+        <button class="btn btn-secondary btn-sm" id="btn-toggle-bgm" style="font-weight:700; transition: all 0.3s;">🎵 开启音乐</button>
+        <button class="btn btn-secondary btn-sm" id="btn-toggle-escape" style="font-weight:700;">🏠 进入放空小屋</button>
+      </div>
+
+      <!-- Overall Progress Display -->
+      <div class="progress-container card">
+        <div class="progress-brief">
+          <div class="progress-text">
+            <span>整体愈合进度</span>
+            <strong id="progress-percentage">0%</strong>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-bar" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Sticky Navigation Pill Bar -->
+    <nav class="nav-bar">
+      <div class="nav-pill">
+        <button class="nav-item active" data-tab="journey" id="btn-journey">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4.5 16.5c-1.5 1.26-2.5 3.19-2.5 5.5h20c0-2.31-1-4.24-2.5-5.5" stroke-linecap="round"/>
+            <path d="M12 2C6.48 2 2 6.48 2 12c0 2.21.72 4.25 1.93 5.92L12 12l8.07 5.92c1.21-1.67 1.93-3.71 1.93-5.92 0-5.52-4.48-10-10-10z" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>每日旅程</span>
+        </button>
+        <button class="nav-item" data-tab="roadmap" id="btn-roadmap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+            <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>愈合地图</span>
+        </button>
+        <button class="nav-item" data-tab="release" id="btn-release">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v10M12 12l-4-4M12 12l4-4M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>倾诉阀门</span>
+        </button>
+        <button class="nav-item" data-tab="moods" id="btn-moods">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M8 14s1.5 2 4 2 4-2 4-2" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="9" y1="9" x2="9.01" y2="9"/>
+            <line x1="15" y1="9" x2="15.01" y2="9"/>
+          </svg>
+          <span>心情记录</span>
+        </button>
+        <button class="nav-item" data-tab="harbor" id="btn-harbor">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>避风港</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="app-main">
+      <!-- Onboarding Welcome (Visible for first-time users) -->
+      <section class="onboarding-card card active" id="onboarding-view">
+        <div class="onboarding-content">
+          <span class="badge">欢迎来到 Rise</span>
+          <h2>一个温柔倾听、安抚内心的空间</h2>
+          <p>给自己时间去疗愈，是一个勇敢的决定。分手的痛苦不是线性的，它需要被温柔地允许。在接下来的21天里，我们将完全专注于你的身心重建与自我关怀。这里不鼓励使用任何社交/社交软件，也不建议匆忙开启新的约会。让我们静下来，重新找回内心的力量。</p>
+          <div class="onboarding-steps">
+            <div class="o-step">
+              <span class="o-num">1</span>
+              <div>
+                <h4>每日专注</h4>
+                <p>每天一个疗愈主题，搭配一项简单行动和一次日记倾诉。</p>
+              </div>
+            </div>
+            <div class="o-step">
+              <span class="o-num">2</span>
+              <div>
+                <h4>呼吸减压</h4>
+                <p>每当感到焦虑、难过或难以自拔时，使用正念呼吸小组件。</p>
+              </div>
+            </div>
+            <div class="o-step">
+              <span class="o-num">3</span>
+              <div>
+                <h4>倾诉阀门</h4>
+                <p>随时写下积压在心底的记忆、悔恨或愤懑，看它们化作粒子消逝。</p>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="btn-start-journey">开启我的愈合之旅</button>
+        </div>
+      </section>
+
+      <!-- TAB: JOURNEY (Daily Content) -->
+      <section class="tab-content" id="tab-journey">
+        <!-- Main Journey reflection card -->
+        <div class="journey-main-card card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="card-day-badge" id="current-day-label">Day 1</span>
+                <button class="btn btn-danger btn-sm" id="btn-emergency-urge" style="padding: 2px 8px; font-size: 0.7rem; box-shadow: 1.5px 1.5px 0 var(--border-color); background-color: var(--accent-rose); color: #FFF;">🚨 紧急断念</button>
+              </div>
+              <h2 id="current-day-title">承认并接纳痛苦</h2>
+            </div>
+            <div class="day-switcher">
+              <button class="btn-icon" id="btn-prev-day" title="前一天">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="15 18 9 12 15 6"/>
+                </svg>
+              </button>
+              <span id="day-switch-text">第 1 天 / 21天</span>
+              <button class="btn-icon" id="btn-next-day" title="后一天">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="journey-content-body">
+            <p class="focus-description" id="current-day-desc">今天的主题是接纳。感到难过是正常的，想哭也是正常的。疗愈的过程，从允许情绪流淌开始。</p>
+
+            <!-- Tasks Checklist -->
+            <div class="tasks-section">
+              <div class="section-label">今日自关怀行动</div>
+              
+              <!-- Element Selector for Infinite Mode -->
+              <div id="element-selector-container" class="hidden" style="margin-bottom: 16px;">
+                <p style="font-size: 0.78rem; font-weight: 700; margin-bottom: 8px; color: var(--text-muted);">选择今日培元五行元素，定制今日行动：</p>
+                <div class="element-buttons" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                  <button class="btn btn-secondary btn-sm element-btn" data-element="wood">🌳 补木 (生发)</button>
+                  <button class="btn btn-secondary btn-sm element-btn" data-element="fire">🔥 补火 (明曜)</button>
+                  <button class="btn btn-secondary btn-sm element-btn" data-element="earth">🧱 补土 (载物)</button>
+                  <button class="btn btn-secondary btn-sm element-btn" data-element="metal">⚔️ 补金 (肃降)</button>
+                  <button class="btn btn-secondary btn-sm element-btn" data-element="water">💧 补水 (圆融)</button>
+                </div>
+              </div>
+
+              <ul class="tasks-list" id="current-day-tasks">
+                <!-- JS will populate checklists -->
+              </ul>
+            </div>
+
+            <!-- Journal Editor Section -->
+            <div class="journal-section">
+              <div class="journal-header">
+                <div class="section-label">自由书写日记</div>
+                <span class="save-status" id="save-status">
+                  <span class="indicator-dot"></span> 已自动保存
+                </span>
+              </div>
+              <p class="journal-prompt-text" id="current-day-prompt">思考引导：现在什么事情让你感到最痛苦？允许自己无保留地写下来。</p>
+              
+              <!-- 一键情绪标签与白卷留白 -->
+              <div class="journal-tags" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+                <button class="pill-btn tag-btn" data-tag="想哭 😢">想哭 😢</button>
+                <button class="pill-btn tag-btn" data-tag="空落落 😶">空落落 😶</button>
+                <button class="pill-btn tag-btn" data-tag="特别思念 💔">特别思念 💔</button>
+                <button class="pill-btn tag-btn" data-tag="感到疲惫 😰">感到疲惫 😰</button>
+                <button class="pill-btn tag-btn" data-tag="内心委屈 😠">内心委屈 😠</button>
+                <button class="pill-btn tag-btn blank-tag" data-tag="只想留白 🌸">只想留白 🌸</button>
+              </div>
+
+              <div class="textarea-wrapper">
+                <textarea id="journal-input" placeholder="在这里倾倒你的全部思绪。你写下的每一个字都将安全、保密地保存在你的本地设备中..." rows="9"></textarea>
+              </div>
+              <div class="journal-footer">
+                <span id="word-count">0 字</span>
+                <button class="btn btn-secondary" id="btn-complete-day">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="display:inline; vertical-align:middle; margin-right:4px;">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  打卡完成今日
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Widgets Row (Stacked in 720px template) -->
+        <div class="journey-widgets-layout">
+          <!-- Calming Breath Widget -->
+          <div class="widget-card card breathing-widget">
+            <h3>正念呼吸</h3>
+            <p class="widget-subtitle">采用 4-4-4-4 箱式呼吸法，帮助你平复波动、焦虑的心绪。</p>
+            
+            <div class="breathing-area">
+              <div class="breathing-circle-container">
+                <div class="breathing-circle" id="breath-circle"></div>
+                <span class="breathing-timer" id="breath-countdown">4</span>
+                <span class="breathing-instruction" id="breath-instruction">点击开始</span>
+              </div>
+            </div>
+            
+            <div class="breathing-controls">
+              <button class="btn btn-secondary btn-sm" id="btn-toggle-breath">开始深呼吸</button>
+              <div class="pattern-indicator">
+                <span class="p-dot active" data-phase="inhale">吸气 4s</span>
+                <span class="p-dot" data-phase="hold1">屏气 4s</span>
+                <span class="p-dot" data-phase="exhale">呼气 4s</span>
+                <span class="p-dot" data-phase="hold2">屏气 4s</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Mood Selection Widget -->
+          <div class="widget-card card mood-checkin-widget">
+            <h3>此时此刻的感受</h3>
+            <div class="mood-options">
+              <button class="mood-btn" data-mood="grieving" title="悲伤中">
+                <span class="mood-emoji">😢</span>
+                <span class="mood-name">悲痛</span>
+              </button>
+              <button class="mood-btn" data-mood="angry" title="愤怒中">
+                <span class="mood-emoji">😠</span>
+                <span class="mood-name">愤怒</span>
+              </button>
+              <button class="mood-btn" data-mood="anxious" title="焦虑中">
+                <span class="mood-emoji">😰</span>
+                <span class="mood-name">焦虑</span>
+              </button>
+              <button class="mood-btn" data-mood="numb" title="木然中">
+                <span class="mood-emoji">😶</span>
+                <span class="mood-name">木然</span>
+              </button>
+              <button class="mood-btn" data-mood="peaceful" title="平静中">
+                <span class="mood-emoji">😌</span>
+                <span class="mood-name">平静</span>
+              </button>
+              <button class="mood-btn" data-mood="hopeful" title="期待中">
+                <span class="mood-emoji">🌅</span>
+                <span class="mood-name">期待</span>
+              </button>
+            </div>
+            <p class="mood-hint">记录每天的心情，观察你的情绪流动轨迹。</p>
+          </div>
+          
+          <!-- Self-Love Win Jar Widget -->
+          <div class="widget-card card win-jar-widget" style="grid-column: span 2;">
+            <h3>自爱能量储蓄罐</h3>
+            <p class="widget-subtitle">记录你今天完成的每一个自我关怀或小成就，积攒能量星星。所有打卡将安全地存在你的本地设备中。</p>
+            <div class="jar-layout" style="display: flex; gap: 24px; align-items: center; margin-bottom: 16px; flex-wrap: wrap;">
+              <div class="jar-container" style="position: relative; width: 140px; height: 180px; flex-shrink: 0; background: #FFF; border: 2.5px solid var(--border-color); border-radius: 20px 20px 10px 10px; box-shadow: 4px 4px 0 var(--border-color); overflow: hidden;">
+                <div class="jar-lid" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 70px; height: 12px; background: var(--border-color); border-radius: 4px;"></div>
+                <div class="jar-neck" style="position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 50px; height: 8px; border-bottom: 2.5px solid var(--border-color); border-left: 2.5px solid var(--border-color); border-right: 2.5px solid var(--border-color);"></div>
+                <div class="jar-stars-box" id="jar-stars-container" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none;">
+                  <!-- 星星会被动态注入到这里 -->
+                </div>
+              </div>
+              <div class="win-input-area" style="display: flex; flex-direction: column; gap: 12px; flex-grow: 1; min-width: 200px;">
+                <label for="win-input" style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">记录今天爱自己的一件小事：</label>
+                
+                <!-- 一键自爱气泡投掷 -->
+                <div class="win-bubbles" style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px;">
+                  <button class="pill-btn bubble-btn" data-bubble="🥛 喝了温水">🥛 喝了温水</button>
+                  <button class="pill-btn bubble-btn" data-bubble="🚶 散步放空">🚶 散步放空</button>
+                  <button class="pill-btn bubble-btn" data-bubble="🍫 吃了好吃的">🍫 吃了好吃的</button>
+                  <button class="pill-btn bubble-btn" data-bubble="🍃 吹风听歌">🍃 吹风听歌</button>
+                  <button class="pill-btn bubble-btn" data-bubble="🛀 泡脚洗澡">🛀 泡脚洗澡</button>
+                  <button class="pill-btn bubble-btn" data-bubble="🛌 准备早睡">🛌 准备早睡</button>
+                </div>
+
+                <div style="display: flex; gap: 8px; width: 100%;">
+                  <input type="text" id="win-input" placeholder="例如：今天中午吃了一顿好吃的..." style="flex-grow: 1; padding: 8px 12px; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); font-size: 0.82rem; outline: none; box-shadow: 1.5px 1.5px 0 var(--border-color);" max-length="40">
+                  <button class="btn btn-secondary btn-sm" id="btn-save-win" style="flex-shrink: 0;">存入</button>
+                </div>
+                <p class="jar-counter" style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">已累积存入 <strong id="jar-star-count" style="font-size: 1.1rem; color: var(--accent-pink-shadow);">0</strong> 颗自爱星</p>
+                <div id="jar-latest-win" style="font-family: var(--font-serif); font-size: 0.85rem; font-style: italic; color: var(--text-muted); line-height: 1.4; min-height: 24px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: ROADMAP (21-Day Progress Matrix) -->
+      <section class="tab-content" id="tab-roadmap">
+        <div class="roadmap-container card">
+          <div class="roadmap-header">
+            <h2>我的 21天 疗愈路线图</h2>
+            <p>愈合是非线性的。你可以随时回看已完成的日期。让我们一步一个脚印地前行。</p>
+            <div class="roadmap-legend">
+              <span class="legend-item"><span class="legend-dot completed"></span> 已打卡</span>
+              <span class="legend-item"><span class="legend-dot active"></span> 进行中</span>
+              <span class="legend-item"><span class="legend-dot locked"></span> 未解锁</span>
+            </div>
+          </div>
+
+          <div class="roadmap-grid" id="roadmap-grid">
+            <!-- JS will populate 21 items -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: RELEASE VALVE (Text Dissolver) -->
+      <section class="tab-content" id="tab-release">
+        <div class="release-container card">
+          <div class="release-header">
+            <h2>心绪倾诉阀门</h2>
+            <p>在这里，你可以无所顾忌地写下内心的焦虑、过往的痛苦、甚至想对前任说却绝不能发送的言语。当你准备好后，点击“粉碎并释怀”，看着文字化作尘埃飘散。<strong>你在此写下的内容，绝不会被任何地方记录。</strong></p>
+          </div>
+
+          <div class="release-canvas-area">
+            <canvas id="release-canvas"></canvas>
+            
+            <div class="release-input-overlay" id="release-overlay">
+              
+              <!-- 一键快捷粉碎包 -->
+              <div class="release-presets" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+                <button class="pill-btn preset-btn" data-preset="前任的回忆 💔">前任的回忆 💔</button>
+                <button class="pill-btn preset-btn" data-preset="脑海中的如果当初 💭">脑海中的如果当初 💭</button>
+                <button class="pill-btn preset-btn" data-preset="所有的执念与不甘 😠">所有的执念与不甘 😠</button>
+                <button class="pill-btn preset-btn" data-preset="深夜的孤独与焦虑 🌌">深夜的孤独与焦虑 🌌</button>
+                <button class="pill-btn preset-btn" data-preset="心中的委屈与自责 🌀">心中的委屈与自责 🌀</button>
+              </div>
+
+              <textarea id="release-input" placeholder="输入你想放手、释怀的一切……痛苦、悔恨、执念或未曾说出口的话。在这里写下，然后让它飘散。" rows="6"></textarea>
+              <button class="btn btn-primary" id="btn-dissolve-text">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="display:inline; vertical-align:middle; margin-right:6px;">
+                  <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+                  <path d="M12 6v12M6 12h12"/>
+                </svg>
+                粉碎并释怀
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: MOODS (History Dashboard) -->
+      <section class="tab-content" id="tab-moods">
+        <div class="moods-container card">
+          <div class="moods-header">
+            <h2>我的情绪风景图</h2>
+            <p>这是你心路历程的写照。情绪波动是再自然不过的生理和心理反应，接纳多变的心情也是治愈的一部分。</p>
+          </div>
+
+          <div class="moods-analytics">
+            <div class="moods-chart-panel">
+              <h3>近七日心情轴</h3>
+              <div class="mood-timeline" id="mood-timeline">
+                <!-- JS will output moods -->
+              </div>
+            </div>
+            
+            <div class="moods-breakdown-panel">
+              <h3>心情占比分布</h3>
+              <div class="mood-breakdown-list" id="mood-breakdown-list">
+                <!-- JS will calculate percentages -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: SAFE HARBOR (Reminders & Support) -->
+      <section class="tab-content" id="tab-harbor">
+        <div class="harbor-container">
+          <div class="harbor-grid">
+            <!-- Recovery Guides -->
+            <div class="harbor-card card">
+              <h3>清醒情感重建指南</h3>
+              <div class="recovery-guides-list" style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 10px;">
+                <div class="guide-item">
+                  <h4 style="font-family: var(--font-serif); font-size: 1rem; font-weight: 700; margin-bottom: 6px; color: var(--text-main);">✦ 断联的核心意义 (No Contact)</h4>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">断联不是为了惩罚对方，也不是欲擒故纵的挽回策略，而是一场为你自己量身定制的“精神排毒”。在依恋系统受创时，任何与前任的联络都会像毒品一样刺激多巴胺受体，加剧强迫性重复。断联的本质是建立物理与数字屏障，强行切断创伤源，让受损的神经系统回归平静，从而找回独立的自我界限与对生活的掌控权。</p>
+                </div>
+                <div class="guide-item">
+                  <h4 style="font-family: var(--font-serif); font-size: 1rem; font-weight: 700; margin-bottom: 6px; color: var(--text-main);">✦ 跨越情感戒断期 (Emotional Withdrawal)</h4>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">分手后的戒断反应在生理上与戒瘾如出一辙，大脑中多巴胺的断崖跌落会引发极度空虚、心慌、甚至手抖。这并非说明“你们是命定的真爱”，这只是神经元在呼唤曾经的刺激源。请将这种痛苦视作感冒发烧般的生理过程，不抗拒、不反刍。每一次忍住不联系、不视奸的瞬间，都是你的大脑在重新长出健康受体，你正在自愈。</p>
+                </div>
+                <div class="guide-item">
+                  <h4 style="font-family: var(--font-serif); font-size: 1rem; font-weight: 700; margin-bottom: 6px; color: var(--text-main);">✦ 理性看待遗憾 (Releasing Regrets)</h4>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">在疗愈期，大脑会为了逃避当下的空虚而启动“美化滤镜”，诱导你陷入“如果当初不吵架/不妥协”的假想深渊。但事实是，任何关系的走向都是双方依恋模式碰撞的必然结果。所谓的遗憾，只是你用如今长出伤疤后的清醒，去苛求当时正处于迷茫和局限中的自己。原谅那个当时已尽全力的自己，把遗憾化为滋养未来边界的养分。</p>
+                </div>
+                <div class="guide-item">
+                  <h4 style="font-family: var(--font-serif); font-size: 1rem; font-weight: 700; margin-bottom: 6px; color: var(--text-main);">✦ 重建个人身份 (Self-Identity Reconstruction)</h4>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">依恋的破裂往往会带来身份认同的坍塌，让你产生“失去了他我便不再完整”的幻觉。然而，关系的终结只是“我们”这一共同体的解体，并不伤及你本自具足的生命主体。疗愈不是为了成为更好的“前任”，而是将散落在对方身上的注意力全部收回。去重拾被你尘封的爱好，划定不容侵犯的边界，在静默中重新拼凑起本就完整的自己。</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Calm Reminders -->
+            <div class="harbor-card card">
+              <h3>温柔的提醒</h3>
+              <ul class="reminders-list">
+                <li>
+                  <strong>接纳情绪波浪：</strong>悲伤、愤怒、木然或委屈，在分手初期会像潮水般反复袭来。心理学中的“情绪波浪理论”告诉我们，情绪的生理唤醒其实像海浪一样，有起有落，通常在达到峰值后会在90秒内自然消退。当痛苦来临时，试着不要抗拒它，也不要试图立刻解决它。深呼吸，对自己说：“我正处于海浪的尖峰，这很痛苦，但它一定会退去。”允许自己在这股浪潮中安然存在。
+                </li>
+                <li>
+                  <strong>建立自悯的声音：</strong>在面对分离的挫败时，我们常会陷入自我苛责：“是不是我哪里做错了？”请试着暂停这种苛求，转而对自己采用“自悯”的态度。想象你正在安抚一个受伤的挚友，你会对他说什么？用同样温柔、宽容的声音对自己低语：“我知道你现在很难过，这并不是你的错。亲爱的，你已经做得很好了，我会一直陪着你。”允许自己带着伤痛慢慢前行，给予身体最温柔的拥抱。
+                </li>
+                <li>
+                  <strong>练习认知解离：</strong>当你的大脑被“我再也找不到真爱了”或“我很失败”等负面念头纠缠时，请尝试使用“认知解离”技术。不要将这些念头等同于事实，而是在念头前加上一个观察句式。例如，将“我失去了所有”改述为“我注意到，我的大脑现在产生了‘我失去了所有’的念头”。通过这层语言屏障，你与痛苦的念头之间拉开了距离，它们只是天空中飘过的乌云，而你才是那片永恒平静的天空。
+                </li>
+                <li>
+                  <strong>划下慈悲的句号：</strong>面对一段终结的关系，我们很容易陷入“反刍思维”，反反复复在脑海中追问“为什么会这样”、“如果当初……”这种精神内耗只会加剧当下的急性痛苦。接纳承诺疗法（ACT）建议我们，试着在无法改变的既成事实后面，划下一个慈悲的句号。不再追索解释，不再纠缠对错。此时此刻，将注意力完全收回到自己的呼吸与生活里。不去叩问过去，就是对自己最深沉的慈悲。
+                </li>
+              </ul>
+            </div>
+
+            <!-- Offline Self-Care Tips -->
+            <div class="harbor-card card">
+              <h3>离线自关怀行动</h3>
+              <p class="card-subtitle">一些健康的离线生活方式，帮你平复情绪，远离屏幕和社交骚扰：</p>
+              <ul class="activities-list">
+                <li>
+                  <span class="act-tag">温热</span> 洗个热水澡，换上最柔软的睡衣，或者喝一杯温热的燕麦牛奶。
+                </li>
+                <li>
+                  <span class="act-tag">转移</span> 阅读一页纸质书籍，或者完成一局舒缓的数独、解开一个拼图。
+                </li>
+                <li>
+                  <span class="act-tag">环境</span> 整理一个被忽略的角落，比如你的桌面或书柜，物理上的秩序感能带来心理上的平静。
+                </li>
+                <li>
+                  <span class="act-tag">安抚</span> 泡一杯洋甘菊或薄荷茶，双手握住温暖的杯壁，专注体会茶水的香气。
+                </li>
+                <li>
+                  <span class="act-tag">自然</span> 在公园的长椅上静坐10分钟，看看风吹树叶的影子，深吸新鲜空气。
+                </li>
+              </ul>
+            </div>
+
+            <!-- Grounding in Local Space Card -->
+            <div class="harbor-card card grounding-card">
+              <h3>异乡安居与环境定力</h3>
+              <p class="card-subtitle">身处异地或情绪波澜起伏时，通过物理空间和自然观察，能够帮助自己快速收拢能量，稳固自身气场：</p>
+              <ul class="grounding-list" style="list-style: none; display: flex; flex-direction: column; gap: 12px; margin-top: 14px;">
+                <li style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+                  <strong style="color: var(--text-main);">📍 确认专属锚定点：</strong>在居所中选定一个绝对安全且不被打扰的“能量角落”（如单人椅、朝阳窗台或温暖毛毯垫），每当心慌时，就坐在这里，彻底将重力交给支撑物。
+                </li>
+                <li style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+                  <strong style="color: var(--text-main);">🪨 物理触觉重归：</strong>双手用力触碰身边的冷硬固体表面（如木质桌面、石质地砖或坚实瓷杯），去感知其温度和坚硬度，用触觉将飘散的意识强行拉回当下真实的空间。
+                </li>
+                <li style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+                  <strong style="color: var(--text-main);">👂 空间五感扫描：</strong>闭上双眼，在当前所处的房间里努力分辨 3 种极其微弱的物理环境声音（如空调送风声、窗外树叶的沙沙声、远处的车流背景音），用耳朵定位它们的物理距离。
+                </li>
+                <li style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+                  <strong style="color: var(--text-main);">🌿 纯粹自然凝视：</strong>将目光投向附近的一棵植物或天空的云朵，仔细观察叶片的纹路走向、反光区域，或云彩的移动速度，维持至少 60 秒，将散乱的心神高度凝聚于自然的演化中。
+                </li>
+                <li style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+                  <strong style="color: var(--text-main);">🛡️ 守护结界意象：</strong>缓慢深呼吸，闭目想象周身一米内升起一圈温暖柔和的淡绿色光盾，这是你个人的磁场“防御结界”，完美过滤并屏蔽外界的一切杂音与情绪投射。
+                </li>
+              </ul>
+            </div>
+
+            <!-- Comfort Quote Slider -->
+            <div class="harbor-card card quotes-card">
+              <h3>温柔的话语</h3>
+              <div class="quote-slider">
+                <p class="quote-text" id="quote-display">“坍塌的不是你的生活，而是那个已经无法容纳你继续成长的旧秩序。”</p>
+                <p class="quote-author" id="quote-author">— 佚名</p>
+                <div class="quote-dots" id="quote-dots">
+                  <!-- JS will inject dots -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Numerology Essay Card -->
+            <div class="harbor-card card essay-card">
+              <h3>命理随笔：如何看待宿命与姻缘的散场</h3>
+              <p class="card-subtitle">从八字干支与五行流转的超然视角，体悟缘分的聚散离合，豁达自渡：</p>
+              <div class="essay-content">
+                <p>在八字命理的视域中，人与人的相遇与别离，从不是无端发生的，而是干支五行磁场交感、大运流年起伏的自然结果。</p>
+                <p>两人相爱相合，往往是因为岁运之中，彼此日柱干支呈现天合地合、三合、三会，两股气场在特定的流年里产生了美妙共振，因而执手同行。然而，天地之气流转不停，流年干支年年更替。当大运换届或流年移步，引动了夫妻宫的刑冲克害，或是五行之气发生剧烈偏枯，曾经的吸引力便会被打破。刑者折磨，冲者离散，克者压抑。当干支的作用力走向“散”的运势，缘分的疏离与碎裂便如秋叶飘落，是天道运转的必然，而非仅是某一方的过错。</p>
+                <p>明白了这一点，便知姻缘散场本是命理运势的潮起潮落。强留一个已经与你磁场相斥的人，如同在冬日强求夏花，不仅无益，反而会剧烈消耗你自身的本命元气，导致自身五行更加失衡。</p>
+                <p>玄学最豁达的智慧在于“顺应天时，修己自渡”。当缘分走向尾声，最好的化解之道绝非执迷于强求算命改运或匆忙寻找替代，而是应当将目光收回到自己身上。顺应岁运的肃降，借木气生发、火气照明、土气承载、金气断念、水气圆融，去调和自己的本命五行，培植自我元气。当你自身的干支气场重新圆满、本气充足时，你便不会被任何人的离开而折损。顺应运势的流动，静心修己，属于你的好运与气场，自会在下一个五行流转的交界处，不期而遇。</p>
+              </div>
+            </div>
+
+            <!-- Lunar Sync Card -->
+            <div class="harbor-card card lunar-card" style="grid-column: span 2;">
+              <h3>月相与自然节律共振</h3>
+              <div class="lunar-sync-layout" style="display: flex; gap: 24px; align-items: center; margin-top: 14px; flex-wrap: wrap;">
+                <div class="lunar-visual" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100px; height: 100px; background: #FAF8F5; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); box-shadow: 2px 2px 0 var(--border-color); flex-shrink: 0;">
+                  <span id="lunar-icon" style="font-size: 2.8rem;">🌑</span>
+                  <span id="lunar-name" style="font-size: 0.72rem; font-weight: 700; color: var(--text-main); margin-top: 4px;">新月</span>
+                </div>
+                <div class="lunar-guidance" style="flex-grow: 1; min-width: 200px;">
+                  <h4 id="lunar-phase-title" style="font-family: var(--font-serif); font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; color: var(--text-main);">新月期（播种自爱）</h4>
+                  <p id="lunar-phase-desc" style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">宜在日记本中写下你对未来新生活的自我期许，播下专注自我的种子。</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Professional Support Lines -->
+            <div class="harbor-card card emergency-card">
+              <h3>专业心理支持</h3>
+              <p>如果感到情绪过度沉重、难以排解，寻求专业的心理咨询师或心理援助热线是非常积极、勇敢的自我关怀举动。</p>
+              <div class="emergency-links">
+                <div class="e-line">
+                  <strong>全国希望24小时热线</strong>
+                  <span>拨打 400-161-9995 (危机干预)</span>
+                </div>
+                <div class="e-line">
+                  <strong>北京心理危机研究与干预中心</strong>
+                  <span>拨打 800-810-1117 或 010-82951332</span>
+                </div>
+                <div class="e-line">
+                  <strong>生命线援助热线 (中国)</strong>
+                  <span>拨打 021-62798990 (上海)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: ESCAPE CABIN (Safe Sanctuary / Escape Cabin) -->
+      <section id="escape-cabin" class="hidden">
+        <!-- 1. 温暖壁炉 -->
+        <div class="cabin-fireplace card">
+          <div style="position: relative; height: 220px; width: 100%;">
+            <canvas id="fireplace-canvas" style="width:100%; height:100%; display:block;"></canvas>
+            <div class="fireplace-label">🔥 深夜壁炉</div>
+          </div>
+          <div class="fireplace-wish-area">
+            <input type="text" id="fireplace-wish-input" class="fireplace-wish-input" placeholder="写下一个愿望或释怀的心念，化作流星..." maxlength="30">
+            <button class="btn btn-secondary btn-sm" id="btn-send-wish" style="flex-shrink: 0; box-shadow: 1px 1px 0 var(--border-color);">许愿 ✨</button>
+          </div>
+        </div>
+
+        <!-- 新增：正念能量结界 -->
+        <div class="cabin-aura-shield card">
+          <h3>🛡️ 个人能量结界</h3>
+          <p class="card-subtitle" style="margin-bottom:12px;">意想周身升起一圈温暖的光盾。跟随其膨胀（吸气）和收缩（呼气）调整呼吸频率。</p>
+          <div class="aura-container">
+            <span class="aura-shield-label">🛡️ AURA FIELD</span>
+            <div class="aura-halo breathing" id="aura-halo" data-element="wood"></div>
+            <span class="aura-instruction" id="aura-breath-instruction">吸气...</span>
+          </div>
+          <div class="aura-controls">
+            <p style="font-size: 0.78rem; font-weight: 700; margin-bottom: 8px; color: var(--text-muted);">切换能量元素色彩：</p>
+            <div class="aura-buttons">
+              <button class="pill-btn aura-btn active" data-aura="wood" style="background-color: #E6F7F0;">🌳 木 · 翠绿</button>
+              <button class="pill-btn aura-btn" data-aura="fire" style="background-color: #FFF0F3;">🔥 火 · 绯粉</button>
+              <button class="pill-btn aura-btn" data-aura="earth" style="background-color: #FFFBE6;">🧱 土 · 金橙</button>
+              <button class="pill-btn aura-btn" data-aura="metal" style="background-color: #FFFFFF;">⚔️ 金 · 银白</button>
+              <button class="pill-btn aura-btn" data-aura="water" style="background-color: #E6F4FF;">💧 水 · 湛蓝</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 新增：颂钵音疗 -->
+        <div class="cabin-bowl card">
+          <h3>🥣 正念颂钵音疗</h3>
+          <p class="card-subtitle" style="margin-bottom:8px;">敲击铜钵，让深沉悠长的钵音涤荡心神，静听心跳与回音。</p>
+          <div class="bowl-wrapper" id="bowl-trigger">
+            <div class="bowl-visual" id="bowl-element">🥣</div>
+          </div>
+          <p style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 12px;">点击铜钵敲击声音 | 支持离线声学合成</p>
+          <div class="bowl-controls" style="display:flex; gap:8px;">
+            <button class="btn btn-secondary btn-sm" id="btn-bowl-sound" style="font-weight:700;">🔊 开启钵声</button>
+          </div>
+        </div>
+
+        <!-- 2. 避风港小动物乐园 -->
+        <div class="cabin-pet card" style="display:flex; flex-direction:column; gap:16px; padding:24px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; border-bottom:1.5px solid #F0F0F0; padding-bottom:12px;">
+            <h3 style="font-family:var(--font-serif); font-size:1.2rem; font-weight:700; margin:0;">🐾 避风港小动物乐园</h3>
+            <div class="pet-tabs" style="display:flex; gap:6px;">
+              <button class="pill-btn pet-tab-btn active" data-pet="cat" style="font-size:0.72rem; padding:3px 10px;">🐱 小猫咪咪</button>
+              <button class="pill-btn pet-tab-btn" data-pet="dog" style="font-size:0.72rem; padding:3px 10px;">🐶 小狗阿柴</button>
+              <button class="pill-btn pet-tab-btn" data-pet="horse" style="font-size:0.72rem; padding:3px 10px;">🐴 小马小七</button>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:20px; min-height:80px;">
+            <div id="pet-display" style="font-size:3.5rem; cursor:pointer; user-select:none; transition: transform 0.15s ease;">🐱</div>
+            <div class="pet-speech-bubble" style="flex-grow:1; background:#FAF8F5; border:1.5px solid var(--border-color); padding:12px 16px; border-radius:var(--radius-md); position:relative; box-shadow:2px 2px 0 var(--border-color);">
+              <p id="pet-speech-text" style="font-family:var(--font-serif); font-size:0.95rem; font-style:italic; line-height:1.5; color:var(--text-main); margin:0;">“今天辛苦啦，点点我，有话对你说。”</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. 捏泡泡纸游戏 -->
+        <div class="cabin-bubblewrap card">
+          <h3>🫧 捏泡泡纸解压</h3>
+          <p class="card-subtitle" style="margin-bottom:12px;">通过点击指尖，戳碎心中的焦躁和闷气。</p>
+          <div id="bubble-wrap-grid" class="bubble-grid" style="display:grid; grid-template-columns:repeat(6, 1fr); gap:8px;"></div>
+          <button class="btn btn-secondary btn-sm" id="btn-reset-bubbles" style="margin-top:12px; width:100%;">重新铺满泡泡纸</button>
+        </div>
+
+        <!-- 4. 世界温柔碎片 -->
+        <div class="cabin-fragments card">
+          <h3>🍃 世界温柔碎片</h3>
+          <p id="fragment-text" style="font-family:var(--font-serif); font-size:1.05rem; font-style:italic; line-height:1.6; color:var(--text-main); min-height:50px; display:flex; align-items:center; margin:10px 0;"></p>
+          <button class="btn btn-secondary btn-sm" id="btn-next-fragment" style="width:100%;">换一片温柔</button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer signatures and configuration options -->
+    <footer class="app-footer fade-in visible">
+      <p class="signature">Rise — 陪伴每一个温柔的灵魂</p>
+      <div class="footer-bottom">
+        <span class="privacy-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12" style="display:inline; vertical-align:middle; margin-right:4px;">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          所有数据仅以加密形式留存在您的本地浏览器中。
+        </span>
+        <p class="copyright">快捷键 Shift + Alt + R 可调出重置面板</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modal dialogue for completing daily step -->
+  <dialog id="celebration-dialog" class="card text-center">
+    <div class="celebration-content">
+      <div class="celebration-emoji">🌱</div>
+      <h2>今日已完成打卡</h2>
+      <p id="celebration-message">你今天又向前迈进了一步，请为你内心的坚韧感到骄傲。</p>
+      <button class="btn btn-primary" id="btn-close-celebration">继续这趟旅程</button>
+    </div>
+  </dialog>
+
+  <!-- Modal dialogue for resetting timeline configuration -->
+  <dialog id="settings-dialog" class="card text-center">
+    <div class="settings-content">
+      <h2>重置你的旅程</h2>
+      <p>你确定要重新开始你的21天愈合旅程吗？这将永久清除你在本地记录的全部日记内容、打卡状态和情绪历史，此操作无法撤销。</p>
+      <div class="btn-group">
+        <button class="btn btn-danger" id="btn-confirm-reset">确认清除并重置</button>
+        <button class="btn btn-secondary" id="btn-cancel-reset">取消</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Modal dialogue for Emergency Urge Shield -->
+  <dialog id="emergency-dialog" class="card text-center">
+    <div class="emergency-content" id="emergency-step-1">
+      <h2>🚨 紧急断念安全气囊</h2>
+      <p>极度渴望联系前任时，请先闭上眼，跟随着气泡进行 60 秒正念箱式呼吸。别急，等倒计时结束再说。</p>
+      <div class="emergency-breath-area">
+        <div class="emergency-breath-circle"></div>
+        <span id="emergency-timer">60</span>
+      </div>
+      <div class="emergency-breath-instruction" id="emergency-breath-txt">准备开始...</div>
+      <button class="btn btn-secondary btn-sm" id="btn-skip-breath" style="margin-top: 20px;" disabled>请专注呼吸 60 秒</button>
+    </div>
+    
+    <div class="emergency-content hidden" id="emergency-step-2">
+      <h2>✍️ 理智断念誓言</h2>
+      <p class="emergency-oath-text" style="font-family: var(--font-serif); font-size: 1.15rem; font-style: italic; line-height: 1.6; margin-bottom: 24px; text-align: left; background: #FAF8F5; padding: 16px; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); box-shadow: 2px 2px 0 var(--border-color);">
+        “我不去打扰他，不是为了显示我的骄傲，而是为了守护我的尊严。每一次克制，都是我对自己温柔的救赎。我正在努力成长，我不回头。”
+      </p>
+      <p>大声读出这段话，并在心里郑重承诺。</p>
+      <button class="btn btn-primary" id="btn-confirm-oath">我已郑重宣誓</button>
+    </div>
+    
+    <div class="emergency-content hidden" id="emergency-step-3">
+      <h2>🏃‍♂️ 物理代偿行动</h2>
+      <p>做完这些，你的神经系统应该稍有平复。现在，请立刻完成以下三项离线代偿行为：</p>
+      <ol class="emergency-activities-list" style="text-align: left; margin-bottom: 24px; padding-left: 20px; line-height: 1.8; font-size: 0.88rem; color: var(--text-muted); list-style-type: decimal;">
+        <li><strong>喝一杯温水：</strong>缓慢吞咽，专注感受温水流过喉咙的温度。</li>
+        <li><strong>绕房间走50步：</strong>专注数步数，并感受双脚踩在地面上的沉稳触感。</li>
+        <li><strong>物理隔离手机：</strong>将手机锁进抽屉或放到另一个房间，看窗外 3 分钟。</li>
+      </ol>
+      <button class="btn btn-secondary" id="btn-close-emergency">关闭气囊</button>
+    </div>
+  </dialog>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
