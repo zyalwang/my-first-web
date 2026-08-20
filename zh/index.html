@@ -89,6 +89,40 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     }
     .nav-pill a:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 #d4829a; }
     .nav-pill a.active { box-shadow: 3px 3px 0 #d4829a; transform: translate(-1px, -1px); }
+    .nav-pill a.nav-projects {
+      background: #F05AA3;
+      color: #fff;
+      box-shadow: 2px 2px 0 #c43d7a;
+    }
+    .nav-pill a.nav-projects:hover,
+    .nav-pill a.nav-projects.active {
+      box-shadow: 3px 3px 0 #c43d7a;
+    }
+
+    .hero-actions { margin-top: 22px; }
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.85rem; font-weight: 600; color: #000;
+      text-decoration: none; padding: 12px 24px; border-radius: 6px;
+      background: #F5A3B7; box-shadow: 2px 2px 0 #d4829a;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .hero-cta:hover { transform: translate(-1px, -2px); box-shadow: 4px 4px 0 #d4829a; }
+    .project-spotlight {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-top: 16px;
+    }
+    .spotlight-chip {
+      font-size: 0.72rem; font-weight: 600; color: #2D2D2D;
+      text-decoration: none; padding: 7px 12px; border-radius: 999px;
+      background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s, color 0.2s;
+    }
+    .spotlight-chip:hover {
+      transform: translateY(-1px);
+      color: #F05AA3;
+      box-shadow: 0 4px 12px rgba(240,90,163,0.18);
+    }
 
     /* ── Language switcher ── */
     .lang-bar {
@@ -792,10 +826,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- Nav -->
 <nav>
   <div class="nav-pill">
-    <a href="#about" class="active">关于我</a>
+    <a href="#projects" class="nav-projects active">项目</a>
+    <a href="#about">关于我</a>
     <a href="#life" class="hide-mobile">生活</a>
     <a href="#music">原创音乐</a>
-    <a href="#projects">项目</a>
     <a href="#content">内容</a>
     <a href="#contact">联系</a>
   </div>
@@ -825,6 +859,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       这里是我的<a href="#projects">数字花园</a>。
     </p>
     <p class="currently">此刻在想 → <span class="rotating-text"></span><span class="tw-cursor"></span></p>
+    <div class="hero-actions">
+      <a href="#projects" class="hero-cta">查看项目 →</a>
+    </div>
+    <div class="project-spotlight">
+      <a class="spotlight-chip" href="https://japan-keiba.lovable.app/" target="_blank">Japan Keiba</a>
+      <a class="spotlight-chip" href="https://xinhuo.zyalwang.com/" target="_blank">心火</a>
+      <a class="spotlight-chip" href="https://bazi.zyalwang.com/" target="_blank">Bazi</a>
+      <a class="spotlight-chip" href="https://todo.zyalwang.com/" target="_blank">Todo</a>
+      <a class="spotlight-chip" href="https://station-roulette.zyalwang.com/" target="_blank">Station Roulette</a>
+      <a class="spotlight-chip" href="#projects">全部项目 →</a>
+    </div>
   </section>
 
   <!-- Manifesto -->
@@ -857,120 +902,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
     </div>
   </section>
-
-  <!-- About -->
-  <section id="about" class="fade-in visible">
-    <p class="section-label">About</p>
-    <div class="about-grid">
-      <div class="about-portrait">
-        <img src="../portrait.jpeg" alt="Zyal Wang">
-      </div>
-      <div class="about-text">
-        <h2>在东京和互联网之间，不停思考的人。</h2>
-        <p>我是Zyal。日常工作是<em>医疗健康营销</em>，<br>把复杂的信息变成真正能打动人的表达。</p>
-        <p>但如果深夜还没关电脑，<br>多半是在做<em>AI实验</em>、构思新项目，<br>或者在Rednote上写点什么。</p>
-        <p><em>营销和创造</em>重叠的地方，就是我最喜欢待的地方。<br>周末做的原型比任何课程都让我学得多，<br>最好的想法永远来自好奇心，而不是计划。</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Life gallery -->
-  <section id="life" class="fade-in visible">
-    <p class="section-label">Life</p>
-    <div class="life-gallery">
-      <div class="life-photo active" data-index="0"><img src="../images/life1.jpeg" alt="洛丽塔"></div>
-      <div class="life-photo" data-index="1"><img src="../images/life2.jpeg" alt="马"></div>
-      <div class="life-photo" data-index="2"><img src="../images/life3.jpg" alt="狗"></div>
-      <div class="life-photo" data-index="3"><img src="../images/life4.jpeg" alt="动漫"></div>
-      <div class="life-photo" data-index="4"><img src="../images/life5.jpeg" alt="温泉"></div>
-      <div class="life-photo" data-index="5"><img src="../images/life6.jpeg" alt="旅行"></div>
-    </div>
-    <div class="life-caption">
-      <h3 id="life-title">洛丽塔</h3>
-      <p id="life-desc">用穿衣表达情绪、记忆和一点戏剧感。一种更温柔的被看见的方式。</p>
-    </div>
-  </section>
-
-  <!-- Music player -->
-  <div id="music" class="music-player fade-in visible">
-    <div class="music-widget">
-      <div class="phone">
-        <div class="phone-screen">
-          <div class="screen-status">
-            <span class="screen-hearts">♥ ♥ ♥</span>
-            <span class="screen-clock" id="screen-clock">12:34</span>
-          </div>
-          <div class="screen-album">
-            <div class="cd-icon" id="cd-icon"></div>
-          </div>
-          <div class="screen-title" id="music-title">Balkansko</div>
-          <div class="screen-artist" id="music-artist">Original Music</div>
-          <div class="screen-progress-wrap">
-            <span class="screen-progress-time" id="music-time">0:00</span>
-            <div class="screen-progress" id="music-progress">
-              <div class="screen-progress-fill" id="music-fill"></div>
-            </div>
-            <span class="screen-progress-time right" id="music-duration">0:00</span>
-          </div>
-          <div class="screen-controls">
-            <button class="ctrl-skip" id="music-prev" title="上一首">
-              <svg viewBox="0 0 24 24"><path d="M19 20L9 12l10-8v16zM5 4h2v16H5V4z"/></svg>
-            </button>
-            <button class="ctrl-play" id="music-toggle" title="播放">
-              <svg id="music-icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              <svg id="music-icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
-            </button>
-            <button class="ctrl-skip" id="music-next" title="下一首">
-              <svg viewBox="0 0 24 24"><path d="M5 4l10 8-10 8V4zm14 0h-2v16h2V4z"/></svg>
-            </button>
-          </div>
-        </div>
-        <div class="phone-keypad">
-          <button class="key">1</button><button class="key">2</button><button class="key">3</button>
-          <button class="key">4</button><button class="key">5</button><button class="key">6</button>
-          <button class="key">7</button><button class="key">8</button><button class="key">9</button>
-          <button class="key">*</button><button class="key">0</button><button class="key">#</button>
-        </div>
-        <button class="phone-menu">MENU</button>
-      </div>
-      <div class="tracklist-panel">
-        <div class="tracklist-header">♫ TRACKLIST</div>
-        <div class="tracklist-items" id="tracklist">
-          <button class="track-item active" data-index="0">
-            <span class="track-idx">01</span><span class="track-emoji">🎧</span>
-            <span class="track-info"><span class="track-name">Balkansko</span><span class="track-sub">Montenegro Song</span></span>
-            <span class="track-dur" data-dur>--:--</span>
-          </button>
-          <button class="track-item" data-index="1">
-            <span class="track-idx">02</span><span class="track-emoji">🔥</span>
-            <span class="track-info"><span class="track-name">Mi Esperanza</span><span class="track-sub">Spanish Song</span></span>
-            <span class="track-dur" data-dur>--:--</span>
-          </button>
-          <button class="track-item" data-index="2">
-            <span class="track-idx">03</span><span class="track-emoji">🐶</span>
-            <span class="track-info"><span class="track-name">ビーグルの歌</span><span class="track-sub">Japanese Song</span></span>
-            <span class="track-dur" data-dur>--:--</span>
-          </button>
-          <button class="track-item" data-index="3">
-            <span class="track-idx">04</span><span class="track-emoji">🌈</span>
-            <span class="track-info"><span class="track-name">彩虹</span><span class="track-sub">Chinese Song</span></span>
-            <span class="track-dur" data-dur>--:--</span>
-          </button>
-          <button class="track-item" data-index="4">
-            <span class="track-idx">05</span><span class="track-emoji">✨</span>
-            <span class="track-info"><span class="track-name">魔法なんていらない</span><span class="track-sub">Japanese Song</span></span>
-            <span class="track-dur" data-dur>--:--</span>
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="music-desc">
-      <p>这些作品都由我亲自创作与制作。它们凝结了我对世界的热爱、人生的片段与情绪的记录。</p>
-      <p>其中，有我在黑山共和国与西班牙旅行时的感受，也有在日本独自求职、每天走在通勤路上的心境。</p>
-      <p>还有一些中文歌曲，创作于我的初中时期，歌词来源于一本作文选，旋律则是即兴完成，并曾在全班同学面前演唱。</p>
-      <p>这些作品或许仍有不成熟之处，但都是真实而珍贵的表达。希望你会喜欢这些凝聚了我心血的创作。</p>
-    </div>
-  </div>
 
   <!-- Projects -->
   <section id="projects" class="fade-in visible">
@@ -1098,6 +1029,120 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
     </div>
   </section>
+
+  <!-- About -->
+  <section id="about" class="fade-in visible">
+    <p class="section-label">About</p>
+    <div class="about-grid">
+      <div class="about-portrait">
+        <img src="../portrait.jpeg" alt="Zyal Wang">
+      </div>
+      <div class="about-text">
+        <h2>在东京和互联网之间，不停思考的人。</h2>
+        <p>我是Zyal。日常工作是<em>医疗健康营销</em>，<br>把复杂的信息变成真正能打动人的表达。</p>
+        <p>但如果深夜还没关电脑，<br>多半是在做<em>AI实验</em>、构思新项目，<br>或者在Rednote上写点什么。</p>
+        <p><em>营销和创造</em>重叠的地方，就是我最喜欢待的地方。<br>周末做的原型比任何课程都让我学得多，<br>最好的想法永远来自好奇心，而不是计划。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Life gallery -->
+  <section id="life" class="fade-in visible">
+    <p class="section-label">Life</p>
+    <div class="life-gallery">
+      <div class="life-photo active" data-index="0"><img src="../images/life1.jpeg" alt="洛丽塔"></div>
+      <div class="life-photo" data-index="1"><img src="../images/life2.jpeg" alt="马"></div>
+      <div class="life-photo" data-index="2"><img src="../images/life3.jpg" alt="狗"></div>
+      <div class="life-photo" data-index="3"><img src="../images/life4.jpeg" alt="动漫"></div>
+      <div class="life-photo" data-index="4"><img src="../images/life5.jpeg" alt="温泉"></div>
+      <div class="life-photo" data-index="5"><img src="../images/life6.jpeg" alt="旅行"></div>
+    </div>
+    <div class="life-caption">
+      <h3 id="life-title">洛丽塔</h3>
+      <p id="life-desc">用穿衣表达情绪、记忆和一点戏剧感。一种更温柔的被看见的方式。</p>
+    </div>
+  </section>
+
+  <!-- Music player -->
+  <div id="music" class="music-player fade-in visible">
+    <div class="music-widget">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="screen-status">
+            <span class="screen-hearts">♥ ♥ ♥</span>
+            <span class="screen-clock" id="screen-clock">12:34</span>
+          </div>
+          <div class="screen-album">
+            <div class="cd-icon" id="cd-icon"></div>
+          </div>
+          <div class="screen-title" id="music-title">Balkansko</div>
+          <div class="screen-artist" id="music-artist">Original Music</div>
+          <div class="screen-progress-wrap">
+            <span class="screen-progress-time" id="music-time">0:00</span>
+            <div class="screen-progress" id="music-progress">
+              <div class="screen-progress-fill" id="music-fill"></div>
+            </div>
+            <span class="screen-progress-time right" id="music-duration">0:00</span>
+          </div>
+          <div class="screen-controls">
+            <button class="ctrl-skip" id="music-prev" title="上一首">
+              <svg viewBox="0 0 24 24"><path d="M19 20L9 12l10-8v16zM5 4h2v16H5V4z"/></svg>
+            </button>
+            <button class="ctrl-play" id="music-toggle" title="播放">
+              <svg id="music-icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg id="music-icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+            </button>
+            <button class="ctrl-skip" id="music-next" title="下一首">
+              <svg viewBox="0 0 24 24"><path d="M5 4l10 8-10 8V4zm14 0h-2v16h2V4z"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="phone-keypad">
+          <button class="key">1</button><button class="key">2</button><button class="key">3</button>
+          <button class="key">4</button><button class="key">5</button><button class="key">6</button>
+          <button class="key">7</button><button class="key">8</button><button class="key">9</button>
+          <button class="key">*</button><button class="key">0</button><button class="key">#</button>
+        </div>
+        <button class="phone-menu">MENU</button>
+      </div>
+      <div class="tracklist-panel">
+        <div class="tracklist-header">♫ TRACKLIST</div>
+        <div class="tracklist-items" id="tracklist">
+          <button class="track-item active" data-index="0">
+            <span class="track-idx">01</span><span class="track-emoji">🎧</span>
+            <span class="track-info"><span class="track-name">Balkansko</span><span class="track-sub">Montenegro Song</span></span>
+            <span class="track-dur" data-dur>--:--</span>
+          </button>
+          <button class="track-item" data-index="1">
+            <span class="track-idx">02</span><span class="track-emoji">🔥</span>
+            <span class="track-info"><span class="track-name">Mi Esperanza</span><span class="track-sub">Spanish Song</span></span>
+            <span class="track-dur" data-dur>--:--</span>
+          </button>
+          <button class="track-item" data-index="2">
+            <span class="track-idx">03</span><span class="track-emoji">🐶</span>
+            <span class="track-info"><span class="track-name">ビーグルの歌</span><span class="track-sub">Japanese Song</span></span>
+            <span class="track-dur" data-dur>--:--</span>
+          </button>
+          <button class="track-item" data-index="3">
+            <span class="track-idx">04</span><span class="track-emoji">🌈</span>
+            <span class="track-info"><span class="track-name">彩虹</span><span class="track-sub">Chinese Song</span></span>
+            <span class="track-dur" data-dur>--:--</span>
+          </button>
+          <button class="track-item" data-index="4">
+            <span class="track-idx">05</span><span class="track-emoji">✨</span>
+            <span class="track-info"><span class="track-name">魔法なんていらない</span><span class="track-sub">Japanese Song</span></span>
+            <span class="track-dur" data-dur>--:--</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="music-desc">
+      <p>这些作品都由我亲自创作与制作。它们凝结了我对世界的热爱、人生的片段与情绪的记录。</p>
+      <p>其中，有我在黑山共和国与西班牙旅行时的感受，也有在日本独自求职、每天走在通勤路上的心境。</p>
+      <p>还有一些中文歌曲，创作于我的初中时期，歌词来源于一本作文选，旋律则是即兴完成，并曾在全班同学面前演唱。</p>
+      <p>这些作品或许仍有不成熟之处，但都是真实而珍贵的表达。希望你会喜欢这些凝聚了我心血的创作。</p>
+    </div>
+  </div>
 
   <!-- Exploring -->
   <section id="exploring" class="fade-in visible">
