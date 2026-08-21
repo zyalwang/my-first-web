@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="一个安静的小游戏。吃饱了，挑要带走的，上车，回家。">
+<meta name="theme-color" content="#12161C">
+<meta property="og:type" content="website">
+<meta property="og:title" content="打包">
+<meta property="og:description" content="吃饱了，挑要带走的，上车，回家。">
+<meta property="og:url" content="https://zyalwang.com/dabao/">
+<meta property="og:image" content="https://zyalwang.com/dabao/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://zyalwang.com/dabao/og.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%2312161C'/><rect x='18' y='42' width='64' height='38' rx='4' fill='%23EDE7D6'/><rect x='14' y='32' width='72' height='14' rx='3' fill='%23A8382C'/></svg>">
+<title>打包</title>
+<style>
+:root{
+  --night:#12161C; --cabin:#1A1F27; --sodium:#E39A47; --bulb:#F3DFB0;
+  --lid:#A8382C; --dash:#6BA79E; --dim:rgba(243,223,176,.34);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:#0A0C10;overscroll-behavior:none;position:fixed;inset:0}
+body{font-family:"Songti SC","Noto Serif SC","Source Han Serif SC",STSong,SimSun,serif;
+  color:var(--bulb);user-select:none;display:flex;align-items:center;justify-content:center}
+#stage{position:relative;width:100%;height:100%;max-width:520px;overflow:hidden;
+  background:var(--night);touch-action:none;overscroll-behavior:none}
+
+#sub{position:absolute;left:0;right:0;bottom:calc(1.4% + env(safe-area-inset-bottom));text-align:center;font-size:14px;
+  letter-spacing:.2em;line-height:1.9;color:var(--dim);padding:0 26px;
+  opacity:0;transition:opacity 1.4s ease;pointer-events:none;z-index:45}
+#sub.on{opacity:1}
+.scene{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity 1.6s ease}
+#stage[data-sc="1"] #sub{bottom:auto;top:47%}
+#stage[data-sc="2"] #sub{bottom:calc(5.5% + env(safe-area-inset-bottom))}
+.scene.on{opacity:1;pointer-events:auto}
+
+/* ================= 1 桌 ================= */
+#s1{background:radial-gradient(ellipse 80% 50% at 50% 30%,#2E2A23 0%,#1B1A18 52%,#101215 100%)}
+.lamp{position:absolute;top:-16%;left:50%;transform:translateX(-50%);width:150%;height:60%;
+  background:radial-gradient(ellipse at 50% 0%,rgba(243,223,176,.15),transparent 62%);pointer-events:none}
+#tray{position:absolute;top:3.5%;left:0;right:0;height:42%;display:flex;flex-wrap:wrap;
+  align-content:flex-start;justify-content:center;gap:10px 8px;padding:0 12px}
+.dish{width:74px;cursor:pointer;transition:transform .35s cubic-bezier(.2,.8,.3,1),opacity .6s}
+.dish svg{display:block;width:74px;height:74px;filter:drop-shadow(0 8px 16px rgba(0,0,0,.55))}
+.dish .nm{text-align:center;font-size:10px;letter-spacing:.16em;color:rgba(243,223,176,.4);margin-top:2px}
+.dish .kp{text-align:center;font-size:8px;letter-spacing:.1em;margin-top:1px;opacity:.75}
+.dish .kp.k2{color:#7FBF9C}.dish .kp.k1{color:rgba(243,223,176,.34)}.dish .kp.k0{color:#C77A6A}
+.dish.sel{transform:translateY(-7px) scale(1.06)}
+.dish.sel .nm{color:var(--sodium)}
+.dish.gone{opacity:0;pointer-events:none;transform:scale(.6)}
+
+#boxwrap{position:absolute;left:50%;bottom:calc(15% + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(86%,300px)}
+#grid{position:relative;width:100%;aspect-ratio:4/3;background:linear-gradient(#EDE7D6,#CDC5AE);
+  border-radius:3px;box-shadow:0 16px 36px rgba(0,0,0,.6),inset 0 -8px 16px rgba(0,0,0,.14);
+  display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(3,1fr);padding:5px;gap:2px}
+.cell{border-radius:2px;background:rgba(120,110,90,.1);transition:background .18s}
+.cell.hi{background:rgba(227,154,71,.42)}
+.cell.bad{background:rgba(168,56,44,.36)}
+#pieces{position:absolute;inset:5px;pointer-events:none}
+#ghost{position:fixed;left:0;top:0;z-index:90;pointer-events:none;opacity:0;
+  will-change:transform;transition:opacity .18s}
+#ghost.on{opacity:.92}
+#ghost svg{display:block;width:100%;height:100%;filter:drop-shadow(0 10px 20px rgba(0,0,0,.6))}
+.dish.drag{opacity:.25}
+.pc{position:absolute;pointer-events:auto;cursor:pointer;transition:transform .3s}
+.pc svg{width:100%;height:100%;display:block}
+.pc:active{transform:scale(.94)}
+
+#info{position:absolute;left:50%;bottom:calc(12.4% + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:14px;
+  font-size:10px;letter-spacing:.18em;color:rgba(243,223,176,.34);white-space:nowrap;z-index:20}
+#info b{font-weight:400;color:var(--sodium)}
+#lidbar{position:absolute;left:50%;bottom:calc(6% + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:9px;z-index:20}
+.btn{background:none;border:1px solid rgba(243,223,176,.2);color:rgba(243,223,176,.52);
+  font-family:inherit;font-size:11px;letter-spacing:.26em;text-indent:.26em;padding:9px 15px;
+  border-radius:2px;cursor:pointer;transition:.35s}
+.btn:hover,.btn:focus-visible{border-color:rgba(243,223,176,.5);color:rgba(243,223,176,.88)}
+.btn[disabled]{opacity:.22;cursor:default}
+.btn.go{border-color:rgba(227,154,71,.5);color:var(--sodium)}
+
+#lidanim{position:absolute;left:50%;bottom:calc(15% + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(84%,290px);
+  aspect-ratio:4/3;pointer-events:none;z-index:15;opacity:0}
+#lidanim div{position:absolute;left:-5px;right:-5px;top:-9px;height:22px;border-radius:3px;
+  background:linear-gradient(var(--lid),#7E2A20);box-shadow:0 4px 14px rgba(0,0,0,.5);
+  transform-origin:50% 100%;transform:translateY(-40px) rotateX(78deg)}
+#lidanim.shut{opacity:1}
+#lidanim.shut div{transform:translateY(0) rotateX(0);transition:transform 1s cubic-bezier(.3,.9,.3,1)}
+
+/* ================= 2 车 ================= */
+#s2{background:var(--cabin)}
+#road{position:absolute;inset:0;width:100%;height:100%}
+.frame{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 96% 60% at 50% 32%,transparent 40%,rgba(10,12,16,.92) 88%),
+  linear-gradient(to top,rgba(8,10,13,1) 0%,rgba(8,10,13,.9) 16%,transparent 33%)}
+#dash{position:absolute;left:0;right:0;bottom:0;height:16%;
+  background:linear-gradient(to top,#0A0C10,#14181F);border-top:1px solid rgba(107,167,158,.13)}
+#seatbox{position:absolute;right:18px;bottom:10.5%;width:58px;height:40px;opacity:.45}
+#seatbox .b{position:absolute;inset:auto 0 0 0;height:29px;border-radius:2px;background:linear-gradient(#CFC7B0,#9C947F)}
+#seatbox .l{position:absolute;left:-3px;right:-3px;top:5px;height:10px;border-radius:2px;background:var(--lid)}
+#hold{position:absolute;left:50%;bottom:calc(1.6% + env(safe-area-inset-bottom));transform:translateX(-50%);width:76%;max-width:270px;
+  height:2px;background:rgba(107,167,158,.15);z-index:35}
+#fill{width:0;height:100%;background:var(--dash);box-shadow:0 0 12px rgba(107,167,158,.5);transition:width .18s linear}
+/* ================= 3 冰箱 ================= */
+#s3{background:#0B0D11;cursor:pointer}
+#fridge{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:min(62%,210px);aspect-ratio:3/4.4;background:#171B21;border-radius:5px;
+  box-shadow:0 30px 70px rgba(0,0,0,.7);overflow:hidden;transition:opacity 1.2s ease}
+#glow{position:absolute;inset:0;background:linear-gradient(105deg,rgba(226,240,244,.95),rgba(198,220,228,.5));
+  transform-origin:left center;transform:perspective(700px) rotateY(-96deg);
+  transition:transform 1.8s cubic-bezier(.3,.85,.25,1)}
+#fridge.open #glow{transform:perspective(700px) rotateY(-7deg)}
+#spill{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:200%;height:120%;
+  background:radial-gradient(ellipse,rgba(214,236,242,.2),transparent 60%);opacity:0;
+  transition:opacity 1.8s ease;pointer-events:none}
+#s3.lit #spill{opacity:1}
+#fridge.hide{opacity:0;pointer-events:none}
+
+#inside{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity 1.4s ease;cursor:default}
+#inside.on{opacity:1;pointer-events:auto}
+#fgwrap{position:absolute;left:50%;top:7%;transform:translateX(-50%);width:min(88%,330px)}
+#fgrid{position:relative;width:100%;aspect-ratio:5/4;
+  background:linear-gradient(#E9F1F3,#C8D8DE);border-radius:4px;
+  box-shadow:0 20px 50px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.5),
+             inset 0 -14px 26px rgba(90,120,132,.22);
+  display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(4,1fr);padding:5px;gap:2px}
+.fcell{border-radius:2px;background:rgba(120,150,162,.11);transition:background .16s}
+.fcell.hi{background:rgba(107,167,158,.5)}
+.fcell.bad{background:rgba(168,56,44,.34)}
+.shelf{position:absolute;left:5px;right:5px;height:2px;background:rgba(255,255,255,.6);
+  box-shadow:0 1px 3px rgba(80,110,124,.4);pointer-events:none}
+#fpieces{position:absolute;inset:5px;pointer-events:none}
+.fp{position:absolute;pointer-events:auto;cursor:grab;padding:2px}
+.fp svg{width:100%;height:100%;display:block}
+.fp.mine{filter:drop-shadow(0 3px 7px rgba(60,90,100,.45))}
+
+#queue{position:absolute;left:0;right:0;bottom:calc(17% + env(safe-area-inset-bottom));display:flex;flex-wrap:wrap;
+  justify-content:center;align-items:center;gap:6px;padding:0 14px;min-height:66px}
+.qi{width:54px;height:54px;cursor:grab;transition:opacity .5s,transform .3s}
+.qi svg{width:100%;height:100%;display:block;filter:drop-shadow(0 6px 12px rgba(0,0,0,.5))}
+.qi .qn{text-align:center;font-size:9px;letter-spacing:.12em;color:rgba(243,223,176,.42);margin-top:1px}
+.qi.gone{opacity:0;pointer-events:none;transform:scale(.6)}
+#fbar{position:absolute;left:50%;bottom:calc(7% + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:9px;z-index:20}
+#fnote{position:absolute;left:0;right:0;bottom:calc(13% + env(safe-area-inset-bottom));text-align:center;font-size:10px;
+  letter-spacing:.18em;color:rgba(243,223,176,.3)}
+
+/* ================= 4 早上 ================= */
+#s4{background:linear-gradient(#1A1E26 0%,#2A2A2A 46%,#3A332A 100%)}
+#morning{position:absolute;top:8%;left:0;right:0;text-align:center;font-size:12px;
+  letter-spacing:.34em;color:rgba(243,223,176,.35)}
+#plate2{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:min(80%,300px);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px}
+.left{cursor:pointer;transition:transform .4s,opacity .8s}
+.left svg{display:block;width:70px;height:70px;filter:drop-shadow(0 6px 14px rgba(0,0,0,.45))}
+.left:active{transform:scale(.92)}
+.left.eaten{opacity:0;transform:scale(.5);pointer-events:none}
+
+#end{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:var(--night);z-index:60;opacity:0;pointer-events:none;transition:opacity 2.4s ease}
+#end.on{opacity:1;pointer-events:auto}
+:focus-visible{outline:1px solid rgba(107,167,158,.8);outline-offset:4px}
+
+#snd{position:absolute;top:16px;right:16px;z-index:70;width:28px;height:28px;border:none;
+  background:none;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;gap:2px;
+  opacity:.28;transition:opacity .5s}
+#snd:hover,#snd:focus-visible{opacity:.65}
+#snd i{display:block;width:2px;background:var(--bulb);border-radius:1px;transition:height .4s}
+#snd i:nth-child(1){height:6px}#snd i:nth-child(2){height:14px}#snd i:nth-child(3){height:9px}
+#snd.off i{height:2px!important}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="scene on" id="s1">
+    <div class="lamp"></div>
+    <div id="tray"></div>
+    <div id="boxwrap"><div id="grid"></div><div id="pieces"></div></div>
+    <div id="lidanim"><div></div></div>
+    <div id="info"><span>空格 <b id="freeN">12</b></span><span id="tagN">　</span></div>
+    <div id="lidbar">
+      <button class="btn" id="rot">转 个 方 向</button>
+      <button class="btn go" id="shut" disabled>盖 上 盖 子</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s2">
+    <canvas id="road"></canvas>
+    <div class="frame"></div>
+    <div id="dash"></div>
+    <div id="seatbox"><div class="b"></div><div class="l"></div></div>
+    <div id="hold"><div id="fill"></div></div>
+  </div>
+
+  <div class="scene" id="s3">
+    <div id="spill"></div>
+    <div id="fridge"><div id="glow"></div></div>
+    <div id="inside">
+      <div id="fgwrap"><div id="fgrid"></div><div id="fpieces"></div></div>
+      <div id="fnote">里面的东西也可以挪。转个方向也行。</div>
+      <div id="queue"></div>
+      <div id="fbar"><button class="btn" id="frot">转 个 方 向</button>
+        <button class="btn go" id="fclose">关 上 门</button></div>
+    </div>
+  </div>
+
+  <div class="scene" id="s4"><div id="morning">第 二 天 早 上</div><div id="plate2"></div></div>
+
+  <div id="sub"></div>
+  <div id="ghost"></div>
+  <button id="snd" aria-label="关闭声音"><i></i><i></i><i></i></button>
+  <div id="end"><button class="btn" id="again">再 来 一 次</button></div>
+</div>
+
+<script>
+const stage=document.getElementById('stage'),sub=document.getElementById('sub');
+const S={1:document.getElementById('s1'),2:document.getElementById('s2'),
+         3:document.getElementById('s3'),4:document.getElementById('s4')};
+let phase=1;
+function scn(n){stage.setAttribute('data-sc',String(n))}
+scn(1);
+
+/* ---------- 菜 ---------- */
+function plate(inner,rim='#E6E1D4'){
+  return `<svg viewBox="0 0 100 100">
+   <defs><radialGradient id="pl" cx="38%" cy="32%"><stop offset="0" stop-color="${rim}"/>
+   <stop offset=".62" stop-color="#B9B3A4"/><stop offset="1" stop-color="#7E786C"/></radialGradient></defs>
+   <circle cx="50" cy="50" r="47" fill="url(#pl)"/><circle cx="50" cy="50" r="37" fill="#D9D3C4" opacity=".55"/>
+   ${inner}</svg>`;
+}
+const DISHES=[
+ {id:'du',n:'红油牛肚',w:2,h:1,soup:1,keep:2,tip:'冷了更入味',art:plate(`
+   <path d="M27 52 q9-13 22-8 t22-3" stroke="#D8CDB4" stroke-width="7" fill="none" stroke-linecap="round"/>
+   <path d="M29 60 q11-9 21-3 t21-6" stroke="#C9BCA0" stroke-width="6" fill="none" stroke-linecap="round"/>
+   <path d="M31 44 q10-8 20-2 t19-5" stroke="#E0D6BE" stroke-width="5" fill="none" stroke-linecap="round"/>
+   <g fill="#A8382C" opacity=".85"><circle cx="38" cy="47" r="2.6"/><circle cx="58" cy="56" r="3"/>
+   <circle cx="67" cy="45" r="2.2"/><circle cx="45" cy="61" r="2.4"/></g>
+   <g stroke="#6E8A57" stroke-width="1.6" stroke-linecap="round"><path d="M40 39 l5 4"/><path d="M62 63 l5-4"/></g>`)},
+
+ {id:'jz',n:'饺子',w:2,h:2,soup:0,keep:0,tip:'皮明天会软',art:plate(`
+   <g fill="#EDE4CE" stroke="#C6B896" stroke-width="1.2">
+   <path d="M30 40 q9-11 19 0 q-9 7-19 0z"/><path d="M52 36 q9-11 19 0 q-9 7-19 0z"/>
+   <path d="M27 55 q9-11 19 0 q-9 7-19 0z"/><path d="M50 52 q9-11 19 0 q-9 7-19 0z"/>
+   <path d="M38 68 q9-11 19 0 q-9 7-19 0z"/></g>
+   <g stroke="#C6B896" stroke-width=".8" fill="none" opacity=".8">
+   <path d="M34 38v3M39 36v3M44 38v3"/><path d="M56 34v3M61 32v3M66 34v3"/>
+   <path d="M31 53v3M36 51v3M41 53v3"/><path d="M54 50v3M59 48v3M64 50v3"/>
+   <path d="M42 66v3M47 64v3M52 66v3"/></g>`)},
+
+ {id:'hg',n:'拍黄瓜',w:2,h:1,soup:0,keep:0,tip:'明天出水',art:plate(`
+   <g stroke="#3F5B33" stroke-width="1">
+   <path d="M32 46 l11-4 5 9 -11 5z" fill="#8FB56A"/><path d="M46 40 l12-3 4 10 -12 4z" fill="#7CA65C"/>
+   <path d="M58 47 l11-5 5 9 -11 5z" fill="#96BC72"/><path d="M35 58 l12-4 4 9 -11 5z" fill="#84AE64"/>
+   <path d="M50 56 l11-3 5 9 -12 4z" fill="#8FB56A"/></g>
+   <g fill="#EDE7D0"><ellipse cx="40" cy="49" rx="2.4" ry="3.4"/><ellipse cx="54" cy="45" rx="2.2" ry="3.2"/>
+   <ellipse cx="66" cy="51" rx="2.2" ry="3"/><ellipse cx="43" cy="62" rx="2.2" ry="3"/></g>
+   <g fill="#D9CFAF"><circle cx="47" cy="53" r="1.6"/><circle cx="60" cy="60" r="1.5"/><circle cx="36" cy="53" r="1.3"/></g>`)},
+
+ {id:'sjd',n:'干煸四季豆',w:3,h:1,soup:0,keep:1,tip:'热一下还行',art:plate(`
+   <g stroke-linecap="round" fill="none">
+   <path d="M24 44 q26-7 52 2" stroke="#2E4527" stroke-width="5"/>
+   <path d="M25 52 q26 8 51-3" stroke="#3A5730" stroke-width="5"/>
+   <path d="M26 61 q25-8 49 3" stroke="#2A4023" stroke-width="4.6"/>
+   <path d="M28 36 q24 6 46-2" stroke="#37502D" stroke-width="4.2"/></g>
+   <g fill="#A8382C" opacity=".9"><path d="M36 57 l7-2 1 3 -7 2z"/><path d="M60 40 l7-2 1 3 -7 2z"/>
+   <path d="M48 65 l6-2 1 3 -6 2z"/></g>
+   <g fill="#7A6A4E"><circle cx="44" cy="47" r="1.7"/><circle cx="57" cy="55" r="1.6"/>
+   <circle cx="66" cy="47" r="1.4"/><circle cx="33" cy="49" r="1.4"/></g>`)},
+
+ {id:'pg',n:'糖醋排骨',w:2,h:2,soup:1,keep:2,tip:'隔夜最香',art:plate(`
+   <defs><linearGradient id="gz" x1="0" y1="0" x2="0" y2="1">
+   <stop offset="0" stop-color="#B4552A"/><stop offset="1" stop-color="#7E3418"/></linearGradient></defs>
+   <g fill="url(#gz)" stroke="#5E2711" stroke-width="1">
+   <rect x="30" y="36" width="19" height="13" rx="4"/><rect x="52" y="33" width="18" height="13" rx="4"/>
+   <rect x="28" y="53" width="19" height="13" rx="4"/><rect x="51" y="50" width="19" height="13" rx="4"/>
+   <rect x="40" y="66" width="18" height="12" rx="4"/></g>
+   <g fill="#EFE3C8" opacity=".9"><rect x="35" y="41" width="3" height="4" rx="1.4"/>
+   <rect x="58" y="38" width="3" height="4" rx="1.4"/><rect x="34" y="58" width="3" height="4" rx="1.4"/>
+   <rect x="57" y="55" width="3" height="4" rx="1.4"/></g>
+   <g fill="#F0E6CC"><circle cx="47" cy="47" r="1.4"/><circle cx="62" cy="63" r="1.3"/><circle cx="33" cy="50" r="1.2"/></g>`)},
+
+ {id:'mp',n:'麻婆豆腐',w:2,h:2,soup:2,keep:2,tip:'汤多，别侧过来',art:plate(`
+   <circle cx="50" cy="52" r="26" fill="#A8382C" opacity=".55"/>
+   <g fill="#F3EBD6" stroke="#D8C9A6" stroke-width=".9">
+   <rect x="34" y="40" width="12" height="11" rx="2" transform="rotate(-6 40 45)"/>
+   <rect x="50" y="37" width="12" height="11" rx="2" transform="rotate(8 56 42)"/>
+   <rect x="38" y="55" width="12" height="11" rx="2" transform="rotate(4 44 60)"/>
+   <rect x="54" y="52" width="12" height="11" rx="2" transform="rotate(-9 60 57)"/>
+   <rect x="46" y="66" width="11" height="10" rx="2"/></g>
+   <g fill="#7E1F17" opacity=".85"><circle cx="45" cy="52" r="2"/><circle cx="62" cy="47" r="1.7"/>
+   <circle cx="37" cy="63" r="1.6"/><circle cx="57" cy="66" r="1.8"/></g>
+   <g stroke="#5E8A46" stroke-width="1.5" stroke-linecap="round">
+   <path d="M42 36 l4 3"/><path d="M64 60 l4-3"/><path d="M34 50 l3 3"/></g>`)},
+
+ {id:'fq',n:'番茄炒蛋',w:2,h:1,soup:1,keep:1,tip:'配饭刚好',art:plate(`
+   <g fill="#E8B54A" stroke="#C08F2E" stroke-width=".8">
+   <path d="M32 44 q9-8 17-1 q-3 9-16 7z"/><path d="M55 56 q9-8 17-1 q-4 9-17 6z"/>
+   <path d="M38 60 q8-7 15-1 q-3 8-14 6z"/></g>
+   <g fill="#C0392B" stroke="#8E2A20" stroke-width=".8">
+   <path d="M50 38 q10-6 16 3 q-8 7-17 1z"/><path d="M30 56 q10-5 15 4 q-9 6-16 0z"/>
+   <path d="M58 45 q9-4 13 4 q-8 6-14 1z"/></g>
+   <g stroke="#6E8A57" stroke-width="1.5" stroke-linecap="round"><path d="M46 50 l5 4"/><path d="M65 39 l4 3"/></g>`)},
+
+ {id:'xr',n:'白灼虾',w:2,h:1,soup:0,keep:0,tip:'当天最好',art:plate(`
+   <g fill="none" stroke="#E0705A" stroke-width="6" stroke-linecap="round">
+   <path d="M34 44 q9-9 15 1 q-6 8-13 3"/><path d="M55 40 q9-9 15 1 q-6 8-13 3"/>
+   <path d="M32 60 q9-9 15 1 q-6 8-13 3"/><path d="M54 58 q9-9 15 1 q-6 8-13 3"/></g>
+   <g fill="none" stroke="#F0A08C" stroke-width="1.2">
+   <path d="M36 45 q7-6 12 1"/><path d="M57 41 q7-6 12 1"/></g>
+   <g stroke="#C9553F" stroke-width="1" stroke-linecap="round">
+   <path d="M33 41 l-4-4"/><path d="M54 37 l-4-4"/><path d="M31 57 l-4-4"/><path d="M53 55 l-4-4"/></g>`)},
+
+ {id:'mf',n:'米饭',w:1,h:1,soup:0,keep:1,tip:'总要带一份',art:`<svg viewBox="0 0 100 100">
+   <defs><radialGradient id="bw" cx="40%" cy="30%"><stop offset="0" stop-color="#DDE6EC"/>
+   <stop offset=".7" stop-color="#9FB0BC"/><stop offset="1" stop-color="#6E7D89"/></radialGradient></defs>
+   <path d="M22 46 q28 44 56 0z" fill="url(#bw)"/>
+   <ellipse cx="50" cy="46" rx="28" ry="8" fill="#8FA0AC"/>
+   <path d="M26 45 q24-19 48 0 q-24 9 -48 0z" fill="#F6F2E6"/>
+   <g stroke="#3E6B93" stroke-width="1.6" fill="none" opacity=".55"><path d="M30 56 h40"/></g></svg>`},
+
+ {id:'hs',n:'花生米',w:1,h:1,soup:0,keep:2,tip:'放多久都行',art:plate(`
+   <g fill="#C4823E" stroke="#8B5524" stroke-width=".8">
+   <ellipse cx="42" cy="45" rx="5" ry="4" transform="rotate(-20 42 45)"/>
+   <ellipse cx="56" cy="42" rx="5" ry="4" transform="rotate(15 56 42)"/>
+   <ellipse cx="49" cy="55" rx="5" ry="4" transform="rotate(-8 49 55)"/>
+   <ellipse cx="62" cy="55" rx="5" ry="4" transform="rotate(25 62 55)"/>
+   <ellipse cx="37" cy="57" rx="5" ry="4" transform="rotate(10 37 57)"/>
+   <ellipse cx="52" cy="66" rx="5" ry="4" transform="rotate(-15 52 66)"/></g>`)}
+];
+const KEEPTAG=['明天就软了','明天还行','明天更好吃'];
+
+/* ---------- 打包：4x3 的盒子，装不下全部 ---------- */
+const COLS=4,ROWS=3;
+let occ=Array.from({length:ROWS},()=>Array(COLS).fill(null));
+let placed=[],sel=null,rot=false;
+const tray=document.getElementById('tray'),grid=document.getElementById('grid'),
+      pieces=document.getElementById('pieces'),shutBtn=document.getElementById('shut'),
+      rotBtn=document.getElementById('rot');
+
+const ghost=document.getElementById('ghost'),freeN=document.getElementById('freeN'),tagN=document.getElementById('tagN');
+function refresh(){const f=occ.flat().filter(x=>!x).length;freeN.textContent=f;return f}
+let drag=null,lastKey1='';
+
+function moveGhost(x,y){
+  ghost.style.transform=`translate3d(${x}px,${y}px,0) translate(-50%,-50%)`;
+}
+function ghostSize(d,rotated){
+  const gr=grid.getBoundingClientRect();
+  const cw=(gr.width-10)/COLS, ch=(gr.height-10)/ROWS;
+  const w=rotated?d.h:d.w, h=rotated?d.w:d.h;
+  return {w:cw*w,h:ch*h};
+}
+function showGhost(d,x,y){
+  const sz=ghostSize(d,drag.rot);
+  ghost.style.width=sz.w+'px'; ghost.style.height=sz.h+'px';
+  moveGhost(x,y);
+  ghost.innerHTML=d.art; ghost.classList.add('on');
+}
+function cellAt(x,y){
+  const gr=grid.getBoundingClientRect();
+  if(x<gr.left||x>gr.right||y<gr.top||y>gr.bottom) return null;
+  const cw=(gr.width-10)/COLS, ch=(gr.height-10)/ROWS;
+  const sz=ghostSize(drag.d,drag.rot);
+  // anchor from the ghost's top-left, not the finger
+  const lx=x-sz.w/2-(gr.left+5), ly=y-sz.h/2-(gr.top+5);
+  return {c:Math.round(lx/cw), r:Math.round(ly/ch)};
+}
+
+function pickFour(){
+  const CAP=COLS*ROWS;
+  for(let t=0;t<400;t++){
+    const pool=DISHES.slice().sort(()=>Math.random()-.5).slice(0,4);
+    const area=pool.reduce((s,d)=>s+d.w*d.h,0);
+    const fitsW=pool.every(d=>(d.w<=COLS&&d.h<=ROWS)||(d.h<=COLS&&d.w<=ROWS));
+    if(area>CAP&&fitsW)return pool;                 // 一定装不下
+  }
+  return ['jz','pg','mp','sjd'].map(id=>DISHES.find(d=>d.id===id));
+}
+const TONIGHT=pickFour();
+
+TONIGHT.forEach(d=>{
+  const el=document.createElement('div');
+  el.className='dish'; el.dataset.id=d.id;
+  el.innerHTML=d.art+`<div class="nm">${d.n}</div>`+
+    `<div class="kp k${d.keep}">${['明天软','明天还行','明天更好'][d.keep]}</div>`;
+  el.addEventListener('pointerdown',e=>{
+    if(phase!==1||el.classList.contains('gone'))return;
+    e.preventDefault();
+    drag={d,rot:false,el,moved:false,sx:e.clientX,sy:e.clientY};
+    sel=d; rot=false;
+    el.setPointerCapture&&el.setPointerCapture(e.pointerId);
+    showGhost(d,e.clientX,e.clientY);
+    el.classList.add('drag');
+    tagN.textContent=`${d.n}　${d.w}×${d.h}　${KEEPTAG[d.keep]}`;
+    say(d.soup?`${d.tip}。`:`${d.w}×${d.h}。拖进盒子。`,2200);
+  });
+  tray.appendChild(el);
+});
+
+addEventListener('pointermove',e=>{
+  if(!drag||phase!==1)return;
+  if(Math.abs(e.clientX-drag.sx)>4||Math.abs(e.clientY-drag.sy)>4) drag.moved=true;
+  moveGhost(e.clientX,e.clientY);
+  const at=cellAt(e.clientX,e.clientY);
+  const key=at?at.r+','+at.c:'';
+  if(key!==lastKey1){lastKey1=key;clearPrev();if(at)preview(at.r,at.c)}
+});
+addEventListener('pointerup',e=>{
+  if(!drag||phase!==1)return;
+  const at=cellAt(e.clientX,e.clientY);
+  ghost.classList.remove('on'); drag.el.classList.remove('drag'); clearPrev();
+  if(at && drag.moved){
+    const ok=place(at.r,at.c);
+    if(!ok) say('放不下。挪一挪，或者转个方向再拖。',2800);
+    drag=null; sel=null;
+    document.querySelectorAll('.dish.sel').forEach(x=>x.classList.remove('sel'));
+    return;
+  }
+  if(!drag.moved){                       // 轻点＝选中，再点格子也能放
+    document.querySelectorAll('.dish.sel').forEach(x=>x.classList.remove('sel'));
+    drag.el.classList.add('sel');
+    say(`${drag.d.w}×${drag.d.h}。点一格放下，或者直接拖。`,2600);
+    sel=drag.d; rot=drag.rot; drag=null; return;
+  }
+  drag=null;
+});
+
+const cells=[];
+for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
+  const cell=document.createElement('div'); cell.className='cell';
+  cell.dataset.r=r; cell.dataset.c=c;
+  cell.addEventListener('pointerenter',()=>{ if(!drag) preview(r,c) });
+  cell.addEventListener('pointerleave',()=>{ if(!drag) clearPrev() });
+  cell.addEventListener('click',()=>{ if(!drag&&sel){ if(!place(r,c)) say('放不下。换个地方，或者转个方向。',2800) } });
+  grid.appendChild(cell); cells.push(cell);
+}
+const dim=()=>{const d=drag?drag.d:sel,r=drag?drag.rot:rot;return r?{w:d.h,h:d.w}:{w:d.w,h:d.h}};
+function fits(r,c,w,h){
+  if(r<0||c<0||r+h>ROWS||c+w>COLS)return false;
+  for(let i=0;i<h;i++)for(let j=0;j<w;j++)if(occ[r+i][c+j])return false;
+  return true;
+}
+let lit1=[];
+function clearPrev(){lit1.forEach(c=>c.classList.remove('hi','bad'));lit1=[]}
+function preview(r,c){
+  if(phase!==1||(!sel&&!drag))return;
+  const{w,h}=dim(),ok=fits(r,c,w,h),cls=ok?'hi':'bad';
+  for(let i=0;i<h;i++)for(let j=0;j<w;j++){
+    if(r+i<0||r+i>=ROWS||c+j<0||c+j>=COLS)continue;
+    const cell=cells[(r+i)*COLS+(c+j)];
+    if(cell){cell.classList.add(cls);lit1.push(cell)}
+  }
+}
+function place(r,c){
+  if(phase!==1)return false;
+  const d=drag?drag.d:sel; if(!d)return false;
+  const{w,h}=dim();
+  if(!fits(r,c,w,h))return false;
+  for(let i=0;i<h;i++)for(let j=0;j<w;j++)occ[r+i][c+j]=d.id;
+  const p={id:d.id,r,c,w,h,art:d.art,n:d.n}; placed.push(p);
+  const el=document.createElement('div'); el.className='pc';
+  el.style.cssText=`left:${c/COLS*100}%;top:${r/ROWS*100}%;width:${w/COLS*100}%;height:${h/ROWS*100}%;padding:2px`;
+  el.innerHTML=p.art;
+  el.addEventListener('click',ev=>{ev.stopPropagation();remove(p,el)});
+  pieces.appendChild(el);
+  tray.querySelector(`[data-id="${d.id}"]`).classList.add('gone');
+  tone(SCALE[(placed.length-1)%SCALE.length],.05,4.5);
+  sel=null; clearPrev();
+  document.querySelectorAll('.dish.sel').forEach(x=>x.classList.remove('sel'));
+  shutBtn.disabled=false; tagN.textContent='　';
+  const free=refresh();
+  if(placed.length===1)say('装不下全部。挑吧。',3400);
+  else if(free===0)say('满了。',2600);
+  else if(free<=3)say('差不多满了。',2600);
+  return true;
+}
+function remove(p,el){
+  if(phase!==1)return;
+  for(let i=0;i<p.h;i++)for(let j=0;j<p.w;j++)occ[p.r+i][p.c+j]=null;
+  placed=placed.filter(x=>x!==p); el.remove();
+  tray.querySelector(`[data-id="${p.id}"]`).classList.remove('gone');
+  shutBtn.disabled=placed.length===0; refresh();
+}
+rotBtn.addEventListener('click',()=>{
+  const d=drag?drag.d:sel;
+  if(!d){say('先选一样菜。',2200);return}
+  if(d.soup>=2){say('汤太多，侧过来会洒。',2600);return}
+  if(drag){drag.rot=!drag.rot;const g=ghostSize(drag.d,drag.rot);
+    ghost.style.width=g.w+'px';ghost.style.height=g.h+'px';}
+  else rot=!rot;
+  const{w,h}=dim(); say(`${w}×${h}`,1800);
+});
+shutBtn.addEventListener('click',()=>{
+  if(phase!==1||!placed.length)return;
+  phase=2; clearPrev();
+  document.getElementById('lidbar').style.display='none';
+  document.getElementById('lidanim').classList.add('shut');
+  tone(146.83,.07,6);
+  const lb=TONIGHT.length-placed.length;
+  const good=placed.filter(x=>DISHES.find(d=>d.id===x.id).keep===2).length;
+  const bad=placed.filter(x=>DISHES.find(d=>d.id===x.id).keep===0).length;
+  let line=lb?`剩下${lb}样留在桌上。`:'都带走了。';
+  if(good>=3)line+='挑的都是隔夜更好吃的。';
+  else if(bad>=2)line+='有几样明天大概会软，但你想带。';
+  say(line+'走吧。',3600);
+  setTimeout(()=>{S[1].classList.remove('on');S[2].classList.add('on');scn(2);setScene(2);drive()},2600);
+});
+
+/* ---------- 车：一路的风景（预渲染，逐帧不再新建渐变） ---------- */
+const cv=document.getElementById('road'),cx=cv.getContext('2d',{alpha:false});
+let raf,driving=false,prog=0,dist=0,holding=false;
+const fill=document.getElementById('fill');
+const DUR=30000,TOTAL=4000,SPEED=TOTAL/DUR;
+
+const SEG=[
+ {at:0.00,sky:['#0B0E13','#1B212B']},
+ {at:0.16,sky:['#080D14','#152234']},
+ {at:0.46,sky:['#131A26','#3A4457']},
+ {at:0.66,sky:['#101A2A','#2E4468']},
+ {at:0.88,sky:['#0B121C','#1C2A3C']}
+];
+const BR0=0.16,BR1=0.44,STEP=26,SPAN=1040;
+const hex2=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+function mix(h1,h2,t){const A=hex2(h1),B=hex2(h2);
+  return `rgb(${A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(',')})`}
+
+/* ---- 预渲染的素材 ---- */
+let glowSprite=null, skylineRaw=null, skylineFit=null, wheelBase=null;
+let skyGrad=null, skyKey=-1, roadGrad=null, glowGrad=null, W=0,H=0,HZ=0;
+
+function makeGlow(){
+  const c=document.createElement('canvas'); c.width=c.height=64;
+  const g=c.getContext('2d');
+  const rg=g.createRadialGradient(32,32,0,32,32,32);
+  rg.addColorStop(0,'rgba(255,215,160,1)');
+  rg.addColorStop(.18,'rgba(240,170,90,.85)');
+  rg.addColorStop(1,'rgba(227,154,71,0)');
+  g.fillStyle=rg; g.fillRect(0,0,64,64);
+  glowSprite=c;
+}
+function makeSkyline(){
+  const c=document.createElement('canvas'); c.width=2400; c.height=260;
+  const g=c.getContext('2d'); let x=0,i=0;
+  while(x<2400){
+    const w=26+Math.random()*54; let h=30+Math.random()*95, tall=(i===14);
+    if(tall)h=215;
+    g.fillStyle='#0E141D';
+    if(tall){g.beginPath();g.moveTo(x,260);g.lineTo(x,260-h+34);g.lineTo(x+w*.22,260-h);
+      g.lineTo(x+w*.78,260-h);g.lineTo(x+w,260-h+34);g.lineTo(x+w,260);g.closePath();g.fill()}
+    else g.fillRect(x,260-h,w,h);
+    for(let wy=260-h+8;wy<254;wy+=9)for(let wx=x+4;wx<x+w-4;wx+=7)
+      if(Math.random()<.42){
+        g.fillStyle=Math.random()<.14?'rgba(107,167,158,.75)':`rgba(243,223,176,${.28+Math.random()*.5})`;
+        g.fillRect(wx,wy,3,4);
+      }
+    if(tall){g.fillStyle='rgba(227,80,60,.9)';g.fillRect(x+w/2-2,260-h-5,4,4)}
+    x+=w+6+Math.random()*22; i++;
+  }
+  skylineRaw=c;
+}
+function makeWheel(){                 // 轮辐和吊舱只画一次，颜色圈每帧再叠
+  const R=140,S=R*2+30,c=document.createElement('canvas');
+  c.width=c.height=S; const g=c.getContext('2d'),X=S/2,Y=S/2;
+  g.strokeStyle='rgba(150,165,182,.4)'; g.lineWidth=3;
+  for(let i=0;i<16;i++){const a=i*Math.PI/8;
+    g.beginPath();g.moveTo(X,Y);g.lineTo(X+Math.cos(a)*R,Y+Math.sin(a)*R);g.stroke()}
+  for(let i=0;i<16;i++){const a=i*Math.PI/8;
+    g.fillStyle='rgba(243,223,176,.85)';
+    g.beginPath();g.arc(X+Math.cos(a)*R,Y+Math.sin(a)*R,6,0,7);g.fill()}
+  wheelBase=c;
+}
+function sizeCv(){
+  const r=stage.getBoundingClientRect();
+  W=cv.width=Math.round(r.width); H=cv.height=Math.round(r.height); HZ=H*.44;
+  roadGrad=cx.createLinearGradient(0,HZ,0,H);
+  roadGrad.addColorStop(0,'#191D24'); roadGrad.addColorStop(1,'#0D1014');
+  if(skylineRaw){
+    const sh=Math.round(HZ*.62), sw=Math.round(2400*(sh/260));
+    const c=document.createElement('canvas'); c.width=sw; c.height=sh;
+    c.getContext('2d').drawImage(skylineRaw,0,0,sw,sh);
+    skylineFit=c;
+    glowGrad=cx.createLinearGradient(0,HZ-sh,0,HZ);
+    glowGrad.addColorStop(0,'rgba(243,223,176,0)');
+    glowGrad.addColorStop(1,'rgba(243,223,176,.7)');
+  }
+  skyKey=-1;
+}
+addEventListener('resize',()=>{if(driving)sizeCv()});
+
+function skyFor(p){
+  const k=Math.round(p*90);
+  if(k===skyKey&&skyGrad)return skyGrad;
+  skyKey=k;
+  let i=0;for(let n=0;n<SEG.length;n++)if(p>=SEG[n].at)i=n;
+  const cur=SEG[i],nxt=SEG[Math.min(i+1,SEG.length-1)];
+  const span=(nxt.at-cur.at)||1,t=Math.min(1,Math.max(0,(p-cur.at)/span));
+  skyGrad=cx.createLinearGradient(0,0,0,HZ);
+  skyGrad.addColorStop(0,mix(cur.sky[0],nxt.sky[0],t));
+  skyGrad.addColorStop(1,mix(cur.sky[1],nxt.sky[1],t));
+  return skyGrad;
+}
+
+/* ===== 跨海大桥：世界坐标 + 真透视，按雾浓度分组批量描边 ===== */
+const BW=15,      // 桁架/主缆半宽
+      RW=11.5,    // 车行道半宽
+      LP=10.3,    // 灯柱：护栏以内
+      CAM=2.2, ZN=1.2, HANG=20, TSPAN=900, FOG=400, BANDS=4;
+let FOC=1;
+const pjx=(x,z)=>W/2+x*FOC/z;
+const pjy=(y,z)=>HZ+(CAM-y)*FOC/z;
+function cableH(wz){
+  const t=((wz%TSPAN)+TSPAN)%TSPAN/TSPAN;
+  return 8+112*(1-Math.sin(t*Math.PI));
+}
+const pts=[];
+
+function drawBridge(now){
+  FOC=H*0.30;
+
+  /* 海 */
+  cx.fillStyle='#060B12'; cx.fillRect(0,HZ,W,H-HZ);
+  cx.fillStyle='rgba(150,180,205,.07)';
+  for(let i=0;i<12;i++){
+    const yy=HZ+10+i*i*4+(dist*.5)%18; if(yy>H)break;
+    cx.fillRect((i*211+dist*1.8)%W,yy,26+i*6,1);
+  }
+
+  /* 桥面：外侧是桁架顶面，中间才是车行道 */
+  const nY=pjy(0,ZN);
+  const bL=pjx(-BW,ZN),bR=pjx(BW,ZN);
+  cx.fillStyle='#12161C';
+  cx.beginPath(); cx.moveTo(bL,nY); cx.lineTo(bR,nY); cx.lineTo(W/2,HZ); cx.closePath(); cx.fill();
+  cx.fillRect(Math.min(bL,0),nY,Math.max(bR-bL,W),H-nY);
+  const rL=pjx(-RW,ZN),rR=pjx(RW,ZN);
+  cx.fillStyle='#1B2028';
+  cx.beginPath(); cx.moveTo(rL,nY); cx.lineTo(rR,nY); cx.lineTo(W/2,HZ); cx.closePath(); cx.fill();
+  cx.fillRect(Math.min(rL,0),nY,Math.max(rR-rL,W),H-nY);
+  /* 边线 */
+  cx.strokeStyle='rgba(226,220,200,.28)'; cx.lineWidth=1.2;
+  cx.beginPath();
+  cx.moveTo(rL,H); cx.lineTo(W/2,HZ); cx.moveTo(rR,H); cx.lineTo(W/2,HZ); cx.stroke();
+
+  /* 车道线：中央 + 左右分道，一次填充 */
+  cx.fillStyle='rgba(226,214,180,.2)'; cx.beginPath();
+  for(let n=0;n<26;n++){
+    const z0=Math.ceil(dist/18)*18+n*18-dist; if(z0>FOG)break;
+    const z1=z0+7; if(z1<ZN)continue;
+    const za=Math.max(ZN,z0);
+    const y0=pjy(0,za),y1=pjy(0,z1);
+    for(const lx of [0,-RW/2,RW/2]){
+      const x0=pjx(lx,za),x1=pjx(lx,z1);
+      const w0=Math.max(.6,.32*FOC/za),w1=Math.max(.4,.32*FOC/z1);
+      cx.moveTo(x0-w0,y0); cx.lineTo(x0+w0,y0); cx.lineTo(x1+w1,y1); cx.lineTo(x1-w1,y1);
+    }
+  }
+  cx.fill();
+
+  /* 采样所有吊索点，远 → 近 */
+  pts.length=0;
+  const n0=Math.floor(dist/HANG), N=Math.ceil(FOG/HANG);
+  for(let n=N;n>=0;n--){
+    const wz=(n0+n)*HANG, z=wz-dist;
+    if(z<ZN)continue;
+    const v=1-z/FOG; if(v<=0)continue;
+    pts.push({xL:pjx(-BW,z),xR:pjx(BW,z),yD:pjy(0,z),yT:pjy(-13,z),
+              yR:pjy(1.2,z),yC:pjy(cableH(wz),z),sc:FOC/z,f:v*v,z});
+  }
+  const M=pts.length;
+  if(M>1){
+    const per=Math.ceil(M/BANDS);
+    for(let b=0;b<BANDS;b++){
+      const i0=b*per, i1=Math.min(M-1,(b+1)*per);
+      if(i0>=i1)continue;
+      const mid=pts[Math.floor((i0+i1)/2)], a=mid.f, sc=mid.sc;
+      if(a<=0.004)continue;
+
+      /* 主缆 */
+      cx.globalAlpha=Math.min(1,a*.95); cx.strokeStyle='#E2E9EE';
+      cx.lineWidth=Math.max(.8,sc*.62); cx.beginPath();
+      cx.moveTo(pts[i0].xL,pts[i0].yC);
+      for(let i=i0+1;i<=i1;i++)cx.lineTo(pts[i].xL,pts[i].yC);
+      cx.moveTo(pts[i0].xR,pts[i0].yC);
+      for(let i=i0+1;i<=i1;i++)cx.lineTo(pts[i].xR,pts[i].yC);
+      cx.stroke();
+
+      /* 护栏 */
+      cx.globalAlpha=a*.5; cx.strokeStyle='#C3CDD5';
+      cx.lineWidth=Math.max(.5,sc*.16); cx.beginPath();
+      cx.moveTo(pts[i0].xL,pts[i0].yR);
+      for(let i=i0+1;i<=i1;i++)cx.lineTo(pts[i].xL,pts[i].yR);
+      cx.moveTo(pts[i0].xR,pts[i0].yR);
+      for(let i=i0+1;i<=i1;i++)cx.lineTo(pts[i].xR,pts[i].yR);
+      cx.stroke();
+
+      /* 吊索 */
+      cx.globalAlpha=a*.45; cx.strokeStyle='#C8D2DA';
+      cx.lineWidth=Math.max(.4,sc*.13); cx.beginPath();
+      for(let i=i0;i<=i1;i++){
+        const q=pts[i];
+        cx.moveTo(q.xL,q.yC); cx.lineTo(q.xL,q.yR);
+        cx.moveTo(q.xR,q.yC); cx.lineTo(q.xR,q.yR);
+      }
+      cx.stroke();
+
+      /* 桥面下的桁架：只画近处两组 */
+      if(b>=BANDS-2){
+        cx.globalAlpha=a*.5; cx.strokeStyle='#7C8B99';
+        cx.lineWidth=Math.max(.5,sc*.26); cx.beginPath();
+        for(let i=i0;i<i1;i++){
+          const q=pts[i],r=pts[i+1];
+          cx.moveTo(q.xL,q.yD); cx.lineTo(r.xL,r.yT);
+          cx.moveTo(q.xL,q.yT); cx.lineTo(r.xL,r.yD);
+          cx.moveTo(q.xR,q.yD); cx.lineTo(r.xR,r.yT);
+          cx.moveTo(q.xR,q.yT); cx.lineTo(r.xR,r.yD);
+          cx.moveTo(q.xL,q.yT); cx.lineTo(r.xL,r.yT);
+          cx.moveTo(q.xR,q.yT); cx.lineTo(r.xR,r.yT);
+        }
+        cx.stroke();
+      }
+    }
+    cx.globalAlpha=1;
+
+    /* 灯柱与灯：只在近处 */
+    if(glowSprite){
+      cx.strokeStyle='#A9B5BE'; cx.lineWidth=1; cx.beginPath();
+      for(let i=0;i<M;i++){
+        const q=pts[i]; if(q.z>170||i%2)continue;
+        const pL=pjx(-LP,q.z),pR=pjx(LP,q.z),base=pjy(0,q.z),ly=pjy(7.5,q.z);
+        cx.moveTo(pL,base); cx.lineTo(pL,ly);
+        cx.moveTo(pR,base); cx.lineTo(pR,ly);
+      }
+      cx.globalAlpha=.35; cx.stroke();
+      for(let i=0;i<M;i++){
+        const q=pts[i]; if(q.z>170||i%2)continue;
+        const pL=pjx(-LP,q.z),pR=pjx(LP,q.z),ly=pjy(7.5,q.z),r=Math.max(2,q.sc*1.6);
+        cx.globalAlpha=Math.min(.85,q.f*1.3);
+        cx.drawImage(glowSprite,pL-r*2,ly-r*2,r*4,r*4);
+        cx.drawImage(glowSprite,pR-r*2,ly-r*2,r*4,r*4);
+      }
+      cx.globalAlpha=1;
+    }
+  }
+
+  /* 桥塔：纯色填充，不再逐帧建渐变 */
+  const t0=Math.floor(dist/TSPAN);
+  for(let k=3;k>=0;k--){
+    const wz=(t0+k)*TSPAN, z=wz-dist;
+    if(z<ZN)continue;
+    const v=1-z/FOG; if(v<=0)continue;
+    const f=Math.min(1,v*v*1.7), sc=FOC/z;
+    const xL=pjx(-BW-2,z), xR=pjx(BW+2,z);
+    const yTop=pjy(126,z), yBot=pjy(-16,z), legW=Math.max(1.2,sc*2.6);
+    const mid=pjy(55,z);
+    cx.globalAlpha=f;
+    cx.fillStyle='#E4EBEF';
+    cx.fillRect(xL-legW/2,yTop,legW,mid-yTop);
+    cx.fillRect(xR-legW/2,yTop,legW,mid-yTop);
+    cx.fillStyle='#94A2AE';
+    cx.fillRect(xL-legW/2,mid,legW,yBot-mid);
+    cx.fillRect(xR-legW/2,mid,legW,yBot-mid);
+    cx.fillStyle='#CBD5DC';
+    const bh=Math.max(1,sc*1.8);
+    for(const hh of [120,104,52]){
+      const by=pjy(hh,z); if(by<yBot) cx.fillRect(xL,by,xR-xL,bh);
+    }
+    const rr=Math.max(1,sc*.9), ry=pjy(130,z);
+    cx.fillStyle='#DC4637';
+    cx.fillRect(xL-rr/2,ry,rr,rr); cx.fillRect(xR-rr/2,ry,rr,rr);
+    if(glowSprite&&z<260){
+      const g2=Math.max(2.5,sc*3); cx.globalAlpha=f*.4;
+      cx.drawImage(glowSprite,xL-g2,ry-g2,g2*2,g2*2);
+      cx.drawImage(glowSprite,xR-g2,ry-g2,g2*2,g2*2);
+    }
+  }
+  cx.globalAlpha=1;
+}
+
+function frame(now){
+  if(!driving)return;
+  const p=prog, onBridge=(p>BR0&&p<BR1);
+  cx.fillStyle=skyFor(p); cx.fillRect(0,0,W,HZ);
+
+  /* 天际线 */
+  const city=p<.46?0:p<.56?(p-.46)/.10:p<.90?1:Math.max(0,1-(p-.90)/.10);
+  if(city>0&&skylineFit){
+    const sw=skylineFit.width,sh=skylineFit.height;
+    let off=-(dist*.42)%sw; if(off>0)off-=sw;
+    cx.globalAlpha=city*.95;
+    for(let x=off;x<W;x+=sw) cx.drawImage(skylineFit,x,HZ-sh);
+    cx.globalAlpha=city*.16; cx.fillStyle=glowGrad; cx.fillRect(0,HZ-sh,W,sh);
+    cx.globalAlpha=1;
+  }
+
+  /* 摩天轮 */
+  const wz=TOTAL*.74-dist;
+  if(wz<330&&wz>-40&&wheelBase){
+    const q=Math.max(.05,wz/330);
+    const R=Math.min(H*.9,H*.055/Math.max(.055,q));
+    const X=W*.5+(W*.42)*(1/Math.max(.16,q))*.42, Y=HZ-R*.62;
+    const t=now/1000, al=Math.min(1,(1-q)*1.5+.25);
+    cx.save(); cx.globalAlpha=al;
+    cx.strokeStyle='rgba(160,175,190,.5)'; cx.lineWidth=Math.max(1,R*.03);
+    cx.beginPath(); cx.moveTo(X-R*.5,Y+R*1.28); cx.lineTo(X,Y);
+    cx.moveTo(X+R*.5,Y+R*1.28); cx.lineTo(X,Y); cx.stroke();
+    const sc=R/140;
+    cx.save(); cx.translate(X,Y); cx.rotate(t*.22); cx.scale(sc,sc);
+    cx.drawImage(wheelBase,-wheelBase.width/2,-wheelBase.height/2); cx.restore();
+    cx.lineWidth=Math.max(1.4,R*.05);
+    for(let i=0;i<18;i++){
+      cx.strokeStyle=`hsla(${(i*20+t*40)%360},72%,62%,.92)`;
+      cx.beginPath(); cx.arc(X,Y,R,i/18*6.2832,(i+1)/18*6.2832); cx.stroke();
+    }
+    cx.restore();
+  }
+
+  /* ---- 地面 ---- */
+  if(onBridge){
+    drawBridge(now);
+  }else{
+    cx.fillStyle=roadGrad; cx.fillRect(0,HZ,W,H-HZ);
+    if(p>.66){
+      const sea=Math.min(1,(p-.66)/.10);
+      cx.globalAlpha=sea*.5; cx.fillStyle='#0A1420'; cx.fillRect(0,HZ-4,W,10);
+      cx.fillStyle='rgba(243,223,176,.16)';
+      for(let i=0;i<14;i++) cx.fillRect((i*137+dist*1.4)%W,HZ-3+((i*7)%5),18,1);
+      cx.globalAlpha=1;
+    }
+    cx.fillStyle='rgba(226,214,180,.26)';
+    for(let i=0;i<20;i++){
+      const zz=i*22-(dist%22); if(zz<=1)continue;
+      const q=22/zz, y=HZ+(H-HZ)*Math.min(1,q*q*1.4); if(y>H)continue;
+      const w2=Math.max(1,q*7);
+      cx.fillRect(W/2-w2/2,y,w2,Math.max(2,q*26));
+    }
+  }
+
+  /* 路灯（不在桥上时） */
+  if(!onBridge){
+    const SP=42;
+    for(let i=0;i<16;i++){
+      const d0=Math.ceil(dist/SP)*SP+i*SP, z=d0-dist;
+      if(z<1||z>200)continue;
+      const q=22/z, side=((d0/SP)%2)?1:-1;
+      const x=W/2+side*W*.42*q*3.2;
+      if(x<-160||x>W+160)continue;
+      const y=HZ-q*46, r=Math.max(2,q*13)*4.5;
+      cx.globalAlpha=Math.min(.9,q*1.5);
+      cx.drawImage(glowSprite,x-r,y-r,r*2,r*2);
+      cx.globalAlpha=Math.min(.16,q*.32); cx.fillStyle='#E39A47';
+      cx.fillRect(x-r*.14,HZ+q*8,r*.28,(H-HZ)*q*.5);
+      cx.globalAlpha=1;
+    }
+  }
+  raf=requestAnimationFrame(frame);
+}
+
+const VIEWS=[
+ {at:0.18,t:'上桥了。下面全是海。'},
+ {at:0.30,t:'桥塔从头顶过去，灯是红的。'},
+ {at:0.50,t:'楼一栋一栋亮着，像谁忘了关。'},
+ {at:0.72,t:'みなとみらい。摩天轮在换颜色。'},
+ {at:0.92,t:'快到了。'}
+];
+let doneV=new Set(),lastT=0;
+
+function step(now){
+  if(phase!==2){return}
+  const dt=Math.min(50,now-(lastT||now)); lastT=now;
+  if(holding){
+    dist+=dt*SPEED; prog=Math.min(1,dist/TOTAL);
+    fill.style.width=(prog*100).toFixed(1)+'%';
+    for(let i=0;i<VIEWS.length;i++)
+      if(prog>=VIEWS[i].at&&!doneV.has(i)){doneV.add(i);say(VIEWS[i].t,4200)}
+    if(prog>=1){arrive();return}
+  }
+  requestAnimationFrame(step);
+}
+
+function drive(){
+  makeGlow(); makeSkyline(); makeWheel(); sizeCv();
+  driving=true; requestAnimationFrame(frame); requestAnimationFrame(step);
+  say('按住屏幕。一直按着。',0);
+  S[2].addEventListener('pointerdown',e=>{if(phase!==2)return;e.preventDefault();holding=true});
+  addEventListener('pointerup',()=>holding=false);
+  addEventListener('pointercancel',()=>holding=false);
+}
+function arrive(){
+  if(phase!==2)return;phase=3;holding=false;
+  say('到了。一路没说话，也不觉得空。',0);
+  setTimeout(()=>{
+    driving=false;cancelAnimationFrame(raf);
+    S[2].classList.remove('on');S[3].classList.add('on');scn(3);setScene(3);
+    clearTimeout(subTimer);sub.classList.remove('on');
+    setTimeout(()=>say('放进去。',0),1300);
+  },3000);
+}
+
+/* ---------- 冰箱：给明天腾地方 ---------- */
+const FCOLS=5,FROWS=4;
+let occ3=Array.from({length:FROWS},()=>Array(FCOLS).fill(null));
+let fItems=[],fQueue=[],drag2=null,fsel=null;
+const fgrid=document.getElementById('fgrid'),fpieces=document.getElementById('fpieces'),
+      queue=document.getElementById('queue'),inside=document.getElementById('inside'),
+      fcloseBtn=document.getElementById('fclose'),frotBtn=document.getElementById('frot'),
+      fnote=document.getElementById('fnote');
+const fcells=[];
+
+/* 冰箱里本来就有的东西 */
+const STOCK=[
+ {id:'milk',n:'牛奶',w:1,h:2,art:`<svg viewBox="0 0 50 100">
+   <path d="M12 30 h26 v62 a4 4 0 0 1-4 4 h-18 a4 4 0 0 1-4-4z" fill="#F4F7F8" stroke="#B9C9CE" stroke-width="1.4"/>
+   <path d="M12 30 l13-16 13 16z" fill="#E4EBEE" stroke="#B9C9CE" stroke-width="1.4"/>
+   <rect x="16" y="48" width="18" height="22" rx="2" fill="#4E7A93" opacity=".55"/>
+   <rect x="19" y="8" width="12" height="8" rx="2" fill="#7FA3B4"/></svg>`},
+ {id:'egg',n:'鸡蛋',w:2,h:1,art:`<svg viewBox="0 0 100 50">
+   <rect x="5" y="12" width="90" height="30" rx="5" fill="#D9CDBB" stroke="#B6A991" stroke-width="1.4"/>
+   <g fill="#F2EADC" stroke="#C9BCA6" stroke-width="1">
+   <ellipse cx="21" cy="22" rx="9" ry="10"/><ellipse cx="42" cy="22" rx="9" ry="10"/>
+   <ellipse cx="63" cy="22" rx="9" ry="10"/><ellipse cx="84" cy="22" rx="9" ry="10"/></g></svg>`},
+ {id:'beer',n:'啤酒',w:1,h:1,art:`<svg viewBox="0 0 50 50">
+   <rect x="16" y="8" width="18" height="36" rx="3" fill="#2E5A2A" stroke="#1D3D1A" stroke-width="1.3"/>
+   <rect x="16" y="20" width="18" height="13" fill="#D8C271" opacity=".85"/>
+   <rect x="19" y="4" width="12" height="6" rx="2" fill="#9AA6A0"/></svg>`},
+ {id:'soy',n:'酱油',w:1,h:2,art:`<svg viewBox="0 0 50 100">
+   <path d="M18 26 h14 v6 q10 6 10 18 v40 a5 5 0 0 1-5 5 h-24 a5 5 0 0 1-5-5 v-40 q0-12 10-18z"
+     fill="#2A2118" stroke="#16110C" stroke-width="1.4"/>
+   <rect x="19" y="12" width="12" height="14" rx="2" fill="#6E3B2A"/>
+   <rect x="16" y="58" width="18" height="16" rx="2" fill="#C7B48A" opacity=".7"/></svg>`},
+ {id:'kim',n:'泡菜',w:1,h:1,art:`<svg viewBox="0 0 50 50">
+   <rect x="10" y="12" width="30" height="32" rx="4" fill="#EFE7D5" stroke="#C6B99E" stroke-width="1.3"/>
+   <rect x="12" y="22" width="26" height="20" rx="2" fill="#B94B2C" opacity=".82"/>
+   <rect x="8" y="6" width="34" height="8" rx="3" fill="#9AA6A0"/></svg>`},
+ {id:'juice',n:'果汁',w:1,h:2,art:`<svg viewBox="0 0 50 100">
+   <rect x="13" y="20" width="24" height="72" rx="4" fill="#E8A24C" stroke="#B87A2C" stroke-width="1.3" opacity=".9"/>
+   <rect x="13" y="20" width="24" height="16" rx="4" fill="#F2CE93"/>
+   <rect x="18" y="8" width="14" height="13" rx="3" fill="#D8DFE2"/>
+   <rect x="17" y="48" width="16" height="22" rx="2" fill="#FFF" opacity=".28"/></svg>`},
+ {id:'lo',n:'剩菜',w:2,h:1,art:`<svg viewBox="0 0 100 50">
+   <rect x="6" y="14" width="88" height="30" rx="4" fill="#DCD4C2" stroke="#B4AB95" stroke-width="1.3"/>
+   <rect x="6" y="14" width="88" height="9" rx="3" fill="#8E9B9E" opacity=".8"/>
+   <rect x="14" y="26" width="70" height="13" rx="2" fill="#7E5A3C" opacity=".55"/></svg>`},
+ {id:'but',n:'黄油',w:1,h:1,art:`<svg viewBox="0 0 50 50">
+   <rect x="9" y="17" width="32" height="20" rx="3" fill="#F0E3B8" stroke="#C9B77F" stroke-width="1.2"/>
+   <rect x="9" y="17" width="32" height="7" rx="3" fill="#E4CE87"/>
+   <path d="M14 30 h22" stroke="#C9B77F" stroke-width="1"/></svg>`}
+];
+const PRESET=[['milk',0,0],['egg',0,1],['beer',0,3],['soy',2,4],['kim',3,0]];
+
+function fdim(o){const it=o.item,r=o.rot;return r?{w:it.h,h:it.w}:{w:it.w,h:it.h}}
+function ffits(r,c,w,h,skip){
+  if(r<0||c<0||r+h>FROWS||c+w>FCOLS)return false;
+  for(let i=0;i<h;i++)for(let j=0;j<w;j++){const v=occ3[r+i][c+j];if(v&&v!==skip)return false}
+  return true;
+}
+let litCells=[];
+function fclear(){litCells.forEach(c=>c.classList.remove('hi','bad'));litCells=[]}
+function fpreview(r,c,o,skip){
+  fclear(); const{w,h}=fdim(o), ok=ffits(r,c,w,h,skip), cls=ok?'hi':'bad';
+  for(let i=0;i<h;i++)for(let j=0;j<w;j++){
+    if(r+i<0||r+i>=FROWS||c+j<0||c+j>=FCOLS)continue;
+    const cell=fcells[(r+i)*FCOLS+(c+j)];
+    cell.classList.add(cls); litCells.push(cell);
+  }
+}
+function fsize(o){
+  const gr=fgrid.getBoundingClientRect();
+  const cw=(gr.width-10)/FCOLS, ch=(gr.height-10)/FROWS;
+  const{w,h}=fdim(o); return{w:cw*w,h:ch*h};
+}
+function fcellAt(x,y,o){
+  const gr=fgrid.getBoundingClientRect();
+  if(x<gr.left-40||x>gr.right+40||y<gr.top-40||y>gr.bottom+40)return null;
+  const cw=(gr.width-10)/FCOLS, ch=(gr.height-10)/FROWS, sz=fsize(o);
+  return{c:Math.round((x-sz.w/2-(gr.left+5))/cw),r:Math.round((y-sz.h/2-(gr.top+5))/ch)};
+}
+function fput(o,r,c){
+  const{w,h}=fdim(o);
+  o.r=r;o.c=c;o.w=w;o.h=h;
+  for(let i=0;i<h;i++)for(let j=0;j<w;j++)occ3[r+i][c+j]=o.key;
+  if(!o.el){
+    o.el=document.createElement('div');
+    o.el.className='fp'+(o.mine?' mine':'');
+    o.el.innerHTML=o.item.art;
+    o.el.addEventListener('pointerdown',e=>startDrag2(e,o));
+    fpieces.appendChild(o.el);
+  }
+  o.el.style.cssText=`left:${c/FCOLS*100}%;top:${r/FROWS*100}%;width:${w/FCOLS*100}%;height:${h/FROWS*100}%;padding:2px`;
+  o.el.className='fp'+(o.mine?' mine':'');
+}
+function flift(o){
+  for(let i=0;i<o.h;i++)for(let j=0;j<o.w;j++)
+    if(occ3[o.r+i][o.c+j]===o.key)occ3[o.r+i][o.c+j]=null;
+}
+
+function startDrag2(e,o,fromQueue){
+  if(phase!==3)return; e.preventDefault(); e.stopPropagation&&e.stopPropagation();
+  drag2={o,fromQueue,moved:false,sx:e.clientX,sy:e.clientY};
+  fsel=o;
+  if(!fromQueue)flift(o);
+  const sz=fsize(o);
+  ghost.style.width=sz.w+'px';ghost.style.height=sz.h+'px';
+  moveGhost(e.clientX,e.clientY);
+  ghost.innerHTML=o.item.art;ghost.classList.add('on');
+  if(o.el)o.el.style.opacity='0';
+  if(o.qel)o.qel.style.opacity='.25';
+}
+let lastKey2='',pend2=null,raf2=0;
+function flush2(){
+  raf2=0; if(!drag2||!pend2)return;
+  const [x,y]=pend2;
+  moveGhost(x,y);
+  const at=fcellAt(x,y,drag2.o);
+  const key=at?at.r+','+at.c:'';
+  if(key!==lastKey2){lastKey2=key;if(at)fpreview(at.r,at.c,drag2.o);else fclear()}
+}
+addEventListener('pointermove',e=>{
+  if(!drag2)return;
+  if(Math.abs(e.clientX-drag2.sx)>4||Math.abs(e.clientY-drag2.sy)>4)drag2.moved=true;
+  pend2=[e.clientX,e.clientY];
+  if(!raf2)raf2=requestAnimationFrame(flush2);
+});
+addEventListener('pointerup',e=>{
+  if(!drag2)return;
+  const o=drag2.o, at=fcellAt(e.clientX,e.clientY,o);
+  ghost.classList.remove('on'); fclear(); lastKey2=''; pend2=null;
+  if(o.el)o.el.style.opacity='';
+  if(o.qel)o.qel.style.opacity='';
+  const{w,h}=fdim(o);
+  if(at&&drag2.moved&&ffits(at.r,at.c,w,h)){
+    fput(o,at.r,at.c);
+    if(drag2.fromQueue){
+      o.qel.classList.add('gone'); o.placedIn=true;
+      tone(SCALE[fQueue.filter(x=>x.placedIn).length%SCALE.length],.045,4);
+      const left=fQueue.filter(x=>!x.placedIn).length;
+      if(left===0){fcloseBtn.disabled=false;say('都放进去了。关门吧。',3000)}
+      else say(`还有${left}样。`,2200);
+    }
+  }else{
+    if(!drag2.fromQueue)fput(o,o.r,o.c);            // 放不下就回原位
+    if(drag2.moved)say('放不下。挪一挪里面的东西。',2600);
+  }
+  drag2=null;
+});
+frotBtn.addEventListener('click',()=>{
+  if(!fsel){say('先拿起一样。',2200);return}
+  const d=DISHES.find(x=>x.id===fsel.item.id);
+  if(d&&d.soup>=2){say('汤太多，侧过来会洒。',2400);return}
+  if(fsel.placedIn||!fsel.qel){                       // 已在冰箱里
+    flift(fsel); fsel.rot=!fsel.rot;
+    const{w,h}=fdim(fsel);
+    if(ffits(fsel.r,fsel.c,w,h))fput(fsel,fsel.r,fsel.c);
+    else{fsel.rot=!fsel.rot;fput(fsel,fsel.r,fsel.c);say('转不开。先挪出来。',2400)}
+  }else{fsel.rot=!fsel.rot;const{w,h}=fdim(fsel);say(`${w}×${h}`,1600)}
+});
+
+function buildFridge(){
+  for(let r=0;r<FROWS;r++)for(let c=0;c<FCOLS;c++){
+    const cell=document.createElement('div');cell.className='fcell';
+    fgrid.appendChild(cell);fcells.push(cell);
+  }
+  for(let i=1;i<FROWS;i++){
+    const sh=document.createElement('div');sh.className='shelf';
+    sh.style.top=`calc(${i/FROWS*100}% - 1px)`;fgrid.appendChild(sh);
+  }
+  let k=0;
+  PRESET.forEach(([id,r,c])=>{
+    const it=STOCK.find(x=>x.id===id);
+    const o={key:'s'+(k++),item:it,rot:false,mine:false};
+    fput(o,r,c); fItems.push(o);
+  });
+  placed.forEach((p,i)=>{
+    const d=DISHES.find(x=>x.id===p.id);
+    const o={key:'m'+i,item:d,rot:false,mine:true,placedIn:false};
+    const qel=document.createElement('div');qel.className='qi';
+    qel.innerHTML=d.art+`<div class="qn">${d.n}</div>`;
+    qel.addEventListener('pointerdown',e=>startDrag2(e,o,true));
+    queue.appendChild(qel); o.qel=qel; fQueue.push(o);
+  });
+  fcloseBtn.disabled=true;
+}
+
+let fridgeOpened=false;
+document.getElementById('s3').addEventListener('click',e=>{
+  if(phase!==3||fridgeOpened)return;
+  fridgeOpened=true;
+  document.getElementById('fridge').classList.add('open');
+  S[3].classList.add('lit');
+  clearTimeout(subTimer);sub.classList.remove('on');
+  setTimeout(()=>{
+    document.getElementById('fridge').classList.add('hide');
+    inside.classList.add('on'); buildFridge();
+    say('冰箱本来就满的。给明天腾个地方。',3600);
+  },2000);
+});
+fcloseBtn.addEventListener('click',()=>{
+  if(phase!==3)return; phase=4;
+  inside.classList.remove('on'); S[3].classList.remove('lit');
+  say('明天还有。',0);
+  setTimeout(()=>{
+    clearTimeout(subTimer);sub.classList.remove('on');
+    S[3].classList.remove('on');S[4].classList.add('on');scn(4);setScene(4);
+    buildMorning();
+  },3200);
+});
+
+/* ---------- 第二天 ---------- */
+let eaten=0;
+function buildMorning(){
+  const wrap=document.getElementById('plate2');wrap.innerHTML='';
+  placed.forEach(p=>{
+    const el=document.createElement('div');el.className='left';el.innerHTML=p.art;
+    el.addEventListener('click',()=>{
+      if(el.classList.contains('eaten'))return;
+      el.classList.add('eaten');eaten++;
+      tone(SCALE[eaten%SCALE.length],.045,4);
+      const d=DISHES.find(x=>x.id===p.id);
+      if(eaten===placed.length)finish();
+      else say(['软了，但还是吃了。','热一下，跟昨天差不多。','比昨天还好吃。'][d.keep],2800);
+    });
+    wrap.appendChild(el);
+  });
+  setTimeout(()=>say(placed.length>1?`昨天的。${placed.length}样，热一下就能吃。`:'就这一样。热一下就能吃。',0),1400);
+}
+function finish(){
+  phase=5;clearTimeout(subTimer);
+  say('吃完了。今天再去买。',0);
+  setTimeout(()=>{sub.classList.remove('on');setTimeout(()=>document.getElementById('end').classList.add('on'),1200)},4200);
+}
+document.getElementById('again').addEventListener('click',()=>location.reload());
+
+/* ---------- 字幕 ---------- */
+let subTimer;
+function say(t,hold=3400){
+  clearTimeout(subTimer);sub.classList.remove('on');
+  setTimeout(()=>{sub.textContent=t;sub.classList.add('on');
+    if(hold)subTimer=setTimeout(()=>sub.classList.remove('on'),hold)},520);
+}
+
+/* ---------- 声音（全部实时合成） ---------- */
+const A={ctx:null,on:true,master:null,scene:null,nodes:[],timers:[]};
+function noiseBuf(ctx,sec=4){
+  const b=ctx.createBuffer(1,ctx.sampleRate*sec,ctx.sampleRate),d=b.getChannelData(0);let last=0;
+  for(let i=0;i<d.length;i++){const w=Math.random()*2-1;last=(last+.02*w)/1.02;d[i]=last*3.2}
+  return b;
+}
+function initAudio(){
+  if(A.ctx){if(A.ctx.state==='suspended')A.ctx.resume();return}
+  const C=window.AudioContext||window.webkitAudioContext;if(!C)return;
+  A.ctx=new C();A.master=A.ctx.createGain();A.master.gain.value=A.on?.85:0;
+  A.master.connect(A.ctx.destination);A.noise=noiseBuf(A.ctx);setScene(1);
+}
+function clearS(){
+  A.timers.forEach(clearTimeout);A.timers=[];
+  A.nodes.forEach(n=>{try{n.g.gain.cancelScheduledValues(A.ctx.currentTime);
+    n.g.gain.setTargetAtTime(0,A.ctx.currentTime,.7);
+    setTimeout(()=>{try{n.src.stop()}catch(e){}},2600)}catch(e){}});
+  A.nodes=[];
+}
+function bed({freq,q,type='lowpass',gain,lfoRate,lfoDepth}){
+  const src=A.ctx.createBufferSource();src.buffer=A.noise;src.loop=true;
+  const f=A.ctx.createBiquadFilter();f.type=type;f.frequency.value=freq;f.Q.value=q||.7;
+  const g=A.ctx.createGain();g.gain.value=0;
+  src.connect(f);f.connect(g);g.connect(A.master);src.start();
+  g.gain.setTargetAtTime(gain,A.ctx.currentTime,2.2);
+  if(lfoRate){const lfo=A.ctx.createOscillator(),la=A.ctx.createGain();
+    lfo.frequency.value=lfoRate;la.gain.value=lfoDepth;lfo.connect(la);la.connect(f.frequency);
+    lfo.start();A.nodes.push({src:lfo,g:la})}
+  A.nodes.push({src,g});
+}
+function drone(hz,gain,det=0){
+  const o=A.ctx.createOscillator();o.type='sine';o.frequency.value=hz;o.detune.value=det;
+  const g=A.ctx.createGain();g.gain.value=0;o.connect(g);g.connect(A.master);o.start();
+  g.gain.setTargetAtTime(gain,A.ctx.currentTime,3);A.nodes.push({src:o,g});
+}
+const SCALE=[293.66,329.63,392.00,440.00,587.33,659.25];
+function tone(hz,vol=.05,dur=5){
+  if(!A.ctx)return;const t=A.ctx.currentTime;
+  const g=A.ctx.createGain();g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(vol,t+.12);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  const f=A.ctx.createBiquadFilter();f.type='lowpass';f.frequency.value=1400;
+  [0,-4,7].forEach((d,i)=>{
+    const o=A.ctx.createOscillator();o.type='sine';
+    o.frequency.value=hz*(i===2?2:1);o.detune.value=d;
+    const og=A.ctx.createGain();og.gain.value=i===2?.22:(i?.4:1);
+    o.connect(og);og.connect(f);o.start(t);o.stop(t+dur+.2)});
+  f.connect(g);g.connect(A.master);
+}
+function sch(fn,ms){A.timers.push(setTimeout(fn,ms))}
+function setScene(n){
+  if(!A.ctx||A.scene===n)return;A.scene=n;clearS();
+  if(n===1){
+    bed({freq:430,gain:.05,lfoRate:.05,lfoDepth:60});drone(96,.014);
+    (function clink(){sch(()=>{if(A.scene!==1)return;
+      const t=A.ctx.currentTime,o=A.ctx.createOscillator(),g=A.ctx.createGain();
+      o.type='triangle';o.frequency.value=900+Math.random()*1600;
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.012,t+.005);
+      g.gain.exponentialRampToValueAtTime(.0001,t+.5);
+      o.connect(g);g.connect(A.master);o.start(t);o.stop(t+.55);clink()},2600+Math.random()*6000)})();
+  }
+  if(n===2){
+    bed({freq:150,gain:.16,lfoRate:.07,lfoDepth:26});bed({freq:70,gain:.1});
+    drone(52,.05);drone(78,.022,6);
+    bed({freq:1100,gain:.028,type:'highpass',lfoRate:.09,lfoDepth:220});
+    (function pass(){sch(()=>{if(A.scene!==2)return;
+      const t=A.ctx.currentTime,src=A.ctx.createBufferSource();src.buffer=A.noise;src.loop=true;
+      const f=A.ctx.createBiquadFilter();f.type='bandpass';f.Q.value=1.1;
+      f.frequency.setValueAtTime(280,t);f.frequency.exponentialRampToValueAtTime(1100,t+1.5);
+      f.frequency.exponentialRampToValueAtTime(200,t+3.4);
+      const p=A.ctx.createStereoPanner?A.ctx.createStereoPanner():null;
+      if(p){p.pan.setValueAtTime(Math.random()<.5?-.8:.8,t);p.pan.linearRampToValueAtTime(0,t+3.4)}
+      const g=A.ctx.createGain();g.gain.setValueAtTime(0,t);
+      g.gain.linearRampToValueAtTime(.07,t+1.5);g.gain.linearRampToValueAtTime(0,t+3.4);
+      src.connect(f);f.connect(p||g);if(p)p.connect(g);g.connect(A.master);
+      src.start(t);src.stop(t+3.6);pass()},5000+Math.random()*11000)})();
+    (function note(){sch(()=>{if(A.scene!==2)return;
+      tone(SCALE[Math.floor(Math.random()*SCALE.length)],.038,6.5);note()},7000+Math.random()*13000)})();
+  }
+  if(n===3){drone(101,.05);drone(202,.012);bed({freq:900,gain:.022,type:'highpass'})}
+  if(n===4){
+    bed({freq:620,gain:.03,lfoRate:.04,lfoDepth:80});drone(174.61,.02);drone(261.63,.012,4);
+    (function bird(){sch(()=>{if(A.scene!==4)return;
+      tone(SCALE[4+Math.floor(Math.random()*2)],.022,3.5);bird()},9000+Math.random()*12000)})();
+  }
+}
+const sndBtn=document.getElementById('snd');
+sndBtn.addEventListener('click',()=>{
+  initAudio();A.on=!A.on;sndBtn.classList.toggle('off',!A.on);
+  sndBtn.setAttribute('aria-label',A.on?'关闭声音':'打开声音');
+  if(A.master)A.master.gain.setTargetAtTime(A.on?.85:0,A.ctx.currentTime,.4);
+});
+addEventListener('pointerdown',initAudio,{once:true});
+
+refresh();
+setTimeout(()=>say(`吃饱了。点了四个菜，盒子只有十二格。`),1100);
+</script>
+</body>
+</html>
