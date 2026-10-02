@@ -1842,6 +1842,24 @@ function updateCloudChip(){
 window.updateCloudChip=updateCloudChip;
 
 /* 设置：音乐 / 音效 / 备份 / 主屏幕 */
+function bindSettingsActions(cloudReady,user){
+  const tMus=$('tMus');if(tMus)tMus.onclick=e=>{e.preventDefault();auInit();setMus(!AU.musOn);e.currentTarget.classList.toggle('on',AU.musOn);};
+  const tFx=$('tFx');if(tFx)tFx.onclick=e=>{e.preventDefault();auInit();setFx(!AU.fxOn);e.currentTarget.classList.toggle('on',AU.fxOn);sfx('click');};
+  const bkCopy=$('bkCopy');if(bkCopy)bkCopy.onclick=e=>{e.preventDefault();const code='XB1:'+btoa(unescape(encodeURIComponent(JSON.stringify(S))));$('bkText').value=code;
+    (navigator.clipboard?navigator.clipboard.writeText(code):Promise.reject()).then(()=>toast('已复制！存到备忘录里吧')).catch(()=>{$('bkText').select();toast('请手动全选复制下面的备份码');});};
+  const bkLoad=$('bkLoad');if(bkLoad)bkLoad.onclick=e=>{e.preventDefault();const v=$('bkText').value.trim();try{if(!v.startsWith('XB1:'))throw 0;const d=JSON.parse(decodeURIComponent(escape(atob(v.slice(4)))));if(!d||!d.name)throw 0;
+      if(!confirm(`要恢复「${d.name}」的存档吗？现在的进度会被覆盖。`))return;S=d;S.stage=0;save();closeModal();toast('存档恢复好啦');enterHome();}catch(err){toast('备份码好像不对，再检查一下');}};
+  const mOk=$('mOk');if(mOk)mOk.onclick=e=>{e.preventDefault();closeModal();};
+  if(cloudReady&&!user){
+    const g=$('btnGoogleLogin');if(g)g.onclick=e=>{e.preventDefault();cloud.loginGoogle();};
+    const login=$('btnEmailLogin');if(login)login.onclick=e=>{e.preventDefault();cloud.loginOrRegister(($('authEmail').value||'').trim(),$('authPw').value||'');};
+    const reset=$('btnEmailReset');if(reset)reset.onclick=e=>{e.preventDefault();cloud.resetPassword(($('authEmail').value||'').trim());};
+  }
+  if(cloudReady&&user){
+    const sync=$('btnCloudSyncNow');if(sync)sync.onclick=e=>{e.preventDefault();cloud.syncNow();};
+    const out=$('btnCloudLogout');if(out)out.onclick=e=>{e.preventDefault();cloud.logout();};
+  }
+}
 function openSettings(){
   sfx('click');
   const cloudReady=!!(window.cloud&&cloud.ready);
@@ -1856,50 +1874,31 @@ function openSettings(){
           <div class="authmail">已登录：${mail}</div>
           <div class="authstatus" id="cloudSyncStatus">${st}</div>
           <div class="authrow">
-            <button class="btn primary" id="btnCloudSyncNow">立即同步</button>
-            <button class="btn" id="btnCloudLogout">退出登录</button>
+            <button type="button" class="btn primary" id="btnCloudSyncNow">立即同步</button>
+            <button type="button" class="btn" id="btnCloudLogout">退出登录</button>
           </div>
         </div>`;
     }else{
       accountHtml=`<div class="sethead" style="margin-top:0">账号</div>
         <div class="authbox">
-          <button class="btn primary" id="btnGoogleLogin" style="width:100%">用 Google 登录</button>
+          <button type="button" class="btn primary" id="btnGoogleLogin" style="width:100%">用 Google 登录</button>
           <div class="authsep">或用邮箱</div>
           <input class="fq" id="authEmail" type="email" placeholder="邮箱" autocomplete="email">
           <input class="fq" id="authPw" type="password" placeholder="密码（至少 6 位）" autocomplete="current-password">
-          <div class="authrow">
-            <button class="btn primary" id="btnEmailLogin">登录</button>
-            <button class="btn" id="btnEmailReg">注册</button>
-            <button class="btn" id="btnEmailReset">忘记密码</button>
-          </div>
+          <button type="button" class="btn primary" id="btnEmailLogin" style="width:100%;margin-top:8px">登录 / 注册</button>
+          <button type="button" class="link" id="btnEmailReset" style="display:block;width:100%;margin-top:10px;text-align:center">忘记密码</button>
         </div>`;
     }
   }
   modal(`<h2>⚙️ 设置</h2>
   ${accountHtml}
-  <div class="setrow"><span>🎵 音乐</span><button class="tgl${AU.musOn?' on':''}" id="tMus"></button></div>
-  <div class="setrow"><span>🔔 音效</span><button class="tgl${AU.fxOn?' on':''}" id="tFx"></button></div>
+  <div class="setrow"><span>🎵 音乐</span><button type="button" class="tgl${AU.musOn?' on':''}" id="tMus"></button></div>
+  <div class="setrow"><span>🔔 音效</span><button type="button" class="tgl${AU.fxOn?' on':''}" id="tFx"></button></div>
   <div class="sethead">存档备份</div><p class="fnote">复制备份码存到备忘录，换手机或数据丢了，粘贴回来就能恢复。</p>
-  <button class="btn" id="bkCopy">📋 复制备份码</button><textarea class="fq bk" id="bkText" placeholder="把备份码粘贴到这里"></textarea><button class="btn ghost" id="bkLoad">恢复存档</button>
+  <button type="button" class="btn" id="bkCopy">📋 复制备份码</button><textarea class="fq bk" id="bkText" placeholder="把备份码粘贴到这里"></textarea><button type="button" class="btn ghost" id="bkLoad">恢复存档</button>
   <div class="sethead">放到手机桌面</div><p class="fnote">iPhone：用 Safari 打开，点底部分享按钮，选「添加到主屏幕」。安卓：浏览器菜单里选「添加到主屏幕」。之后从桌面图标打开，就像一个 App，存档也更不容易丢。</p>
-  <button class="btn primary" id="mOk">好了</button>`);
-  $('tMus').onclick=e=>{auInit();setMus(!AU.musOn);e.target.classList.toggle('on',AU.musOn);};
-  $('tFx').onclick=e=>{auInit();setFx(!AU.fxOn);e.target.classList.toggle('on',AU.fxOn);sfx('click');};
-  $('bkCopy').onclick=()=>{const code='XB1:'+btoa(unescape(encodeURIComponent(JSON.stringify(S))));$('bkText').value=code;
-    (navigator.clipboard?navigator.clipboard.writeText(code):Promise.reject()).then(()=>toast('已复制！存到备忘录里吧')).catch(()=>{$('bkText').select();toast('请手动全选复制下面的备份码');});};
-  $('bkLoad').onclick=()=>{const v=$('bkText').value.trim();try{if(!v.startsWith('XB1:'))throw 0;const d=JSON.parse(decodeURIComponent(escape(atob(v.slice(4)))));if(!d||!d.name)throw 0;
-      if(!confirm(`要恢复「${d.name}」的存档吗？现在的进度会被覆盖。`))return;S=d;S.stage=0;save();closeModal();toast('存档恢复好啦');enterHome();}catch(e){toast('备份码好像不对，再检查一下');}};
-  $('mOk').onclick=closeModal;
-  if(cloudReady&&!user){
-    $('btnGoogleLogin').onclick=()=>cloud.loginGoogle();
-    $('btnEmailLogin').onclick=()=>cloud.loginEmail(($('authEmail').value||'').trim(),$('authPw').value||'');
-    $('btnEmailReg').onclick=()=>cloud.registerEmail(($('authEmail').value||'').trim(),$('authPw').value||'');
-    $('btnEmailReset').onclick=()=>cloud.resetPassword(($('authEmail').value||'').trim());
-  }
-  if(cloudReady&&user){
-    $('btnCloudSyncNow').onclick=()=>cloud.syncNow();
-    $('btnCloudLogout').onclick=()=>cloud.logout();
-  }
+  <button type="button" class="btn primary" id="mOk">好了</button>`);
+  requestAnimationFrame(()=>bindSettingsActions(cloudReady,user));
 }
 function setMus(on){AU.musOn=on;try{localStorage.setItem('berner-mus',on?'on':'off');localStorage.removeItem('berner-sound');}catch(e){}if(AU.mus)AU.mus.gain.setTargetAtTime(on?.3:0,AU.ctx.currentTime,.1);}
 function setFx(on){AU.fxOn=on;try{localStorage.setItem('berner-fx',on?'on':'off');localStorage.removeItem('berner-sound');}catch(e){}}
@@ -2133,7 +2132,7 @@ import {
   getAuth, onAuthStateChanged, GoogleAuthProvider,
   signInWithPopup, signInWithRedirect, getRedirectResult,
   signInWithEmailAndPassword, createUserWithEmailAndPassword,
-  sendPasswordResetEmail, signOut
+  fetchSignInMethodsForEmail, sendPasswordResetEmail, signOut
 } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
 import {
   getFirestore, doc, getDoc, setDoc, serverTimestamp
@@ -2159,14 +2158,16 @@ function authErr(e){
   const c = (e && (e.code || e.message)) || '';
   if(/invalid-email/i.test(c)) return '邮箱格式不对';
   if(/weak-password/i.test(c)) return '密码太短，至少 6 位';
-  if(/email-already-in-use/i.test(c)) return '这个邮箱已经注册过了';
-  if(/user-not-found/i.test(c)) return '找不到这个账号';
-  if(/wrong-password|invalid-credential|invalid-login/i.test(c)) return '邮箱或密码不对';
+  if(/email-already-in-use/i.test(c)) return '这个邮箱已经注册过了，请直接登录，或点“忘记密码”';
+  if(/user-not-found/i.test(c)) return '这个邮箱还没有注册';
+  if(/wrong-password/i.test(c)) return '密码不对，可以点下面的“忘记密码”';
+  if(/invalid-credential|invalid-login/i.test(c)) return '邮箱或密码不对，可以点“忘记密码”';
   if(/too-many-requests/i.test(c)) return '试得太多次了，稍后再试';
   if(/network-request-failed|unavailable/i.test(c)) return '网络好像不太好，稍后再试';
   if(/popup-closed-by-user|cancelled/i.test(c)) return '登录取消了';
   if(/popup-blocked/i.test(c)) return '浏览器拦住了登录弹窗，请允许弹窗后再试';
   if(/operation-not-allowed/i.test(c)) return '这种登录方式还没开通，请换一种';
+  if(/missing-email/i.test(c)) return '请先填写邮箱';
   return '出了点问题，请稍后再试';
 }
 
@@ -2265,32 +2266,53 @@ const cloud = {
     }
   },
 
-  async loginEmail(email, pw){
+  async loginOrRegister(email, pw){
     if(!email){ tip('请填写邮箱'); return; }
     if(!pw){ tip('请填写密码'); return; }
     if(pw.length < 6){ tip('密码太短，至少 6 位'); return; }
     try{
       markInteractiveAuth();
       await signInWithEmailAndPassword(cloud._auth, email, pw);
-    }catch(e){ tip(authErr(e)); }
-  },
-
-  async registerEmail(email, pw){
-    if(!email){ tip('请填写邮箱'); return; }
-    if(!pw){ tip('请填写密码'); return; }
-    if(pw.length < 6){ tip('密码太短，至少 6 位'); return; }
-    try{
-      markInteractiveAuth();
-      await createUserWithEmailAndPassword(cloud._auth, email, pw);
-      tip('注册成功，已登录');
-    }catch(e){ tip(authErr(e)); }
+    }catch(e){
+      const code = String(e && e.code || '');
+      if(code === 'auth/invalid-email'){ tip('邮箱格式不对'); return; }
+      if(code === 'auth/wrong-password'){ tip('密码不对，可以点下面的“忘记密码”'); return; }
+      if(code === 'auth/user-not-found' || code === 'auth/invalid-credential'){
+        let methods = [];
+        let canDetect = true;
+        try{
+          methods = await fetchSignInMethodsForEmail(cloud._auth, email);
+        }catch(_){
+          canDetect = false;
+          methods = [];
+        }
+        // 能查到已有登录方式 = 账号已存在，多半是密码错
+        if(canDetect && methods && methods.length > 0){
+          tip('密码不对，可以点下面的“忘记密码”');
+          return;
+        }
+        // 查不到 / 枚举保护开启：询问是否注册
+        if(!confirm('这个邮箱还没有注册，要用它创建新账号吗？')) return;
+        try{
+          markInteractiveAuth();
+          await createUserWithEmailAndPassword(cloud._auth, email, pw);
+          tip('注册成功，已登录');
+        }catch(ce){
+          const cc = String(ce && ce.code || '');
+          if(cc === 'auth/email-already-in-use') tip('密码不对，可以点下面的“忘记密码”');
+          else tip(authErr(ce));
+        }
+        return;
+      }
+      tip(authErr(e));
+    }
   },
 
   async resetPassword(email){
     if(!email){ tip('请先填写邮箱'); return; }
     try{
       await sendPasswordResetEmail(cloud._auth, email);
-      tip('重置邮件已发送，去邮箱看看');
+      tip('重置邮件已发送，没收到的话看看垃圾邮件');
     }catch(e){ tip(authErr(e)); }
   },
 
