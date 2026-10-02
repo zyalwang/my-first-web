@@ -96,7 +96,6 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pink-hot);outli
 .dogsvg .blinkimg{opacity:0;animation:blinkA 4.6s infinite}
 @keyframes blinkA{0%,92%{opacity:0}93%,96%{opacity:1}97%,100%{opacity:0}}
 .dogwrap svg{transform-origin:50% 96%;transform:rotate(var(--lean,0deg));transition:transform .3s ease}
-@keyframes rPose{from{transform:scale(.94)}}
 .dogwrap.r-ear svg{animation:rEar 1.2s ease-in-out}
 @keyframes rEar{25%{transform:rotate(-7deg)}50%{transform:rotate(-5deg) translateY(2px)}75%{transform:rotate(-7deg)}}
 .dogwrap.r-chin svg{animation:rChin 1.2s ease-in-out}
@@ -140,12 +139,6 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pink-hot);outli
 .actions button:active{transform:translateY(4px);box-shadow:0 1px 0 var(--pink-shadow)}
 .actions button:disabled{opacity:.45}
 .games{margin-top:14px}
-.games-h{font-size:13px;font-weight:700;color:var(--muted);margin:0 2px 8px;letter-spacing:1px}
-.gstrip{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 8px;margin:0 -18px;padding-left:18px;padding-right:18px;scroll-snap-type:x mandatory;scroll-padding-left:18px}
-.gstrip::-webkit-scrollbar{display:none}
-.gtile{flex:0 0 auto;scroll-snap-align:start;display:flex;align-items:center;gap:8px;padding:10px 16px 10px 12px;border:none;border-radius:16px;background:var(--mint);box-shadow:0 5px 0 #9fc6b6;font-size:15px;font-weight:700;color:#2c2c2c;white-space:nowrap}
-.gtile em{font-style:normal;font-size:24px}
-.gtile:active{transform:translateY(4px);box-shadow:0 1px 0 #9fc6b6}
 .pc-h{font-weight:700;font-size:15px;color:var(--ink);margin-top:10px;text-align:left}
 .pc-h small{display:block;font-weight:400;font-size:12px;color:var(--faint);margin-top:2px}
 .photo{position:relative;border-radius:10px;overflow:hidden;margin:0 auto}
@@ -226,11 +219,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pink-hot);outli
 .dtile b{font-size:21px;font-weight:400;line-height:1.1}
 .dtile:active{transform:translateY(2px);box-shadow:0 1px 0 #dbe6e1}
 .iconbtn{width:40px;height:40px;border:none;border-radius:12px;background:var(--card);font-size:19px;box-shadow:0 3px 0 #dbe6e1;flex:0 0 auto}
-.topr{display:flex;align-items:center;gap:8px}
-.pillbtn{border:none;border-radius:999px;background:var(--card);color:var(--ink);font-size:13px;font-weight:700;padding:8px 12px;box-shadow:0 3px 0 #dbe6e1}
 .bones{font-size:13px;font-weight:700;color:var(--ink);background:var(--card);border-radius:999px;padding:8px 10px;box-shadow:0 3px 0 #dbe6e1}
-.gtile span{display:flex;flex-direction:column;align-items:flex-start;line-height:1.2}
-.gtile small{font-size:10px;color:#de64a1;font-weight:700;margin-top:2px}.gtile small i{font-style:normal;color:rgba(0,0,0,.15)}
 .rstars{display:flex;justify-content:center;gap:6px;margin:4px 0}
 .rstars span{font-size:40px;color:#e6efeb;line-height:1}
 .rstars span.on{color:#f5c542;animation:starPop .5s cubic-bezier(.3,1.8,.5,1) both}
@@ -335,7 +324,6 @@ button.chip{cursor:pointer}
 .mem{list-style:none;padding:0;margin:12px 0 0;text-align:left}
 .mem li{padding:12px 4px;border-bottom:1px solid var(--line);font-size:15px;line-height:1.55;color:var(--ink)}
 .mem li span{display:block;font-size:12px;color:var(--pink-dur);margin-top:2px}
-@keyframes rise{from{transform:translateY(40px) rotate(-4deg)}50%{transform:translateY(-20px) rotate(4deg)}to{transform:translateY(-70px) rotate(-2deg)}}
 
 @media (prefers-reduced-motion: reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}}
 @media (max-height:640px){.dogwrap{width:min(52vw,190px)}.actions button{padding:7px 4px}.dname{font-size:26px}}
@@ -947,7 +935,7 @@ function wl(par,step,off=0){const o=(G.dist*par+off)%step;const a=[];for(let x=-
 function pine(x,base,s){ctx.fillStyle='#8b6a55';ctx.fillRect(x-3*s,base-14*s,6*s,14*s);[[0,40],[14,32],[26,24]].forEach(([h,w])=>{ctx.fillStyle='#7fae9a';ctx.beginPath();ctx.moveTo(x,base-(h+34)*s);ctx.lineTo(x-w*s,base-(h+8)*s);ctx.lineTo(x+w*s,base-(h+8)*s);ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(x,base-(h+34)*s);ctx.lineTo(x-w*.45*s,base-(h+22)*s);ctx.lineTo(x+w*.45*s,base-(h+22)*s);ctx.fill();});}
 function drawWalk(){
   const {W,H,ground:gy}=G,K=G.k,sc=curScene().id,L=[],lit=G.tk==='night'||G.tk==='dusk';
-  walkScene(sc,W,H,gy,K,L,lit);
+  try{walkScene(sc,W,H,gy,K,L,lit);}catch(e){console.error(e);}
   // time of day
   const tk=G.tk;
   if(tk==='morning'){ctx.fillStyle='rgba(255,214,180,.2)';ctx.fillRect(0,0,W,H);}
@@ -975,7 +963,7 @@ function drawWalk(){
   if(f.state==='with')drawFriend(ctx,G.friend.fk,d.x+60*K,gy+2+(G.hold?Math.abs(Math.sin(G.walkT*9+1))*-6:0),56*K);
   ctx.fillStyle='rgba(0,0,0,.12)';ctx.beginPath();ctx.ellipse(d.x,gy+2,(26+G.jy*.1)*K,5*K,0,0,7);ctx.fill();
   if(G.img.complete)pupDraw(ctx,G.img,d.x-31*K,gy-84*K+G.jy+bob,62*K,84*K);
-  walkFront(sc,W,H,gy,K);
+  try{walkFront(sc,W,H,gy,K);}catch(e){console.error(e);}
 }
 
 /* ---------- More games: 雪地打滚 / 捉迷藏 / 接飞盘 ---------- */
@@ -1336,13 +1324,13 @@ MODES.simon={
 
 /* 小伯换装 */
 const DRESS={
-  hat:{n:'帽子',items:['','👑','🎩','👒','🧢','🎀','🌸','🎓']},
+  hat:{n:'头上',items:['','🌸','🌼','🪷','🌺','🍀','☘️','🎀','👑','🎩','👒','🧢','🎓']},
   face:{n:'眼镜',items:['','👓','🕶️','🥽']},
   neck:{n:'胸前',items:['','🎀','🌸','🌼','🌹','🌻','🌷','💐']},
   bg:{n:'背景',items:['mint','sakura','beach','snow','night']}
 };
 const SLOT={hat:[194,40,150],face:[194,150,170],neck:[194,318,92]};
-const ADJ={'🥽face':[194,140,150],'🎀hat':[262,52,90],'🌸hat':[140,48,95],'🧢hat':[194,30,160],'🎩hat':[194,4,150],'👑hat':[194,16,130],'🎓hat':[194,14,150],'👒hat':[194,22,180],'🎀neck':[194,296,100],'💐neck':[194,325,100]};
+const ADJ={'🌼hat':[252,52,88],'🪷hat':[194,26,112],'🌺hat':[138,50,96],'🍀hat':[256,48,80],'☘️hat':[136,50,80],'🥽face':[194,140,150],'🎀hat':[262,52,90],'🌸hat':[140,48,95],'🧢hat':[194,30,160],'🎩hat':[194,4,150],'👑hat':[194,16,130],'🎓hat':[194,14,150],'👒hat':[194,22,180],'🎀neck':[194,296,100],'💐neck':[194,325,100]};
 const BGS={mint:['#c4dbd4','#f2faf6','薄荷'],sakura:['#fbe3e8','#f2faf6','樱花'],beach:['#cfeee6','#f6e7cf','海边'],snow:['#e3edf1','#ffffff','雪地'],night:['#252542','#5a4086','星空']};
 const SLOTS_ORDER=['neck','face','hat'];
 const slotPos=(slot,e)=>ADJ[e+slot]||SLOT[slot];
@@ -1358,7 +1346,6 @@ function photoHTML(p,w){
   const sp=SLOTS_ORDER.map(sl=>{const e=p.o[sl];if(!e)return '';const [x,y,z]=slotPos(sl,e);return `<span style="left:${(l+x/389*iw).toFixed(1)}px;top:${(t+y/526*ih).toFixed(1)}px;font-size:${(z/389*iw).toFixed(1)}px">${e}</span>`;}).join('');
   return `<div class="photo" style="width:${w}px;height:${h}px;background:linear-gradient(${c1},${c2})"><img src="${PUP}" alt="" style="left:${l}px;top:${t}px;width:${iw}px">${sp}</div>`;
 }
-function albumPhotos(){const ps=S.photos||[];if(!ps.length)return '';return `<div class="pc-h">写真 ${ps.length}<small>在「小伯换装」里拍的照片</small></div><div class="phgrid">${ps.slice().reverse().map(p=>`<div class="phcard">${photoHTML(p,80)}<small>${esc(p.d)}</small></div>`).join('')}</div>`;}
 MODES.dress={
   hint:'选一件试试看，再拍张照',mem:'',
   title:()=>'',
@@ -1408,7 +1395,7 @@ MODES.dress={
     G.btns=[];
     const keys=Object.keys(DRESS),tw=(W-24-(keys.length-1)*6)/keys.length,ty=ph+12,th=34;
     keys.forEach((k,i)=>{const x=12+i*(tw+6),on=G.tab===k;ctx.fillStyle=on?'#de64a1':'#f2faf6';ctx.beginPath();ctx.roundRect(x,ty,tw,th,12);ctx.fill();ctx.font='bold 14px -apple-system,"PingFang SC",sans-serif';ctx.fillStyle=on?'#fff':'#2c2c2c';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(DRESS[k].n,x+tw/2,ty+th/2);G.btns.push({x,y:ty,w:tw,h:th,act:()=>{G.tab=k;sfx('click');}});});
-    const items=DRESS[G.tab].items,cols=4,cw=(W-24-3*8)/cols,y1=ty+th+12,btnY=H-64,ch=Math.max(40,Math.min(64,(btnY-y1-18)/2));
+    const items=DRESS[G.tab].items,cols=items.length>8?5:4,cw=(W-24-(cols-1)*8)/cols,y1=ty+th+12,btnY=H-64,rows=Math.ceil(items.length/cols),ch=Math.max(36,Math.min(64,(btnY-y1-10-(rows-1)*8)/rows));
     items.forEach((it,i)=>{const x=12+(i%cols)*(cw+8),y=y1+Math.floor(i/cols)*(ch+8),sel=G.tab==='bg'?G.bg===it:(G.o[G.tab]||'')===it;
       ctx.fillStyle=sel?'#fbe3ea':'#f2faf6';ctx.beginPath();ctx.roundRect(x,y,cw,ch,14);ctx.fill();if(sel){ctx.strokeStyle='#de64a1';ctx.lineWidth=2.5;ctx.stroke();}
       if(G.tab==='bg'){const [a,b,n]=BGS[it],gg=ctx.createLinearGradient(0,y+8,0,y+ch-22);gg.addColorStop(0,a);gg.addColorStop(1,b);ctx.fillStyle=gg;ctx.beginPath();ctx.roundRect(x+cw/2-16,y+7,32,ch-30,8);ctx.fill();ctx.font='12px -apple-system,"PingFang SC",sans-serif';ctx.fillStyle='#2c2c2c';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(n,x+cw/2,y+ch-12);}
@@ -1486,7 +1473,7 @@ function askView(){
 /* ---------- 场景绘制（散步 & 明信片共用） ---------- */
 const PINK=['#f6c6d0','#f0b3c2','#f8d3db','#efa9bb'],MAPLE=['#e8a06a','#d9774f','#f0c08a','#e39060','#c9603e'],GREENS=['#9fcf9a','#8cc08a','#b5dcae','#7fb37d','#a8d4a0'];
 const hsh=n=>{n=Math.imul((n|0)^0x5bd1e995,0x27d4eb2d);n=Math.imul(n^n>>>13,0x165667b1);return ((n^n>>>15)>>>0)/4294967296;};
-function wlI(par,step,off=0){const o=G.dist*par+off,base=Math.floor(o/step),fr=o-base*step,a=[];for(let i=-1;;i++){const x=-fr+i*step;if(x>G.W+step)break;a.push([x,base+i]);}return a;}
+function wlI(par,step,off=0){const o=G.dist*par+off,base=Math.floor(o/step),fr=o-base*step,a=[];for(let i=-1;;i++){const x=-fr+i*step;if(x>G.W+step)break;a.push([x,base+i+100000]);}return a;}
 function cBuild(c,x,b,w,h,col,win,lit,i){c.fillStyle=col;c.fillRect(x,b-h,w,h);const cw=Math.max(6,w/7),rh=10;for(let yy=b-h+10;yy<b-14;yy+=rh+9)for(let xx=x+6;xx<x+w-cw;xx+=cw+5){c.fillStyle=lit&&hsh(i*31+xx*7+yy*13)<.45?'#ffe3a0':win;c.fillRect(xx,yy,cw,rh);}}
 function cTower(c,x,b,s,L){c.fillStyle='#e9a6b7';c.beginPath();c.moveTo(x-36*s,b);c.lineTo(x-7*s,b-160*s);c.lineTo(x+7*s,b-160*s);c.lineTo(x+36*s,b);c.closePath();c.fill();c.fillStyle='#fff';for(let k=1;k<6;k++){const y=b-k*28*s,w=36*s*(1-k*28/170);c.fillRect(x-w,y,w*2,5*s);}
   c.fillStyle='#f6efe4';c.fillRect(x-16*s,b-112*s,32*s,12*s);c.fillStyle='#de64a1';c.fillRect(x-2*s,b-205*s,4*s,48*s);L&&L.push({x,y:b-205*s,r:16*s});}
@@ -1741,7 +1728,7 @@ function wallCard(i){
   $('cShare').onclick=()=>shareCard(cd);bindFlips();$('mOk').onclick=closeModalKeep;
 }
 
-function pupDraw(c,img,x,y,w,h,o){c.drawImage(img,x,y,w,h);if(o===undefined)o=S&&S.outfit;if(!o)return;SLOTS_ORDER.forEach(sl=>{const e=o[sl];if(!e)return;const [px,py,z]=slotPos(sl,e);cE(c,e,x+px/389*w,y+py/526*h,z/389*w);});}
+function pupDraw(c,img,x,y,w,h,o){if(!img.complete){cE(c,'🐾',x+w/2,y+h*.6,w*.45);return;}c.drawImage(img,x,y,w,h);if(o===undefined)o=S&&S.outfit;if(!o)return;SLOTS_ORDER.forEach(sl=>{const e=o[sl];if(!e)return;const [px,py,z]=slotPos(sl,e);cE(c,e,x+px/389*w,y+py/526*h,z/389*w);});}
 /* ---------- 进度：星级 / 骨头 / 每日任务 / 解锁 / 教学 / 设置 ---------- */
 const STARS={frisbee:[3,7,12],cart:[12,25,40],snow:[12,25,40],catch:[12,25,40],hide:[6,14,24],simon:[6,15,28],match:[50,100,160],fly:[8,18,30],walk:[1,2,3]};
 const starsFor=(t,v)=>STARS[t]?STARS[t].filter(x=>v>=x).length:0;
@@ -1782,7 +1769,7 @@ function openTasks(){
   $('mOk').onclick=closeModal;
 }
 /* 装扮价格（没写的都是免费的） */
-const PRICE={'hat:👑':60,'hat:🎩':40,'hat:👒':30,'hat:🧢':20,'hat:🎓':50,'face:🕶️':30,'face:🥽':40,'neck:🌼':15,'neck:🌹':25,'neck:🌻':20,'neck:🌷':20,'neck:💐':40,'bg:beach':20,'bg:snow':20,'bg:night':40};
+const PRICE={'hat:🪷':20,'hat:🌺':15,'hat:🍀':10,'hat:👑':60,'hat:🎩':40,'hat:👒':30,'hat:🧢':20,'hat:🎓':50,'face:🕶️':30,'face:🥽':40,'neck:🌼':15,'neck:🌹':25,'neck:🌻':20,'neck:🌷':20,'neck:💐':40,'bg:beach':20,'bg:snow':20,'bg:night':40};
 function owned(slot,it){const k=slot+':'+it;return !it||!PRICE[k]||!!(S.own&&S.own[k]);}
 function initOwn(){if(S.ownInit)return;S.ownInit=1;S.own=S.own||{};const o=S.outfit||{};['hat','face','neck'].forEach(k=>{if(o[k]&&PRICE[k+':'+o[k]])S.own[k+':'+o[k]]=1;});if(S.dressBg&&PRICE['bg:'+S.dressBg])S.own['bg:'+S.dressBg]=1;}
 /* 第一次玩的教学 */
@@ -1877,7 +1864,6 @@ function friendMeet(fk,sid){
     setTimeout(()=>toast(`💌 和${info.name}成为最好的朋友！特别明信片 +20🦴`),3200);}
   save();
 }
-function friendsMet(){return Object.keys(FINFO).filter(k=>S.fr&&S.fr[k]&&S.fr[k].meet).length;}
 function heartsHTML(n){return '♥'.repeat(n)+`<i>${'♥'.repeat(FMAX-n)}</i>`;}
 /* 做客 */
 let visit=null;
