@@ -238,6 +238,14 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pink-hot);outli
 .tgl::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left .2s}
 .tgl.on{background:#de64a1}.tgl.on::after{left:23px}
 .sethead{font-weight:700;font-size:15px;color:var(--ink);text-align:left;margin-top:16px}
+.authbox{background:#f7fbf9;border:2px solid #d7ebe3;border-radius:16px;padding:12px;margin:8px 0 4px;text-align:left}
+.authbox .authmail{font-size:13px;color:#5a6a64;margin:4px 0 8px;word-break:break-all}
+.authbox .authstatus{font-size:13px;color:#3d8f74;margin:0 0 8px}
+.authbox .authrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.authbox .authrow .btn{flex:1;min-width:88px}
+.authbox .authsep{text-align:center;font-size:12px;color:#9aa;margin:10px 0 6px}
+.authbox input.fq{margin:4px 0}
+button.chip.cloud.off{opacity:.75}
 textarea.bk{height:64px;resize:none;font-size:11px;margin-top:10px}
 .toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translate(-50%,-200px);background:#fff;color:#2c2c2c;font-weight:700;font-size:14px;padding:10px 16px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.15);z-index:60;transition:transform .35s cubic-bezier(.3,1.4,.5,1);max-width:90%;text-align:center;pointer-events:none}
 .toast.show{transform:translate(-50%,0)}
@@ -343,7 +351,7 @@ button.chip{cursor:pointer}
 
   <section id="home" class="screen">
     <header class="top">
-      <div><div class="dname" id="dname"></div><div class="chiprow"><span class="chip" id="age"></span><button class="chip" id="taskBtn">📋 0/3</button><span class="chip" id="boneCt">🦴 0</span></div></div>
+      <div><div class="dname" id="dname"></div><div class="chiprow"><span class="chip" id="age"></span><button class="chip" id="taskBtn">📋 0/3</button><span class="chip" id="boneCt">🦴 0</span><button type="button" class="chip cloud off" id="chipCloud" hidden>☁️ 登录同步</button></div></div>
       <button class="iconbtn" id="setBtn" aria-label="设置">⚙️</button>
     </header>
     <div class="stage" id="stage">
@@ -404,7 +412,7 @@ const SAVE='berner-life-v1';
 let S=null, paused=true, moodTemp=null, moodTimer=0, dogKey='', bubbleTimer=0, lastTalk=0, cd={};
 
 function fresh(name){return{name:name||'年糕',stage:0,growth:0,born:Date.now(),hunger:75,joy:75,clean:80,memories:[],firsts:{},best:{fly:0,catch:0},counts:{feed:0,pet:0,bath:0,play:0},ended:false};}
-function save(){if(S)S.lastSeen=Date.now();try{localStorage.setItem(SAVE,JSON.stringify(S))}catch(e){}}
+function save(){if(S)S.lastSeen=Date.now();try{localStorage.setItem(SAVE,JSON.stringify(S))}catch(e){}if(window.cloud&&cloud.user&&cloud.queuePush)cloud.queuePush();}
 function load(){try{const v=localStorage.getItem(SAVE);return v?JSON.parse(v):null}catch(e){return null}}
 
 function ageText(){const n=Math.max(1,Math.floor((Date.now()-(S.born||Date.now()))/864e5)+1);return `一起的第 ${n} 天`;}
@@ -550,7 +558,7 @@ function setSound(on){
   AU.on=on;setMus(on);setFx(on);
   document.querySelectorAll('.soundBtn').forEach(b=>b.textContent=on?'🔊 声音开':'🔇 声音关');
 }
-document.addEventListener('visibilitychange',()=>{if(!AU.ctx)return;if(document.hidden)AU.ctx.suspend();else AU.ctx.resume();});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){if(window.cloud&&cloud.user&&cloud.flushPush)cloud.flushPush();if(AU.ctx)AU.ctx.suspend();}else if(AU.ctx)AU.ctx.resume();});
 document.addEventListener('pointerdown',()=>{if(AU.ctx&&AU.ctx.state==='suspended'&&!document.hidden)AU.ctx.resume();},true);
 
 /* ---------- Home ---------- */
@@ -1822,10 +1830,53 @@ function shareCard(cd){
   }catch(e){}
   toast('这里没法直接分享，长按明信片正面就能存图');
 }
+
+function updateCloudChip(){
+  const el=$('chipCloud');if(!el)return;
+  if(!window.cloud||!cloud.ready){el.hidden=true;return;}
+  el.hidden=false;
+  if(cloud.user){el.textContent=cloud.syncing?'☁️ 同步中':'☁️ 已同步';el.classList.remove('off');}
+  else{el.textContent='☁️ 登录同步';el.classList.add('off');}
+  const st=$('cloudSyncStatus');if(st)st.textContent=cloud.user?(cloud.syncing?'☁️ 同步中…':'☁️ 已同步'):'';
+}
+window.updateCloudChip=updateCloudChip;
+
 /* 设置：音乐 / 音效 / 备份 / 主屏幕 */
 function openSettings(){
   sfx('click');
+  const cloudReady=!!(window.cloud&&cloud.ready);
+  const user=cloudReady?cloud.user:null;
+  let accountHtml='';
+  if(cloudReady){
+    if(user){
+      const mail=user.email||user.displayName||'已登录';
+      const st=cloud.syncing?'☁️ 同步中…':'☁️ 已同步';
+      accountHtml=`<div class="sethead" style="margin-top:0">账号</div>
+        <div class="authbox">
+          <div class="authmail">已登录：${mail}</div>
+          <div class="authstatus" id="cloudSyncStatus">${st}</div>
+          <div class="authrow">
+            <button class="btn primary" id="btnCloudSyncNow">立即同步</button>
+            <button class="btn" id="btnCloudLogout">退出登录</button>
+          </div>
+        </div>`;
+    }else{
+      accountHtml=`<div class="sethead" style="margin-top:0">账号</div>
+        <div class="authbox">
+          <button class="btn primary" id="btnGoogleLogin" style="width:100%">用 Google 登录</button>
+          <div class="authsep">或用邮箱</div>
+          <input class="fq" id="authEmail" type="email" placeholder="邮箱" autocomplete="email">
+          <input class="fq" id="authPw" type="password" placeholder="密码（至少 6 位）" autocomplete="current-password">
+          <div class="authrow">
+            <button class="btn primary" id="btnEmailLogin">登录</button>
+            <button class="btn" id="btnEmailReg">注册</button>
+            <button class="btn" id="btnEmailReset">忘记密码</button>
+          </div>
+        </div>`;
+    }
+  }
   modal(`<h2>⚙️ 设置</h2>
+  ${accountHtml}
   <div class="setrow"><span>🎵 音乐</span><button class="tgl${AU.musOn?' on':''}" id="tMus"></button></div>
   <div class="setrow"><span>🔔 音效</span><button class="tgl${AU.fxOn?' on':''}" id="tFx"></button></div>
   <div class="sethead">存档备份</div><p class="fnote">复制备份码存到备忘录，换手机或数据丢了，粘贴回来就能恢复。</p>
@@ -1839,6 +1890,16 @@ function openSettings(){
   $('bkLoad').onclick=()=>{const v=$('bkText').value.trim();try{if(!v.startsWith('XB1:'))throw 0;const d=JSON.parse(decodeURIComponent(escape(atob(v.slice(4)))));if(!d||!d.name)throw 0;
       if(!confirm(`要恢复「${d.name}」的存档吗？现在的进度会被覆盖。`))return;S=d;S.stage=0;save();closeModal();toast('存档恢复好啦');enterHome();}catch(e){toast('备份码好像不对，再检查一下');}};
   $('mOk').onclick=closeModal;
+  if(cloudReady&&!user){
+    $('btnGoogleLogin').onclick=()=>cloud.loginGoogle();
+    $('btnEmailLogin').onclick=()=>cloud.loginEmail(($('authEmail').value||'').trim(),$('authPw').value||'');
+    $('btnEmailReg').onclick=()=>cloud.registerEmail(($('authEmail').value||'').trim(),$('authPw').value||'');
+    $('btnEmailReset').onclick=()=>cloud.resetPassword(($('authEmail').value||'').trim());
+  }
+  if(cloudReady&&user){
+    $('btnCloudSyncNow').onclick=()=>cloud.syncNow();
+    $('btnCloudLogout').onclick=()=>cloud.logout();
+  }
 }
 function setMus(on){AU.musOn=on;try{localStorage.setItem('berner-mus',on?'on':'off');localStorage.removeItem('berner-sound');}catch(e){}if(AU.mus)AU.mus.gain.setTargetAtTime(on?.3:0,AU.ctx.currentTime,.1);}
 function setFx(on){AU.fxOn=on;try{localStorage.setItem('berner-fx',on?'on':'off');localStorage.removeItem('berner-sound');}catch(e){}}
@@ -2041,6 +2102,7 @@ setInterval(visitTick,2000);
 $('dressBtn').onclick=()=>{if(!paused)playGame('dress');};
 $('taskBtn').onclick=()=>{if(!paused)openTasks();};
 $('setBtn').onclick=()=>{if(!paused)openSettings();};
+$('chipCloud').onclick=()=>{if(!paused)openSettings();};
 $('fortuneBtn').onclick=()=>{if(!paused)openFortune();};
 $('albumBtn').onclick=()=>{if(!paused)openAlbum();};
 $('albClose').onclick=closeAlbum;
@@ -2064,5 +2126,344 @@ setInterval(()=>{
   }
 },3000);
 </script>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js';
+import {
+  getAuth, onAuthStateChanged, GoogleAuthProvider,
+  signInWithPopup, signInWithRedirect, getRedirectResult,
+  signInWithEmailAndPassword, createUserWithEmailAndPassword,
+  sendPasswordResetEmail, signOut
+} from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
+import {
+  getFirestore, doc, getDoc, setDoc, serverTimestamp
+} from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCtENHhI0F_MQAikE4phX1Z0qP3M0NciFU",
+  authDomain: "bernese-f4d70.firebaseapp.com",
+  projectId: "bernese-f4d70",
+  storageBucket: "bernese-f4d70.firebasestorage.app",
+  messagingSenderId: "829109648544",
+  appId: "1:829109648544:web:8be2c83de096e697691dc5",
+  measurementId: "G-4YD64PVQG2"
+};
+
+const PUSH_GAP = 20000;
+let lastPushAt = 0;
+let pushTimer = 0;
+let pushPending = false;
+let handlingAuth = false;
+
+function authErr(e){
+  const c = (e && (e.code || e.message)) || '';
+  if(/invalid-email/i.test(c)) return '邮箱格式不对';
+  if(/weak-password/i.test(c)) return '密码太短，至少 6 位';
+  if(/email-already-in-use/i.test(c)) return '这个邮箱已经注册过了';
+  if(/user-not-found/i.test(c)) return '找不到这个账号';
+  if(/wrong-password|invalid-credential|invalid-login/i.test(c)) return '邮箱或密码不对';
+  if(/too-many-requests/i.test(c)) return '试得太多次了，稍后再试';
+  if(/network-request-failed|unavailable/i.test(c)) return '网络好像不太好，稍后再试';
+  if(/popup-closed-by-user|cancelled/i.test(c)) return '登录取消了';
+  if(/popup-blocked/i.test(c)) return '浏览器拦住了登录弹窗，请允许弹窗后再试';
+  if(/operation-not-allowed/i.test(c)) return '这种登录方式还没开通，请换一种';
+  return '出了点问题，请稍后再试';
+}
+
+function tip(t){ if(typeof toast==='function') toast(t); }
+
+const cloud = {
+  ready: false,
+  user: null,
+  syncing: false,
+  _auth: null,
+  _db: null,
+
+  async push(saveObj){
+    if(!cloud.user || !cloud._db || !saveObj) return;
+    const uid = cloud.user.uid;
+    await setDoc(doc(cloud._db, 'users', uid), {
+      data: JSON.stringify(saveObj),
+      updatedAt: serverTimestamp(),
+      name: saveObj.name || ''
+    }, { merge: true });
+    lastPushAt = Date.now();
+    pushPending = false;
+  },
+
+  async pull(){
+    if(!cloud.user || !cloud._db) return null;
+    const snap = await getDoc(doc(cloud._db, 'users', cloud.user.uid));
+    if(!snap.exists()) return null;
+    const v = snap.data() || {};
+    return { data: v.data || null, updatedAt: v.updatedAt || null, name: v.name || null };
+  },
+
+  queuePush(){
+    if(!cloud.user || !S || cloud._skipQueue) return;
+    pushPending = true;
+    if(pushTimer) return;
+    const wait = Math.max(0, PUSH_GAP - (Date.now() - lastPushAt));
+    pushTimer = setTimeout(()=>{ cloud.flushPush(); }, wait);
+  },
+
+  async flushPush(){
+    clearTimeout(pushTimer); pushTimer = 0;
+    if(!cloud.user || !S) return;
+    if(!pushPending) return;
+    try{
+      cloud.syncing = true;
+      if(typeof updateCloudChip==='function') updateCloudChip();
+      await cloud.push(S);
+      pushPending = false;
+    }catch(e){
+      console.warn('cloud push', e);
+    }finally{
+      cloud.syncing = false;
+      if(typeof updateCloudChip==='function') updateCloudChip();
+    }
+  },
+
+  async syncNow(){
+    if(!cloud.user){ tip('请先登录'); return; }
+    if(!S){ tip('还没有本地存档'); return; }
+    try{
+      cloud.syncing = true;
+      if(typeof updateCloudChip==='function') updateCloudChip();
+      pushPending = true;
+      await cloud.push(S);
+      tip('已同步到云端');
+      if(typeof openSettings==='function') openSettings();
+    }catch(e){
+      tip(authErr(e));
+    }finally{
+      cloud.syncing = false;
+      if(typeof updateCloudChip==='function') updateCloudChip();
+    }
+  },
+
+  async loginGoogle(){
+    try{
+      markInteractiveAuth();
+      const provider = new GoogleAuthProvider();
+      try{
+        await signInWithPopup(cloud._auth, provider);
+      }catch(e){
+        const code = String(e && e.code || '');
+        if(code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request'){
+          tip('登录取消了'); return;
+        }
+        if(/popup-blocked|web-storage-unsupported|operation-not-supported/i.test(code)){
+          try{ sessionStorage.setItem('berner-auth-interactive','1'); }catch(_){}
+          await signInWithRedirect(cloud._auth, provider);
+          return;
+        }
+        tip(authErr(e));
+      }
+    }catch(e){
+      tip(authErr(e));
+    }
+  },
+
+  async loginEmail(email, pw){
+    if(!email){ tip('请填写邮箱'); return; }
+    if(!pw){ tip('请填写密码'); return; }
+    if(pw.length < 6){ tip('密码太短，至少 6 位'); return; }
+    try{
+      markInteractiveAuth();
+      await signInWithEmailAndPassword(cloud._auth, email, pw);
+    }catch(e){ tip(authErr(e)); }
+  },
+
+  async registerEmail(email, pw){
+    if(!email){ tip('请填写邮箱'); return; }
+    if(!pw){ tip('请填写密码'); return; }
+    if(pw.length < 6){ tip('密码太短，至少 6 位'); return; }
+    try{
+      markInteractiveAuth();
+      await createUserWithEmailAndPassword(cloud._auth, email, pw);
+      tip('注册成功，已登录');
+    }catch(e){ tip(authErr(e)); }
+  },
+
+  async resetPassword(email){
+    if(!email){ tip('请先填写邮箱'); return; }
+    try{
+      await sendPasswordResetEmail(cloud._auth, email);
+      tip('重置邮件已发送，去邮箱看看');
+    }catch(e){ tip(authErr(e)); }
+  },
+
+  async logout(){
+    try{
+      await signOut(cloud._auth);
+      tip('已退出登录');
+      if(typeof openSettings==='function') openSettings();
+    }catch(e){ tip(authErr(e)); }
+  }
+};
+
+function markInteractiveAuth(){
+  try{ sessionStorage.setItem('berner-auth-interactive','1'); }catch(_){}
+}
+function consumeInteractiveAuth(){
+  try{
+    if(sessionStorage.getItem('berner-auth-interactive')==='1'){
+      sessionStorage.removeItem('berner-auth-interactive');
+      return true;
+    }
+  }catch(_){}
+  return false;
+}
+function normSave(obj){
+  try{
+    const o = JSON.parse(JSON.stringify(obj||{}));
+    delete o.lastSeen;
+    return JSON.stringify(o);
+  }catch(_){ return ''; }
+}
+function cloudTimeMs(updatedAt){
+  if(!updatedAt) return 0;
+  if(typeof updatedAt.toMillis==='function') return updatedAt.toMillis();
+  if(typeof updatedAt.seconds==='number') return updatedAt.seconds*1000;
+  const t = Date.parse(updatedAt);
+  return Number.isFinite(t) ? t : 0;
+}
+function refreshSettingsIfOpen(){
+  const m = document.getElementById('modal');
+  if(m && m.classList.contains('show') && typeof openSettings==='function') openSettings();
+}
+function applyCloudSave(data){
+  try{
+    const d = typeof data === 'string' ? JSON.parse(data) : data;
+    if(!d || !d.name) throw new Error('bad');
+    S = d;
+    if(S) S.lastSeen = Date.now();
+    cloud._skipQueue = true;
+    try{ localStorage.setItem('berner-life-v1', JSON.stringify(S)); }catch(_){}
+    pushPending = false;
+    lastPushAt = Date.now();
+    tip('已使用云端存档');
+    if(typeof enterHome==='function') enterHome();
+  }catch(e){
+    tip('云端存档读取失败');
+  }finally{
+    cloud._skipQueue = false;
+  }
+}
+function showConflict(remote, cloudObj){
+  if(typeof closeModal==='function') closeModal();
+  const cName = (cloudObj && cloudObj.name) || '云端';
+  const lName = (S && S.name) || '本地';
+  const nameDiff = cloudObj && S && cloudObj.name !== S.name;
+  modal(`<h2>☁️ 选择存档</h2>
+    <p style="font-size:14px;color:#666;line-height:1.6;text-align:left">云端和这台设备的存档不一样${nameDiff?`（云端「${cName}」· 本地「${lName}」）`:''}，请选一个继续用。</p>
+    <button class="btn primary" id="pickCloud" style="width:100%;margin:8px 0">用云端存档（${cName}）</button>
+    <button class="btn" id="pickLocal" style="width:100%;margin:4px 0">用这台设备的存档（${lName}）</button>`);
+  $('pickCloud').onclick = ()=>{ closeModal(); applyCloudSave(remote.data); };
+  $('pickLocal').onclick = async ()=>{
+    try{
+      cloud.syncing = true;
+      await cloud.push(S);
+      tip('已用这台设备的存档覆盖云端');
+      closeModal();
+    }catch(e){ tip(authErr(e)); }
+    finally{ cloud.syncing = false; if(typeof updateCloudChip==='function') updateCloudChip(); }
+  };
+}
+
+async function resolveAfterLogin(interactive){
+  if(handlingAuth) return;
+  handlingAuth = true;
+  cloud.syncing = true;
+  if(typeof updateCloudChip==='function') updateCloudChip();
+  try{
+    const remote = await cloud.pull();
+    const hasCloud = !!(remote && remote.data);
+    const hasLocal = !!(S && S.name);
+
+    if(!hasCloud){
+      if(hasLocal){
+        await cloud.push(S);
+        if(interactive) tip('已登录，本地存档已上传到云端');
+      }else if(interactive){
+        tip('已登录');
+      }
+      refreshSettingsIfOpen();
+      return;
+    }
+
+    if(!hasLocal){
+      applyCloudSave(remote.data);
+      return;
+    }
+
+    let cloudObj = null;
+    try{ cloudObj = JSON.parse(remote.data); }catch(_){ cloudObj = null; }
+    if(!cloudObj){
+      await cloud.push(S);
+      refreshSettingsIfOpen();
+      return;
+    }
+
+    const same = normSave(S) === normSave(cloudObj);
+    if(same){
+      if(interactive) tip('已登录，存档已同步');
+      refreshSettingsIfOpen();
+      return;
+    }
+
+    if(interactive){
+      showConflict(remote, cloudObj);
+      return;
+    }
+
+    // 刷新后自动恢复登录：云端更新就弹窗，否则静默上传本地
+    const remoteMs = cloudTimeMs(remote.updatedAt);
+    const localMs = S.lastSeen || 0;
+    if(remoteMs > localMs + 2000){
+      showConflict(remote, cloudObj);
+    }else{
+      pushPending = true;
+      await cloud.flushPush();
+    }
+  }catch(e){
+    console.warn('cloud sync', e);
+    if(interactive) tip(authErr(e));
+  }finally{
+    cloud.syncing = false;
+    handlingAuth = false;
+    if(typeof updateCloudChip==='function') updateCloudChip();
+  }
+}
+
+try{
+  const app = initializeApp(firebaseConfig);
+  cloud._auth = getAuth(app);
+  cloud._db = getFirestore(app);
+  cloud.ready = true;
+  window.cloud = cloud;
+
+  getRedirectResult(cloud._auth).catch(()=>{});
+
+  onAuthStateChanged(cloud._auth, async (user)=>{
+    cloud.user = user || null;
+    if(typeof updateCloudChip==='function') updateCloudChip();
+    if(user){
+      const interactive = consumeInteractiveAuth();
+      await resolveAfterLogin(interactive);
+    }else{
+      refreshSettingsIfOpen();
+    }
+  });
+
+  if(typeof updateCloudChip==='function') updateCloudChip();
+}catch(e){
+  console.warn('Firebase unavailable', e);
+  window.cloud = { ready:false, user:null, syncing:false };
+  if(typeof updateCloudChip==='function') updateCloudChip();
+}
+</script>
+
 </body>
 </html>
