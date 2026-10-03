@@ -633,15 +633,16 @@ function startGame(type){
   cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
   const W=r.width,H=r.height;
   const slow=.85;
-  G={type,W,H,slow,score:0,hearts:3,time:30,t:0,spawn:0,inv:0,items:[],fx:[],clouds:[],bad:false,over:false,last:0,
+  G={type,W,H,slow,score:0,hearts:3,time:30,t:0,spawn:0,inv:0,items:[],fx:[],clouds:[],bad:false,over:false,last:0,started:type!=='fly',
      img:dogImg(S.stage,'happy'),dog:type==='fly'?{x:W*.28,y:H*.45,vy:0}:{x:W/2,y:H-70},tx:W/2};
   if(type==='cart')setupCart();
   if(type==='walk')setupWalk();
   if(MODES[type])MODES[type].setup();
   $('holdBtn').hidden=type!=='walk';$('jumpBtn').hidden=type!=='walk';$('holdBtn').classList.remove('on');
   for(let i=0;i<5;i++)G.clouds.push({x:Math.random()*W,y:Math.random()*H,s:.6+Math.random()*.8});
-  const h=$('ghint');h.style.opacity=1;h.textContent=MODES[type]?MODES[type].hint:type==='walk'?'右手按住散步，左手跳过水坑':type==='fly'?'点屏幕，让它飞起来':type==='cart'?'左右滑动换道，接住奶酪和牛奶':'左右拖动，接住零食';
-  setTimeout(()=>h.style.opacity=0,1800);
+  const h=$('ghint');h.style.opacity=1;
+  h.textContent=MODES[type]?MODES[type].hint:type==='walk'?'右手按住散步，左手跳过水坑':type==='fly'?'点一下开始，点屏幕往上飞':type==='cart'?'左右滑动换道，接住奶酪和牛奶':'左右拖动，接住零食';
+  if(type!=='fly')setTimeout(()=>h.style.opacity=0,1800);
   updHud();requestAnimationFrame(loop);
 }
 function updHud(){
@@ -650,7 +651,7 @@ function updHud(){
 function loop(ts){
   if(!G||G.over)return;
   const dt=G.last?Math.min(.033,(ts-G.last)/1000):0;G.last=ts;
-  G.t+=dt;if(G.t>1)G.time-=dt;G.inv-=dt;
+  G.t+=dt;if(G.t>1&&!(G.type==='fly'&&!G.started))G.time-=dt;G.inv-=dt;
   try{MODES[G.type]?MODES[G.type].upd(dt):G.type==='fly'?updFly(dt):G.type==='cart'?updCart(dt):G.type==='walk'?updWalk(dt):updCatch(dt);
   G.fx=G.fx.filter(f=>(f.t+=dt)<.8);
   draw();}catch(err){console.error(err);}
@@ -662,10 +663,15 @@ function loop(ts){
 function hit(a,b,r){return Math.hypot(a.x-b.x,a.y-b.y)<r;}
 function updFly(dt){
   const d=G.dog,s=G.slow;
-  d.vy+=900*s*dt;d.y+=d.vy*dt;
-  if(d.y<36){d.y=36;d.vy=0}
-  if(d.y>G.H-36){d.y=G.H-36;d.vy=-260*s}
   G.clouds.forEach(c=>{c.x-=30*c.s*s*dt;if(c.x<-80){c.x=G.W+80;c.y=Math.random()*G.H}});
+  if(!G.started){
+    d.vy=0;
+    d.y=G.H*.45+Math.sin(G.t*2.4)*8;
+    return;
+  }
+  d.vy+=480*s*dt;d.y+=d.vy*dt;
+  if(d.y<36){d.y=36;d.vy=0}
+  if(d.y>G.H-36){d.y=G.H-36;d.vy=0}
   G.spawn-=dt;
   if(G.t>1&&G.spawn<=0){
     G.spawn=.7/s;const r=Math.random(),t=r<.32?'storm':r<.62?'sun':'bone';
@@ -699,7 +705,7 @@ function updCatch(dt){
   });
   G.items=G.items.filter(i=>i.y<G.H+40&&!i.gone);
 }
-function cloud(x,y,s,col){ctx.fillStyle=col;ctx.beginPath();ctx.ellipse(x,y,40*s,16*s,0,0,7);ctx.ellipse(x-18*s,y-8*s,20*s,16*s,0,0,7);ctx.ellipse(x+14*s,y-12*s,24*s,20*s,0,0,7);ctx.fill();}
+function drawCloudShape(x,y,s,col){ctx.fillStyle=col;ctx.beginPath();ctx.ellipse(x,y,40*s,16*s,0,0,7);ctx.ellipse(x-18*s,y-8*s,20*s,16*s,0,0,7);ctx.ellipse(x+14*s,y-12*s,24*s,20*s,0,0,7);ctx.fill();}
 function emoji(e,x,y,sz){ctx.fillStyle='#000';ctx.font=`${sz}px ${EMO}`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(e,x,y);}
 function draw(){
   const {W,H,dog:d}=G;
@@ -709,9 +715,9 @@ function draw(){
   else if(G.type==='fly'){
     const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#bbe0cf');g.addColorStop(.55,'#f2faf6');g.addColorStop(1,'#f0bbc0');
     ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-    G.clouds.forEach(c=>cloud(c.x,c.y,c.s,'rgba(255,255,255,.9)'));
+    G.clouds.forEach(c=>drawCloudShape(c.x,c.y,c.s,'rgba(255,255,255,.9)'));
     G.items.forEach(it=>{
-      if(it.t==='storm'){cloud(it.x,it.y,.95,'#707070');ctx.fillStyle='#f5d04a';ctx.beginPath();ctx.moveTo(it.x,it.y+4);ctx.lineTo(it.x-8,it.y+24);ctx.lineTo(it.x+1,it.y+22);ctx.lineTo(it.x-4,it.y+38);ctx.lineTo(it.x+10,it.y+16);ctx.lineTo(it.x+2,it.y+18);ctx.closePath();ctx.fill();}
+      if(it.t==='storm'){drawCloudShape(it.x,it.y,.95,'#707070');ctx.fillStyle='#f5d04a';ctx.beginPath();ctx.moveTo(it.x,it.y+4);ctx.lineTo(it.x-8,it.y+24);ctx.lineTo(it.x+1,it.y+22);ctx.lineTo(it.x-4,it.y+38);ctx.lineTo(it.x+10,it.y+16);ctx.lineTo(it.x+2,it.y+18);ctx.closePath();ctx.fill();}
       else emoji(it.t==='sun'?'☀️':'🦴',it.x,it.y,34);
     });
     if(G.img.complete&&!(G.inv>0&&Math.floor(G.t*12)%2)){
@@ -731,7 +737,12 @@ function gameInput(e){
   const r=cv.getBoundingClientRect();
   if(G.type==='walk'){if(e.type==='pointerdown'&&!G.freeze){if(walkTapFriend(e))return;G.scrHold=true;G.downT=Date.now();}return;}
   if(G.type==='cart'){if(e.type==='pointerdown')G.px=e.clientX;return;}
-  if(G.type==='fly'){if(e.type==='pointerdown'){G.dog.vy=-340*Math.sqrt(G.slow);sfx('flap');}}
+  if(G.type==='fly'){
+    if(e.type==='pointerdown'){
+      if(!G.started){G.started=true;G.t=0;const h=$('ghint');if(h)h.style.opacity=0;}
+      G.dog.vy=-340*Math.sqrt(G.slow);sfx('flap');
+    }
+  }
   else G.tx=e.clientX-r.left;
 }
 cv.addEventListener('pointerdown',gameInput);
