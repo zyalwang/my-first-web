@@ -871,9 +871,14 @@ function setupWalk(){
 function startScene(){
   const k=G.k;
   const sc0=G.route[G.scene],fk0=(Math.random()<.3&&(S.fr&&S.fr.beagle&&S.fr.beagle.meet||Math.random()<.6))?'beagle':(sc0.fk||rnd(Object.keys(FINFO).filter(k=>k!=='beagle')));
-  Object.assign(G,{need:8,got:0,items:[],parts:[],puddles:[],nextItem:G.dist+320*k,nextPud:G.dist+(560+Math.random()*300)*k,friend:{wx:G.dist+(650+Math.random()*700)*k,state:'idle',fk:fk0},hiRun:0,freeze:false,hold:false,btnHold:false,scrHold:false});
+  Object.assign(G,{need:8,got:0,items:[],parts:[],puddles:[],nextItem:G.dist+320*k,nextPud:G.dist+(560+Math.random()*300)*k,friend:{wx:G.dist+(650+Math.random()*700)*k,state:'idle',fk:fk0,jy:0,vy:0,hopDelay:0},hiRun:0,freeze:false,hold:false,btnHold:false,scrHold:false});
 }
-function walkHop(){if(G.jy===0&&G.vy===0){G.vy=-440*Math.sqrt(G.k);G.jy=-.1;sfx('pop');}}
+function walkHop(){
+  if(G.jy!==0||G.vy!==0)return;
+  G.vy=-440*Math.sqrt(G.k);G.jy=-.1;sfx('pop');
+  const f=G.friend;
+  if(f&&f.state==='with'&&(f.jy||0)===0)f.hopDelay=.07;
+}
 function walkTapFriend(e){
   const r=cv.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top,f=G.friend,K=G.k;
   if(f.state!=='idle')return false;
@@ -893,6 +898,11 @@ function updWalk(dt){
   G.slowT=Math.max(0,G.slowT-dt);
   if(G.hold){G.dist+=130*K*(G.slowT>0?.6:1)*dt;G.walkT+=dt;}
   if(G.jy<0){G.vy+=950*K*dt;G.jy+=G.vy*dt;if(G.jy>=0){G.jy=0;G.vy=0;}}
+  const fHop=G.friend;
+  if(fHop&&fHop.state==='with'){
+    if(fHop.hopDelay>0){fHop.hopDelay-=dt;if(fHop.hopDelay<=0){fHop.hopDelay=0;fHop.vy=-370*Math.sqrt(G.k);fHop.jy=-.1;}}
+    if(fHop.jy<0){fHop.vy+=950*K*dt;fHop.jy+=fHop.vy*dt;if(fHop.jy>=0){fHop.jy=0;fHop.vy=0;}}
+  }
   while(G.nextItem<G.dist+G.W+80){
     const hi=Math.random()<.35&&G.hiRun<1;G.hiRun=hi?G.hiRun+1:0;
     G.items.push({wx:G.nextItem,high:hi,gold:Math.random()<.07,ph:Math.random()*6});
@@ -979,7 +989,11 @@ function drawWalk(){
   if(f.state==='idle'){const sx=f.wx-G.dist,fy=gy-18*K+Math.sin(G.t*6)*2;
     if(sx<W+60){const fk=G.friend.fk;ctx.strokeStyle='rgba(222,100,161,'+(.35+.3*Math.sin(G.t*5))+')';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(sx,gy-30*K,38*K,40*K,0,0,7);ctx.stroke();ctx.fillStyle='rgba(0,0,0,.1)';ctx.beginPath();ctx.ellipse(sx,gy+2,22*K,4*K,0,0,7);ctx.fill();drawFriend(ctx,fk,sx,gy+2+Math.sin(G.t*6)*1.5,64*K);emoji('👋',sx+30*K,gy-66*K,18*K);}}
   const d=G.dog,bob=G.hold&&G.jy===0?Math.abs(Math.sin(G.walkT*9))*-5:0;
-  if(f.state==='with')drawFriend(ctx,G.friend.fk,d.x+60*K,gy+2+(G.hold?Math.abs(Math.sin(G.walkT*9+1))*-6:0),56*K);
+  if(f.state==='with'){
+    const fjy=f.jy||0,fbob=G.hold&&fjy===0?Math.abs(Math.sin(G.walkT*9+1))*-6:0,fx=d.x+60*K;
+    ctx.fillStyle='rgba(0,0,0,.1)';ctx.beginPath();ctx.ellipse(fx,gy+2,(18+fjy*.08)*K,3.5*K,0,0,7);ctx.fill();
+    drawFriend(ctx,f.fk,fx,gy+2+fjy+fbob,56*K);
+  }
   ctx.fillStyle='rgba(0,0,0,.12)';ctx.beginPath();ctx.ellipse(d.x,gy+2,(26+G.jy*.1)*K,5*K,0,0,7);ctx.fill();
   if(G.img.complete)pupDraw(ctx,G.img,d.x-31*K,gy-84*K+G.jy+bob,62*K,84*K);
   try{walkFront(sc,W,H,gy,K);}catch(e){console.error(e);}
