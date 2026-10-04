@@ -90,7 +90,13 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pink-hot);outli
 .stage{flex:1;position:relative;display:flex;align-items:flex-end;justify-content:center;min-height:200px;margin-top:14px;background:var(--card);border-radius:28px;overflow:hidden}
 .stage::before{content:"";position:absolute;left:0;right:0;bottom:0;height:22%;background:var(--mint-hl)}
 .dogwrap{position:relative;width:min(66vw,270px);aspect-ratio:200/220;height:auto;transform:scale(var(--s,1));transform-origin:50% 100%;transition:transform .8s cubic-bezier(.3,1.4,.5,1);margin-bottom:6px;cursor:pointer;touch-action:none}
-.dogwrap svg{width:100%;height:100%;overflow:visible}
+.dogwrap svg,.dogwrap .dogface{width:100%;height:100%;overflow:visible}
+.dogface{position:relative;width:100%;height:100%}
+.dogvid{position:absolute;left:6%;right:6%;top:2%;bottom:8%;width:88%;height:90%;object-fit:contain;pointer-events:none;border-radius:8px}
+.dog-out{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.dogface .zzz{position:absolute;right:8%;top:10%;font:700 18px var(--serif);color:#7a90a8;opacity:.85;animation:zzzF 2.4s ease-in-out infinite;pointer-events:none}
+@keyframes zzzF{0%,100%{transform:translateY(0) rotate(-6deg);opacity:.35}50%{transform:translateY(-10px) rotate(4deg);opacity:.95}}
+.dogface.sleep .dogvid,.dogface.cozy .dogvid{filter:brightness(.92) saturate(.9)}
 .bubble{position:absolute;z-index:2;top:14px;left:50%;transform:translate(-50%,6px);max-width:86%;background:var(--bubble);border:2px solid var(--bubble-line);color:var(--ink);border-radius:16px;padding:9px 16px;font-size:16px;font-weight:600;line-height:1.45;text-align:center;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none}
 .bubble::after{content:"";position:absolute;left:50%;bottom:-8px;width:12px;height:12px;background:var(--bubble);border-right:2px solid var(--bubble-line);border-bottom:2px solid var(--bubble-line);transform:translateX(-50%) rotate(45deg)}
 .bubble.show{opacity:1;transform:translate(-50%,0)}
@@ -100,29 +106,29 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pink-hot);outli
 /* dog animation */
 .dogsvg .blinkimg{opacity:0;animation:blinkA 4.6s infinite}
 @keyframes blinkA{0%,92%{opacity:0}93%,96%{opacity:1}97%,100%{opacity:0}}
-.dogwrap svg{transform-origin:50% 96%;transform:rotate(var(--lean,0deg));transition:transform .3s ease}
-.dogwrap.r-ear svg{animation:rEar 1.2s ease-in-out}
+.dogwrap .dogface,.dogwrap svg{transform-origin:50% 96%;transform:rotate(var(--lean,0deg));transition:transform .3s ease}
+.dogwrap.r-ear .dogface,.dogwrap.r-ear svg{animation:rEar 1.2s ease-in-out}
 @keyframes rEar{25%{transform:rotate(-7deg)}50%{transform:rotate(-5deg) translateY(2px)}75%{transform:rotate(-7deg)}}
-.dogwrap.r-chin svg{animation:rChin 1.2s ease-in-out}
+.dogwrap.r-chin .dogface,.dogwrap.r-chin svg{animation:rChin 1.2s ease-in-out}
 @keyframes rChin{30%{transform:translateY(-6px) scale(.98,1.04)}60%{transform:translateY(-4px) scale(.99,1.03)}}
-.dogwrap.r-tilt svg{animation:rTilt 1.3s ease-in-out}
+.dogwrap.r-tilt .dogface,.dogwrap.r-tilt svg{animation:rTilt 1.3s ease-in-out}
 @keyframes rTilt{20%{transform:rotate(6deg)}45%{transform:rotate(4deg) translateY(2px)}70%{transform:rotate(6deg)}}
-.dogwrap.r-squish svg{animation:rSquish .9s ease}
+.dogwrap.r-squish .dogface,.dogwrap.r-squish svg{animation:rSquish .9s ease}
 @keyframes rSquish{15%{transform:scale(1.1,.88)}35%{transform:scale(.93,1.07)}55%{transform:scale(1.04,.97) rotate(-3deg)}75%{transform:rotate(3deg)}}
-.dogwrap.r-paw svg{animation:rPaw .7s ease}
+.dogwrap.r-paw .dogface,.dogwrap.r-paw svg{animation:rPaw .7s ease}
 @keyframes rPaw{30%{transform:translateY(-12px) rotate(-7deg)}60%{transform:translateY(-4px) rotate(-3deg)}}
-.dogwrap.r-shake svg{animation:rShake .7s linear}
+.dogwrap.r-shake .dogface,.dogwrap.r-shake svg{animation:rShake .7s linear}
 @keyframes rShake{10%,50%,90%{transform:translateX(-6px) rotate(-3deg)}30%,70%{transform:translateX(6px) rotate(3deg)}}
-.dogwrap.r-spin svg{animation:rSpin .9s cubic-bezier(.4,0,.3,1)}
+.dogwrap.r-spin .dogface,.dogwrap.r-spin svg{animation:rSpin .9s cubic-bezier(.4,0,.3,1)}
 @keyframes rSpin{from{transform:perspective(600px) rotateY(0deg)}to{transform:perspective(600px) rotateY(360deg)}}
-.dogwrap.r-jump svg{animation:rJump .9s cubic-bezier(.3,.7,.4,1)}
+.dogwrap.r-jump .dogface,.dogwrap.r-jump svg{animation:rJump .9s cubic-bezier(.3,.7,.4,1)}
 @keyframes rJump{10%{transform:scale(1.08,.9)}40%{transform:translateY(-70px) scale(.95,1.06)}70%{transform:translateY(0) scale(1.1,.88)}85%{transform:scale(.97,1.03)}}
-.dogwrap.r-snuggle svg{animation:rSnug 1.6s ease-in-out infinite}
+.dogwrap.r-snuggle .dogface,.dogwrap.r-snuggle svg{animation:rSnug 1.6s ease-in-out infinite}
 @keyframes rSnug{50%{transform:rotate(var(--lean,0deg)) scale(1.04,.96)}}
 
 .dogsvg .pose{transform-origin:100px 212px;transition:transform .5s}
 .dogsvg.sad .pose{transform:rotate(-4deg) scale(.97,.95)}
-.dogsvg.happy .pose{animation:wiggle .5s ease-in-out 3}
+.dogsvg.happy .pose,.dogface.happy{animation:wiggle .5s ease-in-out 3}
 .dogsvg.sleep .pose{transform:scale(1,.97)}
 @keyframes wiggle{25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
 .dogsvg .breathe{transform-origin:100px 210px;animation:breathe 2.8s ease-in-out infinite}
@@ -418,8 +424,7 @@ const LINES={
 /* ---- Custom icons (replace emoji where available) ---- */
 const ICON={
   '🌸':'icons/dress_00.png','🎀':'icons/dress_01.png','🧢':'icons/dress_02.png','👒':'icons/dress_03.png',
-  '🎩':'icons/dress_04.png','🎓':'icons/dress_05.png','👑':'icons/dress_06.png','👓':'icons/dress_07.png',
-  '🕶️':'icons/dress_08.png','🥽':'icons/dress_09.png','💐':'icons/dress_11.png','🏅':'icons/dress_12.png',
+  '🎩':'icons/dress_04.png','🎓':'icons/dress_05.png','👑':'icons/dress_06.png','💐':'icons/dress_11.png','🏅':'icons/dress_12.png',
   '🎀:hat':'icons/dress_01.png','🎀:neck':'icons/dress_10.png',
   '🌼':'icons/food_01.png','🪷':'icons/jp_07.png','🌺':'icons/food_13.png','🍀':'icons/food_07.png','☘️':'icons/food_07.png',
   '🌹':'icons/jp_00.png','🌻':'icons/food_13.png','🌷':'icons/jp_00.png','🌿':'icons/jp_01.png','🍃':'icons/jp_01.png',
@@ -489,6 +494,55 @@ function dogSVG(stage,mood='neutral'){
   return `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="220" viewBox="0 0 200 220" class="dogsvg ${mood}"><ellipse cx="100" cy="211" rx="66" ry="6" fill="#000" opacity=".13"/><g class="pose"><g class="breathe"><image href="${shut?PUP_SHUT:PUP}" ${at}/>${blink}${typeof outfitSVG==='function'&&S&&S.outfit?outfitSVG(S.outfit,x,y,W,H):''}</g></g></svg>`;
 }
 function dogImg(stage,mood){return PUP_IMG;}
+
+/* ---------- Mood videos (home + walk) ---------- */
+const ANIM={
+  neutral:'anim/idle.webm',idle:'anim/idle.webm',
+  happy:'anim/greet.webm',greet:'anim/greet.webm',
+  sad:'anim/sad.webm',
+  sleep:'anim/idle.webm',cozy:'anim/idle.webm',
+  walk:'anim/walk.webm'
+};
+const ANIM_ONCE={happy:1,greet:1};
+const ANIM_SLOW={sleep:1,cozy:1};
+const ANIM_VID={};
+function animVid(key){
+  const src=ANIM[key]||ANIM.neutral;
+  if(!ANIM_VID[src]){
+    const v=document.createElement('video');
+    v.src=src;v.muted=true;v.loop=true;v.playsInline=true;v.preload='auto';
+    try{v.setAttribute('playsinline','');v.setAttribute('webkit-playsinline','');}catch(_){}
+    ANIM_VID[src]=v;v.load();
+  }
+  return ANIM_VID[src];
+}
+['idle','greet','sad','walk'].forEach(k=>animVid(k));
+function dogHTML(stage,mood='neutral'){
+  const src=ANIM[mood]||ANIM.neutral;
+  const once=!!ANIM_ONCE[mood],slow=!!ANIM_SLOW[mood];
+  const H=210,W=H*IW/IH,x=(200-W)/2,y=0;
+  const outfit=typeof outfitSVG==='function'&&S&&S.outfit?outfitSVG(S.outfit,x,y,W,H):'';
+  const zzz=mood==='sleep'?'<span class="zzz">Zzz</span>':'';
+  return `<div class="dogface ${mood}" data-mood="${mood}">
+    <video class="dogvid" src="${src}" autoplay muted playsinline ${once?'':'loop'}></video>
+    <svg class="dog-out" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" aria-hidden="true"><ellipse cx="100" cy="211" rx="66" ry="6" fill="#000" opacity=".13"/>${outfit}</svg>
+    ${zzz}
+  </div>`;
+}
+function bindDogVideo(w,mood){
+  const v=w&&w.querySelector('video.dogvid');if(!v)return;
+  try{v.muted=true;v.playsInline=true;}catch(_){}
+  v.playbackRate=ANIM_SLOW[mood]?0.55:1;
+  const play=()=>v.play().catch(()=>{});
+  if(v.readyState>=2)play();else v.addEventListener('loadeddata',play,{once:true});
+  if(ANIM_ONCE[mood]){
+    v.loop=false;
+    v.addEventListener('ended',()=>{
+      if(!v.isConnected)return;
+      v.src=ANIM.idle;v.loop=true;v.playbackRate=1;play();
+    },{once:true});
+  }
+}
 
 /* ---------- Audio (all synthesized, original melodies) ---------- */
 const AU={ctx:null,on:true,track:null,name:'',step:0,next:0,timer:0};
@@ -634,8 +688,8 @@ function render(){
   $('age').textContent=ageText();
   [['bHunger','hunger'],['bJoy','joy'],['bClean','clean']].forEach(([id,k])=>{const e=$(id);e.style.width=S[k]+'%';e.classList.toggle('low',S[k]<30);});
   const w=$('dogwrap');w.style.setProperty('--s',.88);
-  const m=mood(),key=S.stage+'-'+m;
-  if(key!==dogKey){dogKey=key;w.innerHTML=dogSVG(S.stage,m);}
+  const m=mood(),key=S.stage+'-'+m+(S.outfit?JSON.stringify(S.outfit):'');
+  if(key!==dogKey){dogKey=key;w.innerHTML=dogHTML(S.stage,m);bindDogVideo(w,m);}
 }
 function say(text,ms=3200){
   const b=$('bubble');b.textContent=text;b.classList.add('show');lastTalk=Date.now();
@@ -1016,7 +1070,7 @@ function finishWalk(){
   modal(`<h2>${perfect?'完美散步！':'散步结束'}</h2><div class="rstars">${[0,1,2].map(i=>`<span class="${i<st?'on':''}" style="animation-delay:${.15+i*.25}s">★</span>`).join('')}</div><div class="pcwall mini">${(g.newCards||[]).map(cd=>`<div class="pcthumb"><img src="${renderCard(cd)}" alt=""><span class="pin"></span></div>`).join('')}</div><p>✨ 金色 ${g.gold}　🐾 新朋友 ${g.friends}　💦 水坑 ${g.mud}　🦴 +${earned}</p><p class="fnote">${st<3?(g.friends<2?'星星提示：和 2 个以上的小动物打招呼':'星星提示：一个水坑都别踩'):'三颗星，完美的一次散步！'}</p><p>${perfect?'一个水坑都没踩，干干净净！':`${esc(S.name)} 身上有点脏了，回家记得洗澡`}</p><button class="btn primary" id="mAgain">再走一次</button><button class="btn ghost" id="mOk">回家</button>`);
   track('walk');track('stars',st);
   $('mAgain').onclick=()=>{closeModal();G=null;startGame('walk');};
-  $('mOk').onclick=()=>{closeModal();playMusic('home');G=null;show('home');paused=false;dogKey='';render();renderGames();renderTop();setMood('happy');setTimeout(()=>say('今天和你走了好远！',3500),300);};
+  $('mOk').onclick=()=>{closeModal();playMusic('home');G=null;show('home');paused=false;dogKey='';render();renderGames();renderTop();setMood('walk',2200);setTimeout(()=>say('今天和你走了好远！',3500),300);};
 }
 function wl(par,step,off=0){const o=(G.dist*par+off)%step;const a=[];for(let x=-o-step;x<G.W+step;x+=step)a.push(x);return a;}
 function pine(x,base,s){ctx.fillStyle='#8b6a55';ctx.fillRect(x-3*s,base-14*s,6*s,14*s);[[0,40],[14,32],[26,24]].forEach(([h,w])=>{ctx.fillStyle='#7fae9a';ctx.beginPath();ctx.moveTo(x,base-(h+34)*s);ctx.lineTo(x-w*s,base-(h+8)*s);ctx.lineTo(x+w*s,base-(h+8)*s);ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(x,base-(h+34)*s);ctx.lineTo(x-w*.45*s,base-(h+22)*s);ctx.lineTo(x+w*.45*s,base-(h+22)*s);ctx.fill();});}
@@ -1053,7 +1107,16 @@ function drawWalk(){
     drawFriend(ctx,f.fk,fx,gy+2+fjy+fbob,56*K);
   }
   ctx.fillStyle='rgba(0,0,0,.12)';ctx.beginPath();ctx.ellipse(d.x,gy+2,(26+G.jy*.1)*K,5*K,0,0,7);ctx.fill();
-  if(G.img.complete)pupDraw(ctx,G.img,d.x-31*K,gy-84*K+G.jy+bob,62*K,84*K);
+  const wv=animVid('walk');
+  if(G.hold&&wv&&wv.readyState>=2){
+    if(wv.paused)wv.play().catch(()=>{});
+    const dw=72*K,dh=72*K,dx=d.x-dw/2,dy=gy-dh+G.jy+bob+6*K;
+    ctx.save();ctx.beginPath();ctx.ellipse(d.x,gy-dh*.45+G.jy+bob,dw*.42,dh*.48,0,0,7);ctx.clip();
+    ctx.drawImage(wv,dx,dy,dw,dh);ctx.restore();
+  }else{
+    if(wv&&!wv.paused)try{wv.pause();}catch(_){}
+    if(G.img.complete)pupDraw(ctx,G.img,d.x-31*K,gy-84*K+G.jy+bob,62*K,84*K);
+  }
   try{walkFront(sc,W,H,gy,K);}catch(e){console.error(e);}
 }
 
@@ -1891,10 +1954,10 @@ function playGame(type){
 const isNight=()=>{const h=new Date().getHours();return h>=22||h<6;};
 function greet(gapH){
   const h=new Date().getHours();let t;
-  if(gapH>=12){t=`你终于回来啦！我等了你 ${Math.floor(gapH)} 个小时`;setTimeout(()=>{sfx('bark');hop();},500);setMood('happy',2500);}
-  else if(gapH>=3){t=rnd(['你回来啦！我好想你','是你的脚步声！汪！']);setTimeout(()=>sfx('bark'),500);setMood('happy',2000);}
-  else if(h>=22||h<6){t=rnd(['好困……但你来了我就醒啦','这么晚还不睡吗？陪我躺一会儿吧']);setMood('happy',2500);}
-  else if(h<10)t=rnd(['早安！今天也要元气满满','早上好～我已经醒好久啦']);
+  if(gapH>=12){t=`你终于回来啦！我等了你 ${Math.floor(gapH)} 个小时`;setTimeout(()=>{sfx('bark');hop();},500);setMood('greet',2800);}
+  else if(gapH>=3){t=rnd(['你回来啦！我好想你','是你的脚步声！汪！']);setTimeout(()=>sfx('bark'),500);setMood('greet',2400);}
+  else if(h>=22||h<6){t=rnd(['好困……但你来了我就醒啦','这么晚还不睡吗？陪我躺一会儿吧']);setMood('greet',2500);}
+  else if(h<10){t=rnd(['早安！今天也要元气满满','早上好～我已经醒好久啦']);setMood('greet',2000);}
   else if(h<14)t=rnd(['午饭吃了吗？','中午好！给我也来一口嘛']);
   else if(h<18)t=rnd(['下午好～要不要出去散散步？','下午的阳光最适合打盹了']);
   else t=rnd(['晚上好～今天辛苦啦','晚上好！今天过得怎么样？']);
@@ -2122,7 +2185,7 @@ Object.assign(REACT.cheek,{cls:'r-squish',ms:900,mood:'happy'});
 Object.assign(REACT.ear,{cls:'r-ear',ms:1200,mood:'cozy'});
 Object.assign(REACT.chin,{cls:'r-chin',ms:1200,mood:'cozy'});
 Object.assign(REACT.belly,{cls:'r-squish',ms:900,mood:'happy'});
-Object.assign(REACT.paw,{cls:'r-paw',ms:700,mood:'happy'});
+Object.assign(REACT.paw,{cls:'r-paw',ms:900,mood:'greet'});
 let rTimer=0,taps=[],pd=null,snugTimer=0;
 const dw=$('dogwrap');
 function stageXY(cx,cy){const sr=$('stage').getBoundingClientRect();return[cx-sr.left,cy-sr.top-16];}
