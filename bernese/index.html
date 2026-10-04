@@ -487,6 +487,8 @@ const PUP='anim/pup.webp';
 const PUP_IMG=new Image();PUP_IMG.src=PUP;
 const IW=360,IH=360;
 const PUP_SHUT='anim/pup_shut.webp';
+const PC_PUP='anim/pc_pup.webp';
+const PC_PUP_IMG=new Image();PC_PUP_IMG.src=PC_PUP;
 function dogSVG(stage,mood='neutral'){
   
   const H=210,W=H*IW/IH,x=(200-W)/2,y=0;
@@ -1833,9 +1835,11 @@ function renderCard(cd){
   if(id==='maple'||id==='sakura')for(let i=0;i<26;i++){c.fillStyle=id==='maple'?['#e8a06a','#d9774f','#f0c08a'][i%3]:'#f4a9bf';c.beginPath();c.ellipse(r()*W,gy+8+r()*(H-gy),4,2.2,r()*3,0,7);c.fill();}
   if(id==='beach')for(let i=0;i<3;i++)cE(c,'🐚',r()*W,gy+20+r()*(H-gy-30),18);
   // dog
-  const dh={wide:92,mid:175,close:330,peek:240,friend:170}[comp]||150,dw=dh*389/526,dy=comp==='close'?H+60:gy+6;
+  const pimg=(PC_PUP_IMG.complete&&PC_PUP_IMG.naturalWidth)?PC_PUP_IMG:PUP_IMG;
+  const ar=(pimg.naturalWidth&&pimg.naturalHeight)?(pimg.naturalWidth/pimg.naturalHeight):(IW/IH);
+  const dh={wide:100,mid:188,close:340,peek:250,friend:180}[comp]||160,dw=dh*ar,dy=comp==='close'?H+60:gy+6;
   c.fillStyle='rgba(0,0,0,.12)';c.beginPath();c.ellipse(dx,gy+4,dw*.42,dh*.035,0,0,7);if(comp!=='close')c.fill();
-  if(PUP_IMG.complete){c.save();c.translate(dx,dy);c.rotate(comp==='close'?(left?-.06:.06):comp==='peek'?(left?.12:-.12):0);pupDraw(c,PUP_IMG,-dw/2,-dh,dw,dh,cd.o||null);c.restore();}
+  if(pimg.complete&&pimg.naturalWidth){c.save();c.translate(dx,dy);c.rotate(comp==='close'?(left?-.06:.06):comp==='peek'?(left?.12:-.12):0);pupDraw(c,pimg,-dw/2,-dh,dw,dh,cd.o||null);c.restore();}
   if(cd.f){const fh=comp==='close'?150:comp==='peek'?110:dh*(comp==='friend'?.78:.62),fx=comp==='close'?(left?W*.72:W*.28):dx+(left?1:-1)*(dw*.55+fh*.32);c.fillStyle='rgba(0,0,0,.12)';c.beginPath();c.ellipse(fx,gy+5,fh*.3,fh*.035,0,0,7);c.fill();drawFriend(c,cardFk(cd),fx,gy+6,fh,!left);}
   if(cd.best){for(let i=0;i<9;i++)cE(c,i%3?'💕':'❤️',W*(.12+r()*.76),H*(.08+r()*.42),18+r()*16);c.fillStyle='rgba(255,255,255,.88)';c.beginPath();c.roundRect(W/2-90,18,180,40,20);c.fill();c.font='bold 22px "Ma Shan Zheng","Kaiti SC",serif';c.fillStyle='#de64a1';c.textAlign='center';c.textBaseline='middle';c.fillText('最好的朋友',W/2,39);}
   // particles & framing
@@ -1855,7 +1859,7 @@ function renderCard(cd){
   for(let i=0;i<2600;i++){const v=r()<.5?255:0;c.fillStyle=`rgba(${v},${v},${v},${.05+r()*.06})`;c.fillRect(r()*W,r()*H,1.2,1.2);}
   const d=new Date(cd.ts||Date.now()),ds=`'${String(d.getFullYear()).slice(2)} ${d.getMonth()+1} ${d.getDate()}`;
   c.font='bold 22px "Courier New",monospace';c.textAlign='right';c.textBaseline='bottom';c.shadowColor='rgba(255,120,40,.9)';c.shadowBlur=8;c.fillStyle='#ff9a4a';c.fillText(ds,W-22,H-16);c.shadowBlur=0;
-  const url=cv2.toDataURL('image/jpeg',.86);if(PUP_IMG.complete&&Object.values(FRIEND_IMG).every(i=>i.complete))pcCache.set(key,url);return url;
+  const url=cv2.toDataURL('image/jpeg',.86);if(pimg.complete&&pimg.naturalWidth&&Object.values(FRIEND_IMG).every(i=>i.complete))pcCache.set(key,url);return url;
 }
 function cardFlip(cd,big){
   const w=WS[cd.id],date=new Date(cd.ts||Date.now());
