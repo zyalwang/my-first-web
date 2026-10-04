@@ -142,14 +142,16 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pink-hot);outli
 
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px;background:var(--card);border-radius:20px;padding:12px 14px}
 .stat{display:flex;align-items:center;gap:6px}
-.stat .ic{font-size:17px}
+.stat .ic{font-size:17px;display:inline-flex;align-items:center}
+.stat .ic .ico{width:18px;height:18px}
 .bar{flex:1;height:8px;border-radius:999px;background:var(--mint-hl);overflow:hidden}
 .bar i{display:block;height:100%;border-radius:999px;background:var(--mint-deep);transition:width .4s,background .4s}
 .bar i.low{background:var(--pink-hot)}
 .actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
 .actions button{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:14px;font-weight:700;color:#000;padding:10px 4px;border-radius:14px;border:none;background:var(--pink);box-shadow:0 5px 0 var(--pink-shadow);transition:transform .08s,box-shadow .08s}
 .actions button[data-act="play"]{background:var(--mint);box-shadow:0 5px 0 #9fc6b6}
-.actions button b{font-size:23px;font-weight:400}
+.actions button b{font-size:23px;font-weight:400;line-height:1;display:flex;align-items:center;justify-content:center}
+.actions button b .ico{width:28px;height:28px}
 .actions button:active{transform:translateY(4px);box-shadow:0 1px 0 var(--pink-shadow)}
 .actions button:disabled{opacity:.45}
 .games{margin-top:14px}
@@ -289,7 +291,8 @@ button.chip{cursor:pointer}
 .stat b{font-size:11px;color:var(--muted);font-weight:700;white-space:nowrap}
 .bigrow{display:grid;grid-template-columns:1.25fr 1fr;gap:10px;margin-top:12px}
 .bigbtn{display:flex;align-items:center;gap:10px;border:none;border-radius:16px;padding:10px 14px;text-align:left;font-size:17px;font-weight:700}
-.bigbtn em{font-style:normal;font-size:28px}
+.bigbtn em{font-style:normal;font-size:28px;display:flex;align-items:center;justify-content:center}
+.bigbtn em .ico{width:32px;height:32px}
 .bigbtn span{display:flex;flex-direction:column;line-height:1.2}.bigbtn small{font-size:11px;font-weight:600;opacity:.85;margin-top:2px}
 .bigbtn.walk{background:var(--pink-hot);color:#fff;box-shadow:0 5px 0 var(--pink-hot-shadow)}
 .bigbtn.play{background:var(--mint);color:#2c2c2c;box-shadow:0 5px 0 #9fc6b6}
@@ -323,7 +326,8 @@ button.chip{cursor:pointer}
 .holdbtn{position:absolute;right:18px;bottom:calc(22px + env(safe-area-inset-bottom,0px));width:92px;height:92px;border-radius:50%;border:none;background:#fff;box-shadow:0 6px 0 #c88699,0 8px 20px rgba(0,0,0,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;z-index:2;transition:transform .08s,box-shadow .08s,background .2s}
 .holdbtn[hidden]{display:none!important}
 .holdbtn.jumpbtn{right:auto;left:18px;width:80px;height:80px}
-.holdbtn span{font-size:34px;line-height:1;transition:transform .15s}
+.holdbtn span{font-size:34px;line-height:1;transition:transform .15s;display:flex;align-items:center;justify-content:center}
+.holdbtn span .ico{width:36px;height:36px}
 .holdbtn small{font-size:12px;font-weight:700;color:#df63a0}
 .holdbtn.on{background:#fbe3ea;transform:translateY(5px);box-shadow:0 1px 0 #c88699,0 0 0 8px rgba(222,100,161,.18)}
 .holdbtn.on span{transform:translateY(3px) scale(.92)}
@@ -375,18 +379,18 @@ button.chip{cursor:pointer}
       <div class="visitor" id="visitor"><div class="vbub" id="vbub"></div><img id="vimg" alt="来做客的朋友"></div>
     </div>
     <div class="stats">
-      <div class="stat"><span class="ic">🍖</span><b>饱</b><div class="bar"><i id="bHunger"></i></div></div>
-      <div class="stat"><span class="ic">💛</span><b>心情</b><div class="bar"><i id="bJoy"></i></div></div>
-      <div class="stat"><span class="ic">🫧</span><b>干净</b><div class="bar"><i id="bClean"></i></div></div>
+      <div class="stat"><span class="ic"><img class="ico" src="icons/sheet2_05_steak1.png" alt=""></span><b>饱</b><div class="bar"><i id="bHunger"></i></div></div>
+      <div class="stat"><span class="ic"><img class="ico" src="icons/sheet2_13_heart_yellow.png" alt=""></span><b>心情</b><div class="bar"><i id="bJoy"></i></div></div>
+      <div class="stat"><span class="ic"><img class="ico" src="icons/sheet2_14_bubbles.png" alt=""></span><b>干净</b><div class="bar"><i id="bClean"></i></div></div>
     </div>
     <div class="actions">
-      <button data-act="feed"><b>🍖</b>喂饭</button>
-      <button data-act="pet"><b>✋</b>摸摸</button>
-      <button data-act="bath"><b>🛁</b>洗澡</button>
+      <button data-act="feed"><b><img class="ico" src="icons/sheet2_05_steak1.png" alt=""></b>喂饭</button>
+      <button data-act="pet"><b><img class="ico" src="icons/sheet2_11_hand_open.png" alt=""></b>摸摸</button>
+      <button data-act="bath"><b><img class="ico" src="icons/sheet2_10_bath.png" alt=""></b>洗澡</button>
     </div>
     <div class="bigrow">
-      <button class="bigbtn walk" id="walkBig"><em>📮</em><span>去散步<small></small></span></button>
-      <button class="bigbtn play" id="gamesBig"><em>🎮</em><span>小游戏<small></small></span></button>
+      <button class="bigbtn walk" id="walkBig"><em><img class="ico" src="icons/sheet2_19_mailbox_wood.png" alt=""></em><span>去散步<small></small></span></button>
+      <button class="bigbtn play" id="gamesBig"><em><img class="ico" src="icons/sheet2_18_controller.png" alt=""></em><span>小游戏<small></small></span></button>
     </div>
     <div class="linkrow"><button class="dtile" id="dressBtn"><b><img class="ico" src="icons/dress_03.png" alt=""></b>换装</button><button class="dtile" id="fortuneBtn"><b><img class="ico" src="icons/jp_10.png" alt=""></b>占卜</button><button class="dtile" id="albumBtn"><b><img class="ico" src="icons/home_07.png" alt=""></b>回忆册</button></div>
   </section>
@@ -397,7 +401,7 @@ button.chip{cursor:pointer}
       <span id="gScore">⭐ 0</span><span class="sp"></span>
       <span id="gHearts">❤️❤️❤️</span><span id="gTime">⏱ 30</span>
     </div>
-    <div class="gwrap" id="gwrap"><canvas id="cv"></canvas><div class="ghint" id="ghint"></div><button class="holdbtn jumpbtn" id="jumpBtn" hidden aria-label="跳一下"><span>⬆️</span><small>跳一下</small></button><button class="holdbtn pulse" id="holdBtn" hidden aria-label="按住散步"><span>👆</span><small>按住散步</small></button></div>
+    <div class="gwrap" id="gwrap"><canvas id="cv"></canvas><div class="ghint" id="ghint"></div><button class="holdbtn jumpbtn" id="jumpBtn" hidden aria-label="跳一下"><span><img class="ico" src="icons/sheet2_03_arrow_up.png" alt=""></span><small>跳一下</small></button><button class="holdbtn pulse" id="holdBtn" hidden aria-label="按住散步"><span><img class="ico" src="icons/sheet2_12_hand_point.png" alt=""></span><small>按住散步</small></button></div>
   </section>
 </div>
 
@@ -431,29 +435,47 @@ const ICON={
   '🎀:hat':'icons/dress_01.png','🎀:neck':'icons/dress_10.png',
   '🌼':'icons/food_01.png','🪷':'icons/jp_07.png','🌺':'icons/food_13.png','🍀':'icons/food_07.png','☘️':'icons/food_07.png',
   '🌹':'icons/jp_00.png','🌻':'icons/food_13.png','🌷':'icons/jp_00.png','🌿':'icons/jp_01.png','🍃':'icons/jp_01.png',
-  '🦴':'icons/sea_18.png','🐾':'icons/ui_09.png','❤️':'icons/ui_08.png','💕':'icons/ui_08.png','🩷':'icons/ui_08.png',
+  '🦴':'icons/sea_18.png','🐾':'icons/ui_09.png','❤️':'icons/ui_08.png','💕':'icons/ui_08.png','🩷':'icons/ui_08.png','💗':'icons/ui_08.png',
+  '💛':'icons/sheet2_13_heart_yellow.png',
   '🏆':'icons/ui_07.png','📅':'icons/ui_04.png','🗓️':'icons/ui_04.png','🏠':'icons/ui_00.png','🏡':'icons/ui_00.png',
   '🌊':'icons/ui_01.png','⛩️':'icons/ui_03.png','📖':'icons/ui_06.png','💝':'icons/ui_05.png','🎁':'icons/misc_00.png',
   '🍳':'icons/ui_02.png',
   '🧸':'icons/home_01.png','🪴':'icons/home_03.png','🎈':'icons/home_04.png','🎄':'icons/home_05.png','🌵':'icons/home_06.png',
-  '📒':'icons/home_07.png','📓':'icons/home_07.png','🛍️':'icons/home_08.png','🔊':'icons/home_09.png','📢':'icons/home_09.png',
+  '📒':'icons/home_07.png','📓':'icons/home_07.png','🛍️':'icons/home_08.png','🔊':'icons/home_09.png',
   '🔇':'icons/home_10.png','💬':'icons/home_11.png','❗':'icons/home_12.png','🖼️':'icons/home_00.png',
-  '🐚':'icons/sea_00.png','🪸':'icons/sea_02.png','🧣':'icons/sea_07.png','🎒':'icons/sea_08.png','🔔':'icons/sea_09.png',
-  '🎾':'icons/sea_13.png','🧀':'icons/sea_12.png','🧺':'icons/sea_14.png','⭐':'icons/sea_16.png','🌟':'icons/sea_17.png',
-  '✨':'icons/sea_17.png','☀️':'icons/sea_17.png','🍎':'icons/food_00.png','🥕':'icons/food_12.png','🍄':'icons/food_03.png',
+  '🐚':'icons/sea_00.png','🪸':'icons/sea_02.png','🧣':'icons/sea_07.png','🎒':'icons/sea_08.png',
+  '🎾':'icons/sea_13.png','🧀':'icons/sea_12.png','🧺':'icons/sea_14.png',
+  '⭐':'icons/sea_16.png','🌟':'icons/sea_17.png','✨':'icons/sea_17.png',
+  '🍎':'icons/food_00.png','🥕':'icons/food_12.png','🍄':'icons/food_03.png',
   '🍞':'icons/food_10.png','🥚':'icons/food_08.png','🥧':'icons/food_15.png','🍯':'icons/food_19.png','🐞':'icons/food_17.png',
   '🎐':'icons/jp_06.png','🐸':'icons/jp_08.png','🪙':'icons/jp_09.png','📜':'icons/jp_10.png','🧶':'icons/jp_11.png',
   '🧦':'icons/jp_12.png','🍘':'icons/jp_13.png','🏮':'icons/jp_14.png','🪭':'icons/jp_15.png','🍩':'icons/jp_16.png',
   '🔑':'icons/jp_17.png','🗝️':'icons/jp_17.png','🍡':'icons/jp_03.png',
-  '📦':'icons/misc_02.png','👋':'icons/misc_01.png','✅':'icons/misc_04.png','🛋️':'icons/misc_03.png','🌙':'icons/misc_05.png',
-  '😴':'icons/misc_05.png','🦊':'icons/misc_06.png',
-  '🌲':'icons/jp_01.png','🌳':'icons/jp_01.png','❄️':'icons/sea_16.png','☃️':'icons/sea_16.png','🍁':'icons/food_13.png',
+  '📦':'icons/misc_02.png','✅':'icons/misc_04.png','🛋️':'icons/misc_03.png',
+  '😴':'icons/misc_05.png','💤':'icons/misc_05.png',
+  '🌲':'icons/jp_01.png','🌳':'icons/jp_01.png',
   '🏝️':'icons/sea_20.png','🛒':'icons/home_08.png','🏙️':'icons/ui_00.png','🏔️':'icons/ui_00.png',
   '🛏️':'icons/misc_03.png','🗄️':'icons/misc_02.png','🪑':'icons/misc_03.png','🧳':'icons/misc_02.png',
-  '🥛':'icons/food_08.png','🍖':'icons/sea_18.png','🍫':'icons/food_15.png','🍇':'icons/food_05.png',
-  '📮':'icons/home_07.png','☁️':'icons/sea_17.png','🔮':'icons/jp_10.png','📋':'icons/home_07.png',
-  '📸':'icons/home_00.png','🔒':'icons/jp_17.png','📤':'icons/home_08.png','⬆️':'icons/sea_17.png',
-  '🥏':'icons/sea_13.png','🤝':'icons/misc_01.png','🎮':'icons/home_01.png','🫧':'icons/sea_01.png'
+  '🥏':'icons/sea_13.png','📸':'icons/home_00.png','🔒':'icons/jp_17.png','📤':'icons/home_08.png','🔮':'icons/jp_10.png',
+  /* sheet2 replacements for leftover / wrong emoji icons */
+  '🎵':'icons/sheet2_00_note.png','🎶':'icons/sheet2_00_note.png',
+  '🔔':'icons/sheet2_01_bell.png',
+  '📋':'icons/sheet2_02_clipboard.png',
+  '⬆️':'icons/sheet2_03_arrow_up.png','👆':'icons/sheet2_12_hand_point.png',
+  '🌙':'icons/sheet2_04_moon.png',
+  '🍖':'icons/sheet2_05_steak1.png','🥩':'icons/sheet2_07_steak2.png',
+  '🐰':'icons/sheet2_06_bunny1.png',
+  '🥛':'icons/sheet2_09_milk.png',
+  '🛁':'icons/sheet2_10_bath.png',
+  '✋':'icons/sheet2_11_hand_open.png','🖐️':'icons/sheet2_11_hand_open.png','👋':'icons/sheet2_12_hand_point.png',
+  '🫧':'icons/sheet2_14_bubbles.png',
+  '📮':'icons/sheet2_19_mailbox_wood.png','📬':'icons/sheet2_15_mailbox_metal.png','📫':'icons/sheet2_15_mailbox_metal.png',
+  '📢':'icons/sheet2_16_megaphone1.png','📣':'icons/sheet2_21_megaphone2.png',
+  '🦊':'icons/sheet2_17_fox.png','🐕':'icons/sheet2_22_shiba.png','🐶':'icons/sheet2_22_shiba.png',
+  '🎮':'icons/sheet2_18_controller.png',
+  '🍁':'icons/sheet2_20_maple.png',
+  '🤝':'icons/sheet2_23_handshake.png',
+  '🍫':'icons/sheet2_25_chocolate.png','🍇':'icons/sheet2_26_grapes.png'
 };
 const ICON_IMG={};
 function iconSrc(e,slot){if(!e)return null;if(slot&&ICON[e+':'+slot])return ICON[e+':'+slot];return ICON[e]||null;}
@@ -2071,7 +2093,7 @@ function openSettings(){
   }
   modal(`<h2>⚙️ 设置</h2>
   ${accountHtml}
-  <div class="setrow"><span>🎵 音乐</span><button type="button" class="tgl${AU.musOn?' on':''}" id="tMus"></button></div>
+  <div class="setrow"><span>${icHTML('🎵')} 音乐</span><button type="button" class="tgl${AU.musOn?' on':''}" id="tMus"></button></div>
   <div class="setrow"><span>🔔 音效</span><button type="button" class="tgl${AU.fxOn?' on':''}" id="tFx"></button></div>
   <div class="sethead">存档备份</div><p class="fnote">复制备份码存到备忘录，换手机或数据丢了，粘贴回来就能恢复。</p>
   <button type="button" class="btn" id="bkCopy">📋 复制备份码</button><textarea class="fq bk" id="bkText" placeholder="把备份码粘贴到这里"></textarea><button type="button" class="btn ghost" id="bkLoad">恢复存档</button>
