@@ -502,24 +502,29 @@ const ANIM={
   neutral:'anim/idle.webp',idle:'anim/idle.webp',
   happy:'anim/greet.webp',greet:'anim/greet.webp',
   sad:'anim/sad.webp',
-  sleep:'anim/idle.webp',cozy:'anim/idle.webp',
-  walk:'anim/walk.webm'
+  sleep:'anim/idle.webp',cozy:'anim/idle.webp'
 };
 const ANIM_SLOW={sleep:1,cozy:1};
 const ANIM_VID={};
-function animVid(key){
-  const src=ANIM[key]||ANIM.neutral;
-  if(!src.endsWith('.webm'))return null;
-  if(!ANIM_VID[src]){
-    const v=document.createElement('video');
-    v.src=src;v.muted=true;v.loop=true;v.playsInline=true;v.preload='auto';
-    try{v.setAttribute('playsinline','');v.setAttribute('webkit-playsinline','');}catch(_){}
-    ANIM_VID[src]=v;v.load();
-  }
-  return ANIM_VID[src];
-}
-animVid('walk');
+function animVid(){return null;}
 ['idle','greet','sad'].forEach(k=>{const im=new Image();im.src=ANIM[k];});
+const WALK_FRAMES=Array.from({length:6},(_,i)=>{const im=new Image();im.src=`anim/walk/${i}.webp`;return im;});
+function walkFrame(moving){
+  if(!moving)return 0;
+  return Math.floor((G.walkT||0)*10)%WALK_FRAMES.length;
+}
+function drawSideDog(x,gy,K,face,frame,jy=0){
+  const im=WALK_FRAMES[((frame%WALK_FRAMES.length)+WALK_FRAMES.length)%WALK_FRAMES.length];
+  const ready=im&&im.complete&&im.naturalWidth;
+  const dw=(ready?96:62)*K, dh=ready?dw*(im.naturalHeight/im.naturalWidth):84*K;
+  ctx.save();
+  ctx.translate(x, gy+jy);
+  // sprites face left; face>0 means walking right → flip
+  ctx.scale((face||1)>0?-1:1, 1);
+  if(ready)ctx.drawImage(im, -dw/2, -dh+2*K, dw, dh);
+  else if(G.img&&G.img.complete)pupDraw(ctx,G.img,-dw/2,-dh,dw,dh);
+  ctx.restore();
+}
 function dogHTML(stage,mood='neutral'){
   const src=ANIM[mood]||ANIM.neutral;
   const H=200,W=H*IW/IH,x=(200-W)/2,y=12;
@@ -742,7 +747,7 @@ function startGame(type){
   $('holdBtn').hidden=type!=='walk';$('jumpBtn').hidden=type!=='walk';$('holdBtn').classList.remove('on');
   for(let i=0;i<5;i++)G.clouds.push({x:Math.random()*W,y:Math.random()*H,s:.6+Math.random()*.8});
   const h=$('ghint');h.style.opacity=1;
-  h.textContent=MODES[type]?MODES[type].hint:type==='walk'?'右手按住散步，左手跳过水坑':type==='fly'?'点一下开始，点屏幕往上飞':type==='cart'?'左右滑动换道，接住奶酪和牛奶':'左右拖动，接住零食';
+  h.textContent=MODES[type]?MODES[type].hint:type==='walk'?'按住散步，左右滑转向，点一下跳跃过水坑':type==='fly'?'点一下开始，点屏幕往上飞':type==='cart'?'左右滑动换道，接住奶酪和牛奶':'左右拖动，接住零食';
   if(type!=='fly')setTimeout(()=>h.style.opacity=0,1800);
   updHud();requestAnimationFrame(loop);
 }
@@ -836,7 +841,16 @@ function draw(){
 function gameInput(e){
   if(!G||G.over)return;
   const r=cv.getBoundingClientRect();
-  if(G.type==='walk'){if(e.type==='pointerdown'&&!G.freeze){if(walkTapFriend(e))return;G.scrHold=true;G.downT=Date.now();}return;}
+  if(G.type==='walk'){
+    if(e.type==='pointerdown'&&!G.freeze){
+      if(walkTapFriend(e))return;
+      G.scrHold=true;G.downT=Date.now();G.px=e.clientX;G.py=e.clientY;G.turned=false;
+    }else if(e.type==='pointermove'&&G.scrHold&&!G.freeze){
+      const dx=e.clientX-(G.px||e.clientX);
+      if(!G.turned&&Math.abs(dx)>42){G.face=dx>0?1:-1;G.turned=true;sfx('flap');}
+    }
+    return;
+  }
   if(G.type==='cart'){if(e.type==='pointerdown')G.px=e.clientX;return;}
   if(G.type==='fly'){
     if(e.type==='pointerdown'){
@@ -847,6 +861,7 @@ function gameInput(e){
   else G.tx=e.clientX-r.left;
 }
 cv.addEventListener('pointerdown',gameInput);
+cv.addEventListener('pointermove',e=>{if(G&&G.type==='walk')gameInput(e);});
 const hb=$('holdBtn');
 hb.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();if(!G||G.type!=='walk'||G.freeze)return;try{hb.setPointerCapture(e.pointerId)}catch(_){}G.btnHold=true;hb.classList.add('on');hb.classList.remove('pulse');});
 const hbUp=e=>{hb.classList.remove('on');if(G&&G.type==='walk')G.btnHold=false;};
@@ -855,7 +870,7 @@ jb.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();if(
 jb.addEventListener('contextmenu',e=>e.preventDefault());
 ['pointerup','pointercancel','lostpointercapture'].forEach(t=>hb.addEventListener(t,hbUp));
 hb.addEventListener('contextmenu',e=>e.preventDefault());
-const walkUp=()=>{if(!G||G.type!=='walk')return;if(G.scrHold&&Date.now()-(G.downT||0)<220)walkHop();G.scrHold=false;};
+const walkUp=()=>{if(!G||G.type!=='walk')return;if(G.scrHold&&!G.turned&&Date.now()-(G.downT||0)<220)walkHop();G.scrHold=false;G.turned=false;};
 cv.addEventListener('pointerup',walkUp);cv.addEventListener('pointercancel',walkUp);cv.addEventListener('pointerleave',walkUp);
 cv.addEventListener('pointerup',e=>{if(!G||G.over||G.type!=='cart')return;const dx=e.clientX-(G.px??e.clientX);if(Math.abs(dx)>30)cartMove(dx>0?1:-1);else{const r=cv.getBoundingClientRect();cartMove(e.clientX-r.left<G.dog.x?-1:1);}});cv.addEventListener('pointermove',e=>{if(G&&G.type==='catch')gameInput(e)});
 function endGame(quit){
@@ -964,7 +979,7 @@ function pcCount(){return Object.values(pcData()).reduce((n,v)=>n+Object.keys(v.
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 const curScene=()=>G.route[G.scene];
 function setupWalk(){
-  Object.assign(G,{route:shuffle(WALK).slice(0,3),scene:0,dist:0,vy:0,jy:0,time:1e9,ground:G.H*.72,k:clamp(G.H/430,1,1.6),tk:timeKey(),gold:0,mud:0,friends:0,met:{},slowT:0,walkT:0,stars:[]});
+  Object.assign(G,{route:shuffle(WALK).slice(0,3),scene:0,dist:0,vy:0,jy:0,time:1e9,ground:G.H*.72,k:clamp(G.H/430,1,1.6),tk:timeKey(),gold:0,mud:0,friends:0,met:{},slowT:0,walkT:0,stars:[],face:1});
   G.dog={x:G.W*.3,y:G.ground};
   for(let i=0;i<40;i++)G.stars.push({x:Math.random(),y:Math.random()*.5,r:.6+Math.random()*1.4,p:Math.random()*6});
   startScene();
@@ -997,7 +1012,12 @@ function updWalk(dt){
   const sc=curScene(),K=G.k;
   G.hold=!!(G.btnHold||G.scrHold);
   G.slowT=Math.max(0,G.slowT-dt);
-  if(G.hold){G.dist+=130*K*(G.slowT>0?.6:1)*dt;G.walkT+=dt;}
+  const face=G.face||1;
+  if(G.hold){
+    const spd=130*K*(G.slowT>0?.6:1)*dt;
+    G.dist=Math.max(0,G.dist+face*spd);
+    G.walkT+=dt;
+  }
   if(G.jy<0){G.vy+=950*K*dt;G.jy+=G.vy*dt;if(G.jy>=0){G.jy=0;G.vy=0;}}
   const fHop=G.friend;
   if(fHop&&fHop.state==='with'){
@@ -1089,23 +1109,14 @@ function drawWalk(){
   const f=G.friend,fs=curScene().friend;
   if(f.state==='idle'){const sx=f.wx-G.dist,fy=gy-18*K+Math.sin(G.t*6)*2;
     if(sx<W+60){const fk=G.friend.fk;ctx.strokeStyle='rgba(222,100,161,'+(.35+.3*Math.sin(G.t*5))+')';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(sx,gy-30*K,38*K,40*K,0,0,7);ctx.stroke();ctx.fillStyle='rgba(0,0,0,.1)';ctx.beginPath();ctx.ellipse(sx,gy+2,22*K,4*K,0,0,7);ctx.fill();drawFriend(ctx,fk,sx,gy+2+Math.sin(G.t*6)*1.5,64*K);emoji('👋',sx+30*K,gy-66*K,18*K);}}
-  const d=G.dog,bob=G.hold&&G.jy===0?Math.abs(Math.sin(G.walkT*9))*-5:0;
+  const d=G.dog,face=G.face||1,bob=G.hold&&G.jy===0?Math.sin(G.walkT*10)*-2:0;
   if(f.state==='with'){
-    const fjy=f.jy||0,fbob=G.hold&&fjy===0?Math.abs(Math.sin(G.walkT*9+1))*-6:0,fx=d.x+60*K;
+    const fjy=f.jy||0,fbob=G.hold&&fjy===0?Math.sin(G.walkT*10+1)*-2.5:0,fx=d.x+58*K*face;
     ctx.fillStyle='rgba(0,0,0,.1)';ctx.beginPath();ctx.ellipse(fx,gy+2,(18+fjy*.08)*K,3.5*K,0,0,7);ctx.fill();
     drawFriend(ctx,f.fk,fx,gy+2+fjy+fbob,56*K);
   }
-  ctx.fillStyle='rgba(0,0,0,.12)';ctx.beginPath();ctx.ellipse(d.x,gy+2,(26+G.jy*.1)*K,5*K,0,0,7);ctx.fill();
-  const wv=animVid('walk');
-  if(G.hold&&wv&&wv.readyState>=2){
-    if(wv.paused)wv.play().catch(()=>{});
-    const dw=72*K,dh=72*K,dx=d.x-dw/2,dy=gy-dh+G.jy+bob+6*K;
-    ctx.save();ctx.beginPath();ctx.ellipse(d.x,gy-dh*.45+G.jy+bob,dw*.42,dh*.48,0,0,7);ctx.clip();
-    ctx.drawImage(wv,dx,dy,dw,dh);ctx.restore();
-  }else{
-    if(wv&&!wv.paused)try{wv.pause();}catch(_){}
-    if(G.img.complete)pupDraw(ctx,G.img,d.x-31*K,gy-84*K+G.jy+bob,62*K,84*K);
-  }
+  ctx.fillStyle='rgba(0,0,0,.12)';ctx.beginPath();ctx.ellipse(d.x,gy+2,(28+G.jy*.1)*K,5*K,0,0,7);ctx.fill();
+  drawSideDog(d.x, gy, K, face, walkFrame(G.hold&&G.jy===0), G.jy+bob);
   try{walkFront(sc,W,H,gy,K);}catch(e){console.error(e);}
 }
 
