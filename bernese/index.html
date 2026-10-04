@@ -467,7 +467,12 @@ function iconImg(e,slot){
 (function preloadIcons(){const seen=new Set();Object.values(ICON).forEach(src=>{if(seen.has(src))return;seen.add(src);const im=new Image();im.src=src;ICON_IMG[src]=im;});})();
 function drawIconOn(c,e,x,y,sz,slot){
   const im=iconImg(e,slot);
-  if(im&&im.complete&&im.naturalWidth){c.drawImage(im,x-sz/2,y-sz/2,sz,sz);return true;}
+  if(im&&im.complete&&im.naturalWidth){
+    const ar=im.naturalWidth/im.naturalHeight;
+    let w=sz,h=sz;if(ar>1)h=sz/ar;else w=sz*ar;
+    let oy=0;if(slot==='hat')oy=-h*.08;else if(slot==='neck')oy=h*.04;
+    c.drawImage(im,x-w/2,y-h/2+oy,w,h);return true;
+  }
   return false;
 }
 function icHTML(e){const src=iconSrc(e);return src?`<img class="ico" src="${src}" alt="">`:e;}
@@ -1490,25 +1495,40 @@ const DRESS={
   neck:{n:'胸前',items:['','🎀','🌸','🌼','🌹','🌻','🌷','💐','🧣','🏅']},
   bg:{n:'背景',items:['mint','sakura','beach','snow','night']}
 };
-const SLOT={hat:[180,52,120],face:[180,128,135],neck:[180,208,95]};
-const ADJ={'🌼hat':[230,55,78],'🪷hat':[180,36,100],'🌺hat':[130,55,88],'🍀hat':[235,52,72],'☘️hat':[128,55,72],'🥽face':[180,120,125],'🎀hat':[240,55,80],'🌸hat':[132,52,86],'🧢hat':[180,36,130],'🎩hat':[180,16,120],'👑hat':[180,26,110],'🎓hat':[180,24,120],'👒hat':[180,32,145],'🎀neck':[180,198,90],'💐neck':[180,215,90],'🧣neck':[180,205,100],'🏅neck':[180,200,95]};
+const SLOT={hat:[150,70,110],face:[145,118,96],neck:[155,180,76]};
+const ADJ={
+  '🌼hat':[98,82,68],'🪷hat':[150,56,92],'🌺hat':[96,84,72],'🍀hat':[208,88,62],'☘️hat':[96,84,62],
+  '🎀hat':[212,78,70],'🌸hat':[96,80,72],
+  '🧢hat':[150,62,118],'🎩hat':[150,40,102],'👑hat':[150,48,98],'🎓hat':[150,46,104],'👒hat':[150,72,120],
+  '🥽face':[145,116,90],'👓face':[145,118,94],'🕶️face':[145,118,94],
+  '🎀neck':[155,172,70],'💐neck':[155,188,74],'🧣neck':[155,178,84],'🏅neck':[155,176,68],
+  '🌸neck':[155,180,68],'🌼neck':[155,180,68],'🌹neck':[155,180,70],'🌻neck':[155,182,72],'🌷neck':[155,180,68]
+};
 const BGS={mint:['#c4dbd4','#f2faf6','薄荷'],sakura:['#fbe3e8','#f2faf6','樱花'],beach:['#cfeee6','#f6e7cf','海边'],snow:['#e3edf1','#ffffff','雪地'],night:['#252542','#5a4086','星空']};
 const SLOTS_ORDER=['neck','face','hat'];
 const slotPos=(slot,e)=>ADJ[e+slot]||SLOT[slot];
+function iconBox(e,slot,sz){
+  const im=iconImg(e,slot);
+  if(im&&im.complete&&im.naturalWidth){const ar=im.naturalWidth/im.naturalHeight;return ar>1?[sz,sz/ar]:[sz*ar,sz];}
+  return [sz,sz];
+}
 function outfitSVG(o,x0,y0,w,h){
   if(!o)return '';let s='';
   SLOTS_ORDER.forEach(sl=>{const e=o[sl];if(!e)return;const [x,y,z]=slotPos(sl,e);
-    const cx=(x0+x/IW*w),cy=(y0+y/IH*h),sz=(z/IW*w),src=iconSrc(e,sl);
-    if(src)s+=`<image href="${src}" x="${(cx-sz/2).toFixed(1)}" y="${(cy-sz/2).toFixed(1)}" width="${sz.toFixed(1)}" height="${sz.toFixed(1)}" preserveAspectRatio="xMidYMid meet"/>`;
-    else s+=`<text x="${cx.toFixed(1)}" y="${cy.toFixed(1)}" font-size="${sz.toFixed(1)}" text-anchor="middle" dominant-baseline="central" style="font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif">${e}</text>`;});
+    const cx=x0+x/IW*w,cy=y0+y/IH*h,sz=z/IW*w,src=iconSrc(e,sl);
+    if(src){const[bw,bh]=iconBox(e,sl,sz);const oy=sl==='hat'?-bh*.08:sl==='neck'?bh*.04:0;
+      s+=`<image href="${src}" x="${(cx-bw/2).toFixed(1)}" y="${(cy-bh/2+oy).toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" preserveAspectRatio="xMidYMid meet"/>`;}
+    else{const oy=sl==='hat'?-sz*.06:0;s+=`<text x="${cx.toFixed(1)}" y="${(cy+oy).toFixed(1)}" font-size="${sz.toFixed(1)}" text-anchor="middle" dominant-baseline="central" style="font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif">${e}</text>`;}});
   return s;
 }
-function drawOutfit(o,ix,iy,iw,ih){SLOTS_ORDER.forEach(sl=>{const e=o&&o[sl];if(!e)return;const [x,y,z]=slotPos(sl,e);const sz=z/IW*iw;if(!drawIconOn(ctx,e,ix+x/IW*iw,iy+y/IH*ih,sz,sl))emoji(e,ix+x/IW*iw,iy+y/IH*ih,sz);});}
+function drawOutfit(o,ix,iy,iw,ih){SLOTS_ORDER.forEach(sl=>{const e=o&&o[sl];if(!e)return;const [x,y,z]=slotPos(sl,e);const sz=z/IW*iw,px=ix+x/IW*iw,py=iy+y/IH*ih;if(!drawIconOn(ctx,e,px,py,sz,sl)){const oy=sl==='hat'?-sz*.06:0;emoji(e,px,py+oy,sz);}});}
 function photoHTML(p,w){
   const [c1,c2]=BGS[p.bg]||BGS.mint,h=w*1.25,ar=pupAR(PUP_IMG),ih=h*.86,iw=ih*ar,l=(w-iw)/2,t=h-ih-4;
-  const sp=SLOTS_ORDER.map(sl=>{const e=p.o[sl];if(!e)return '';const [x,y,z]=slotPos(sl,e);const sz=(z/IW*iw),src=iconSrc(e,sl);
-    if(src)return `<span class="ico-wrap" style="left:${(l+x/IW*iw).toFixed(1)}px;top:${(t+y/IH*ih).toFixed(1)}px;width:${sz.toFixed(1)}px;height:${sz.toFixed(1)}px"><img src="${src}" alt=""></span>`;
-    return `<span style="left:${(l+x/IW*iw).toFixed(1)}px;top:${(t+y/IH*ih).toFixed(1)}px;font-size:${sz.toFixed(1)}px">${e}</span>`;}).join('');
+  const sp=SLOTS_ORDER.map(sl=>{const e=p.o[sl];if(!e)return '';const [x,y,z]=slotPos(sl,e);const sz=z/IW*iw,src=iconSrc(e,sl),cx=l+x/IW*iw,cy=t+y/IH*ih;
+    if(src){const[bw,bh]=iconBox(e,sl,sz);const oy=sl==='hat'?-bh*.08:sl==='neck'?bh*.04:0;
+      return `<span class="ico-wrap" style="left:${cx.toFixed(1)}px;top:${(cy+oy).toFixed(1)}px;width:${bw.toFixed(1)}px;height:${bh.toFixed(1)}px"><img src="${src}" alt=""></span>`;}
+    const oy=sl==='hat'?-sz*.06:0;
+    return `<span style="left:${cx.toFixed(1)}px;top:${(cy+oy).toFixed(1)}px;font-size:${sz.toFixed(1)}px">${e}</span>`;}).join('');
   return `<div class="photo" style="width:${w}px;height:${h}px;background:linear-gradient(${c1},${c2})"><img src="${PUP}" alt="" style="left:${l}px;top:${t}px;width:${iw}px;height:${ih}px">${sp}</div>`;
 }
 MODES.dress={
@@ -1895,7 +1915,7 @@ function wallCard(i){
   $('cShare').onclick=()=>shareCard(cd);bindFlips();$('mOk').onclick=closeModalKeep;
 }
 
-function pupDraw(c,img,x,y,w,h,o){if(!img.complete){cE(c,'🐾',x+w/2,y+h*.6,w*.45);return;}c.drawImage(img,x,y,w,h);if(o===undefined)o=S&&S.outfit;if(!o)return;SLOTS_ORDER.forEach(sl=>{const e=o[sl];if(!e)return;const [px,py,z]=slotPos(sl,e);const sz=z/IW*w;if(!drawIconOn(c,e,x+px/IW*w,y+py/IH*h,sz,sl))cE(c,e,x+px/IW*w,y+py/IH*h,sz);});}
+function pupDraw(c,img,x,y,w,h,o){if(!img.complete){cE(c,'🐾',x+w/2,y+h*.6,w*.45);return;}c.drawImage(img,x,y,w,h);if(o===undefined)o=S&&S.outfit;if(!o)return;SLOTS_ORDER.forEach(sl=>{const e=o[sl];if(!e)return;const [px,py,z]=slotPos(sl,e);const sz=z/IW*w,cx=x+px/IW*w,cy=y+py/IH*h;if(!drawIconOn(c,e,cx,cy,sz,sl)){const oy=sl==='hat'?-sz*.06:0;cE(c,e,cx,cy+oy,sz);}});}
 /* ---------- 进度：星级 / 骨头 / 每日任务 / 解锁 / 教学 / 设置 ---------- */
 const STARS={frisbee:[3,7,12],cart:[12,25,40],snow:[12,25,40],catch:[12,25,40],hide:[6,14,24],simon:[6,15,28],match:[50,100,160],fly:[8,18,30],walk:[1,2,3]};
 const starsFor=(t,v)=>STARS[t]?STARS[t].filter(x=>v>=x).length:0;
