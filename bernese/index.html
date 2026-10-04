@@ -98,6 +98,8 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pink-hot);outli
 .dogface .zzz{position:absolute;right:8%;top:10%;font:700 18px var(--serif);color:#7a90a8;opacity:.85;animation:zzzF 2.4s ease-in-out infinite;pointer-events:none}
 @keyframes zzzF{0%,100%{transform:translateY(0) rotate(-6deg);opacity:.35}50%{transform:translateY(-10px) rotate(4deg);opacity:.95}}
 .dogface.sleep .dogvid,.dogface.cozy .dogvid{filter:brightness(.92) saturate(.9)}
+.dogface.sleep .dogvid,.dogface.cozy .dogvid{animation:dogSlow 3.2s ease-in-out infinite}
+@keyframes dogSlow{0%,100%{transform:scale(1)}50%{transform:scale(1.02,.97)}}
 .bubble{position:absolute;z-index:2;top:14px;left:50%;transform:translate(-50%,6px);max-width:86%;background:var(--bubble);border:2px solid var(--bubble-line);color:var(--ink);border-radius:16px;padding:9px 16px;font-size:16px;font-weight:600;line-height:1.45;text-align:center;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none}
 .bubble::after{content:"";position:absolute;left:50%;bottom:-8px;width:12px;height:12px;background:var(--bubble);border-right:2px solid var(--bubble-line);border-bottom:2px solid var(--bubble-line);transform:translateX(-50%) rotate(45deg)}
 .bubble.show{opacity:1;transform:translate(-50%,0)}
@@ -520,19 +522,16 @@ animVid('walk');
 ['idle','greet','sad'].forEach(k=>{const im=new Image();im.src=ANIM[k];});
 function dogHTML(stage,mood='neutral'){
   const src=ANIM[mood]||ANIM.neutral;
-  const slow=!!ANIM_SLOW[mood];
   const H=200,W=H*IW/IH,x=(200-W)/2,y=12;
   const outfit=typeof outfitSVG==='function'&&S&&S.outfit?outfitSVG(S.outfit,x,y,W,H):'';
   const zzz=mood==='sleep'?'<span class="zzz">Zzz</span>':'';
-  const style=slow?'style="animation:dogSlow 3.2s ease-in-out infinite"':'';
   return `<div class="dogface ${mood}" data-mood="${mood}">
-    <img class="dogvid" src="${src}" alt="" draggable="false" ${style}>
+    <img class="dogvid" src="${src}" alt="" draggable="false">
     <svg class="dog-out" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" aria-hidden="true"><ellipse cx="100" cy="211" rx="66" ry="6" fill="#000" opacity=".13"/>${outfit}</svg>
     ${zzz}
   </div>`;
 }
 function bindDogVideo(){/* animated webp via img — no bind needed */}
-@keyframes dogSlow{0%,100%{transform:scale(1)}50%{transform:scale(1.02,.97)}}
 
 /* ---------- Audio (all synthesized, original melodies) ---------- */
 const AU={ctx:null,on:true,track:null,name:'',step:0,next:0,timer:0};
