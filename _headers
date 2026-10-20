@@ -1,0 +1,8 @@
+/xiaobo-island/
+  Cache-Control: no-cache
+
+/xiaobo-island/index.html
+  Cache-Control: no-cache
+
+/xiaobo-island/cloud.js
+  Cache-Control: no-cache
