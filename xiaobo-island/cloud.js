@@ -8,12 +8,12 @@ import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/fireb
 
 // ▼▼▼ 换成你自己的（Firebase 控制台 → 项目设置 → 你的应用 → SDK 配置） ▼▼▼
 const firebaseConfig = {
-  apiKey: "AIzaSyCtENHhI0F_MQAikE4phX1Z0qP3M0NciFU",
-  authDomain: "zyalwang.com",
-  projectId: "bernese-f4d70",
-  storageBucket: "bernese-f4d70.firebasestorage.app",
-  messagingSenderId: "829109648544",
-  appId: "1:829109648544:web:8be2c83de096e697691dc5",
+  apiKey: "AIzaSyCK2BHfA6v46kz94Mv8OG-PgA9bqtQ_zcE",
+  authDomain: "bernese-island.firebaseapp.com",
+  projectId: "bernese-island",
+  storageBucket: "bernese-island.firebasestorage.app",
+  messagingSenderId: "208330919370",
+  appId: "1:208330919370:web:7574e70d455aa43df81333",
 };
 // ▲▲▲▲▲▲
 
