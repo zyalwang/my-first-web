@@ -6,3 +6,6 @@
 
 /xiaobo-island/cloud.js
   Cache-Control: no-cache
+
+/xiaobo-island/manifest.webmanifest
+  Cache-Control: no-cache

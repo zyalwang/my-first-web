@@ -1,0 +1,24 @@
+{
+  "name": "小伯岛",
+  "short_name": "小伯岛",
+  "description": "和小伯一起散步，岛上每天都有新的发现",
+  "start_url": "/xiaobo-island/",
+  "display": "standalone",
+  "background_color": "#f6efe4",
+  "theme_color": "#f6efe4",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "/xiaobo-island/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/xiaobo-island/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
