@@ -674,6 +674,51 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       gap: 16px;
     }
 
+    /* ── Featured project ── */
+    .project-featured {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 0;
+      margin-bottom: 16px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .project-featured:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.07);
+    }
+    .project-featured .project-preview {
+      height: auto;
+      min-height: 280px;
+    }
+    .project-featured .project-body {
+      justify-content: center;
+      padding: 32px 28px;
+    }
+    .project-featured .project-origin {
+      opacity: 1;
+      transform: none;
+    }
+    .featured-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #F05AA3;
+      background: rgba(245,163,183,0.28);
+      padding: 5px 10px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+    .spotlight-chip.spotlight-featured {
+      color: #F05AA3;
+      background: rgba(245,163,183,0.28);
+      box-shadow: none;
+    }
+
     /* ── Project cards ── */
     .project-card {
       display: flex; flex-direction: column;
@@ -768,6 +813,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         max-width: 85%;
         scroll-snap-align: start;
       }
+      .project-featured {
+        grid-template-columns: 1fr;
+      }
+      .project-featured .project-preview {
+        min-height: 200px;
+        height: 200px;
+      }
     }
     @media (max-width: 480px) {
       .hero-text { font-size: 1.1rem; }
@@ -860,17 +912,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </p>
     <p class="currently">いま夢中なのは → <span class="rotating-text"></span><span class="tw-cursor"></span></p>
     <div class="hero-actions">
-      <a href="#projects" class="hero-cta">作品を見る →</a>
+      <a href="https://zyalwang.com/xiaobo-island/" target="_blank" class="hero-cta" rel="noopener">小伯岛を遊ぶ →</a>
     </div>
     <div class="project-spotlight">
+      <a class="spotlight-chip spotlight-featured" href="https://zyalwang.com/xiaobo-island/" target="_blank" rel="noopener">小伯岛</a>
       <a class="spotlight-chip" href="https://sakura-keiba.zyalwang.com/" target="_blank" rel="noopener">Japan Keiba</a>
       <a class="spotlight-chip" href="https://xinhuo.zyalwang.com/" target="_blank" rel="noopener">Xinhuo</a>
       <a class="spotlight-chip" href="https://bazi.zyalwang.com/" target="_blank" rel="noopener">Bazi</a>
       <a class="spotlight-chip" href="https://todo.zyalwang.com/" target="_blank" rel="noopener">Todo</a>
       <a class="spotlight-chip" href="https://station-roulette.zyalwang.com/" target="_blank" rel="noopener">Station Roulette</a>
       <a class="spotlight-chip" href="https://zyalwang.com/dabao/" target="_blank" rel="noopener">打包</a>
-      <a class="spotlight-chip" href="https://zyalwang.com/bernese/" target="_blank" rel="noopener">小伯来我家</a>
-      <a class="spotlight-chip" href="https://zyalwang.com/xiaobo-island/" target="_blank" rel="noopener">小伯岛</a>
       <a class="spotlight-chip" href="#projects">すべて見る →</a>
     </div>
   </section>
@@ -892,7 +943,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="stat-label">Rednoteのいいね・保存数</div>
       </div>
       <div class="card stat-card">
-        <div class="stat-number">12</div>
+        <div class="stat-number">11</div>
         <div class="stat-label">AIでつくった個人プロジェクト</div>
       </div>
       <div class="card stat-card">
@@ -909,6 +960,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- Projects -->
   <section id="projects" class="fade-in visible">
     <p class="section-label">Projects &amp; Experiments</p>
+    <a class="card project-featured" href="https://zyalwang.com/xiaobo-island/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+      <div class="project-preview">
+        <img src="../Xiaobo Island.png" alt="小伯岛">
+      </div>
+      <div class="project-body">
+        <span class="featured-badge">注目</span>
+        <p class="project-meta">Interactive</p>
+        <h3>小伯岛</h3>
+        <p>手描きの島で小伯とお散歩。友だちと話して、きらめくものを集めながら、今日の発見を楽しもう。</p>
+        <span class="project-origin">いま推したい — やわらかい島の冒険</span>
+        <span class="project-link">いま遊ぶ <span class="arrow">↗</span></span>
+      </div>
+    </a>
     <div class="grid-2">
       <div class="card project-card">
         <div class="project-preview">
@@ -1040,30 +1104,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <p>お腹いっぱい。持ち帰るものを選んで、小さな箱に詰めて、橋を渡って帰る。冷蔵庫に隙間をつくり、翌朝また会う。</p>
           <span class="project-origin">残りもの、帰り道、そして明日についての静かなゲーム</span>
           <a href="https://zyalwang.com/dabao/" target="_blank" class="project-link" rel="noopener">プロジェクトを見る <span class="arrow">↗</span></a>
-        </div>
-      </div>
-      <div class="card project-card">
-        <div class="project-preview">
-          <img src="../Bernese.png" alt="小伯来我家">
-        </div>
-        <div class="project-body">
-          <p class="project-meta">Interactive</p>
-          <h3>小伯来我家</h3>
-          <p>ずっと小さくてかわいいバーニーズ。名前をつけて、ごはん、ミニゲーム、お着替え、思い出アルバム。</p>
-          <span class="project-origin">そっと寄り添う、小さな相棒</span>
-          <a href="https://zyalwang.com/bernese/" target="_blank" class="project-link" rel="noopener">プロジェクトを見る <span class="arrow">↗</span></a>
-        </div>
-      </div>
-      <div class="card project-card">
-        <div class="project-preview">
-          <img src="../Xiaobo Island.png" alt="小伯岛">
-        </div>
-        <div class="project-body">
-          <p class="project-meta">Interactive</p>
-          <h3>小伯岛</h3>
-          <p>手描きの島で小伯とお散歩。友だちと話して、きらめくものを集めながら、今日の発見を楽しもう。</p>
-          <span class="project-origin">「小伯来我家」の続きにある、島の冒険</span>
-          <a href="https://zyalwang.com/xiaobo-island/" target="_blank" class="project-link" rel="noopener">プロジェクトを見る <span class="arrow">↗</span></a>
         </div>
       </div>
     </div>
